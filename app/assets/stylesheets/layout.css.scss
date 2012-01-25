@@ -1,0 +1,67 @@
+$light-blue: #A6D3FD;
+
+body {
+	background-color: $light-blue;
+	background-image: image-url("bg_tile.jpg");
+	background-repeat: repeat;
+	font-size: 11px;
+	font-family: Tahoma;
+	color: $light-blue;
+}
+
+#container {
+	background: transparent image-url("bg.jpg") repeat-x scroll center top;
+	min-height: 683px;
+}
+
+#content {
+	margin: 20px auto 30px;
+	width: 1150px;
+	padding: 0 25px;
+}
+
+header {
+	height: 52px;
+	position: relative;
+	margin: 0 auto;
+	width: 1150px;
+	padding: 0 25px;
+
+	h1 {
+		width: 539px;
+		background: transparent image-url("logo.png") no-repeat scroll 0px 0px;
+		height: 52px;
+	}
+	
+	#headertext {
+		display: none;
+	}
+}
+
+#menubar {
+	height: 57px;
+	width: 1150px;
+	margin: 0 auto;
+	position: relative;
+	text-align: center;
+	padding-top: 13px;
+}
+
+#page_title {
+	background: transparent image-url("header_line.gif") repeat-x scroll center bottom;
+	color: #FFFFFF;
+	font-weight: normal;
+	margin: 0 auto 15px;
+	padding-bottom: 10px;
+	font-size: 21px;
+	font-family: Palatino,Verdana,Georgia,"Times New Roman",Times,serif;
+	width: 60%;
+	text-align: center;
+	font-style: oblique;
+}
+
+* {
+	border: 0 none;
+	margin: 0;
+	padding: 0;
+}

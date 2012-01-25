@@ -1,0 +1,8 @@
+<tr>
+  <td><%= department.display_name %></td>
+  <td><%= department.short_name %></td>
+  <td><%= link_to "edit", edit_department_path(department) %></td>
+  <td><%= link_to "delete", department, :method => :delete, :confirm => "You sure?",
+                                  :title => "Delete #{department.display_name}" %></td>
+</tr>
+  

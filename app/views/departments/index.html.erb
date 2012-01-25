@@ -1,0 +1,12 @@
+<table id="departments_table">
+  <thead>
+    <th>Display Name</th>
+    <th>Abbreviated Name</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    <%= render @departments %>
+  </tbody>
+</table>
+<%= link_to "Add", new_department_path %>
