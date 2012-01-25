@@ -1,0 +1,6 @@
+<%= form_for(@department) do |f| %>
+  <%= render 'fields', :f => f %>
+  <div class="actions">
+    <%= f.submit "Create" %>
+  </div>
+<% end %>

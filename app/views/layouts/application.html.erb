@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <section id="container">
+    <%= render 'layouts/header' %>
+    <%= render 'layouts/nav_bar' %>
+    <section id="content">
+      <h1 id="page_title"><%= page_heading %></h1>
+      <% flash.each do |key, value| %>
+        <%= content_tag(:div, value, :class => "flash #{key}") %>
+      <% end %>
+      <%= yield %>
+    </section>
+  </section>
+</body>
+</html>
