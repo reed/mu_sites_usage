@@ -1,0 +1,38 @@
+<%= render 'shared/error_messages', :object => f.object %>
+<div class="form_row">
+  <div class="form_label">
+    <%= f.label :username %>
+  </div>
+  <div class="form_field">
+    <%= f.text_field :username %>
+  </div>
+</div>
+<div class="form_row">
+  <div class="form_label">
+    <%= f.label :name %>
+  </div>
+  <div class="form_field">
+    <%= f.text_field :name %>
+  </div>
+</div>
+<div class="form_row">
+  <div class="form_label">
+    <%= f.label :email %>
+  </div>
+  <div class="form_field">
+    <%= f.text_field :email %>
+  </div>
+</div>
+<div class="form_row">
+  <div class="form_label">
+    <%= f.label :role %>
+  </div>
+  <div class="form_field">
+    <div class="buttonset">
+      <% User::ROLES.each do |r| %>
+        <%= f.radio_button :role, r %>
+        <%= label "user_role", r %>
+      <% end %>
+    </div>
+  </div>
+</div>

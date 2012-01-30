@@ -1,0 +1,19 @@
+<nav id="main_nav">
+  <h1><a href="<%= url_for(root_path) %>"><span>Sites Usage</span></a><h1>
+  <h3><%= image_tag "sublogo.jpg", :title => "Division of IT" %></h3>
+  <ul class="menu">
+    <%= department_links %>
+  </ul>
+  <ul id="submenu" class="menu">
+    <li><%= link_to "Users", users_path %></li>
+    <li><a href="#stats">Statistics</a></li>
+    <li><a href="#logs">Logs</a></li>
+    <% if signed_in? %>
+      <li><%= link_to "Log Out", logout_path, :method => :delete %></li>
+    <% else %>
+      <li><%= link_to "Log In", login_path %></li>
+    <% end %>
+  </ul>
+  <div id="copy">&copy; 2012 University of Missouri<br />Division of Information Technology</div>
+</nav>
+  

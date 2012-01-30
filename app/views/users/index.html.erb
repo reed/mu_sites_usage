@@ -1,0 +1,17 @@
+<table id="users_table">
+  <thead>
+    <th>Name</th>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Department</th>
+    <th>Role</th>
+    <th>Logins</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    <%= render @users %>
+  </tbody>
+</table>
+
+<%= link_to "Add", new_user_path, :class => "button" %>

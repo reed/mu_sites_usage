@@ -7,14 +7,17 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <section id="container">
-    <%= render 'layouts/header' %>
-    <%= render 'layouts/nav_bar' %>
-    <section id="content">
-      <h1 id="page_title"><%= page_heading %></h1>
-      <% flash.each do |key, value| %>
-        <%= content_tag(:div, value, :class => "flash #{key}") %>
-      <% end %>
+  <%= render 'layouts/navigation' %>
+  <section id="content">
+    <section id="container" class="<%= controller.controller_name %>">
+      <div id="flashes">
+        <% flash.each do |key, value| %>
+          <%= content_tag(:div, value, :class => "flash ui-state-#{key}") %>
+        <% end %>
+      </div>
+      <header id="page_title">
+        <h1><%= page_heading %></h1>
+      </header>
       <%= yield %>
     </section>
   </section>

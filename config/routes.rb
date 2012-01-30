@@ -1,6 +1,18 @@
 SitesUsage::Application.routes.draw do
-  resources :departments
 
+  resources :sessions, :only => [:new, :create, :destroy]
+
+  resources :users, :except => [:show]
+
+  resources :departments do 
+    resources :sites
+  end
+  
+  match '/login', :to => 'sessions#new'
+  match '/logout', :to => 'sessions#destroy'
+  
+  root :to => 'departments#index'
+  post 'clients/upload'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
