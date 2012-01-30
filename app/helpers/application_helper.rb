@@ -20,4 +20,18 @@ module ApplicationHelper
       @page_heading
     end
   end
+  
+  def department_links
+    depts = Department.order("display_name")
+    render :partial => 'department_link', :collection => depts
+  end
+  
+  def site_links(dept_id)
+    sites = Department.find(dept_id).sites.order("display_name")
+    render :partial => 'site_link', :collection => sites
+  end
+  
+  def department_link_active?(id)
+    @department.present? && @department.id == id
+  end
 end

@@ -9,4 +9,5 @@ class Department < ActiveRecord::Base
                          :format => { :with => short_name_regex }
                          
   has_many :sites
+  has_many :users
 end

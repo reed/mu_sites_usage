@@ -1,0 +1,11 @@
+<tr>
+  <td><%= user.name %></td>
+  <td><%= user.username %></td>
+  <td><%= user.email %></td>
+  <td><%= user.department.display_name %></td>
+  <td><%= user.role.titleize %></td>
+  <td><%= user.logins %></td>
+  <td><%= link_to "edit", edit_user_path(user) %></td>
+  <td><%= link_to "delete", user, :method => :delete, :confirm => "You sure?",
+                                  :title => "Delete #{user.name}" %></td>
+</tr>
