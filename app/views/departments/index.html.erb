@@ -1,12 +1,26 @@
-<table id="departments_table">
-  <thead>
-    <th>Display Name</th>
-    <th>Abbreviated Name</th>
-    <th></th>
-    <th></th>
-  </thead>
-  <tbody>
-    <%= render @departments %>
-  </tbody>
-</table>
-<%= link_to "Add", new_department_path, :class => "button" %>
+<% @departments.each do |dept| %>
+  <div class="department_summary">
+    <h2><%= link_to dept.display_name, department_path(dept) %></h2>
+    <div class="status_bar">
+      <div class="ui-state-error"></div>
+      <div class="ui-state-highlight"></div>
+      <div class="ui-state-success"></div>
+    </div>
+    <div class="info_row">
+      <strong>Sites</strong>
+      <span><%= dept.sites.count + 59 %></span>
+    </div>
+    <div class="info_row">
+      <div class="mac_icon">
+        <%= image_tag "mac.png", :title => "Mac Clients", :size => "40x40", :class => "type_icon" %>
+      </div>
+      <span>27</span>
+    </div>
+    <div class="info_row">
+      <div class="windows_icon">
+        <%= image_tag "windows.png", :title => "Windows CLients", :size => "35x35", :class => "type_icon" %>
+      </div>
+      <span>34</span>
+    </div>
+  </div>
+<% end %>

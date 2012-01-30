@@ -54,11 +54,11 @@ body {
 	
 	h3 {
 		display: block;
-		height: 32px;
-		width: 131px;
+		height: 40px;
+		width: 155px;
 		position: absolute;
 		top: 200px;
-		left: 50px;
+		left: 20px;
 	}
 	
 	ul.menu {
@@ -119,14 +119,22 @@ body {
 	}
 
 	#submenu {
-		border-bottom: 1px solid #A39E92;
+		color: #FFFFFF;
+		text-transform: uppercase;
 		font-size: 11px;
 		margin-top: 30px;
 		
-		li {
+		li:first-child {
 			border-top: 1px solid #A39E92;
+		}
+		li {
+			border-bottom: 1px solid #A39E92;
 			height: 20px;
 			line-height: 20px;
+			display: block;
+			width: 230px;
+			text-align: center;
+			clear: both;
 			
 			.parent.active, #current.active {
 				background: image_url("arrow_menu_small.jpg") no-repeat scroll right top transparent;
@@ -181,6 +189,10 @@ body {
 }
 a {
 	color: $main_blue;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
 }
 
 ul {

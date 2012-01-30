@@ -1,10 +1,10 @@
 <nav id="main_nav">
   <h1><a href="<%= url_for(root_path) %>"><span>Sites Usage</span></a><h1>
-  <h3><%= image_tag "sublogo.jpg", :title => "Division of IT" %></h3>
+  <h3><%= image_tag "sublogo_dark.jpg", :title => "Division of IT" %></h3>
   <ul class="menu">
     <%= department_links %>
   </ul>
-  <ul id="submenu" class="menu">
+  <ul id="submenu">
     <li><%= link_to "Users", users_path %></li>
     <li><a href="#stats">Statistics</a></li>
     <li><a href="#logs">Logs</a></li>

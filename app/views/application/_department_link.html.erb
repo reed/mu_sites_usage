@@ -1,7 +1,6 @@
 <li <%= "class=active" if department_link_active?(department_link.id) %>>
   <%= link_to department_link.display_name, department_path(department_link) %>
   <% if department_link_active?(department_link.id) %>
-    <ul><% 20.times do %>
-      <%= site_links(department_link.id) %><% end %></ul>
+    <ul><%= site_links(department_link.id) %></ul>
   <% end %>
 </li>

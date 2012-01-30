@@ -1,3 +1,96 @@
 // Place all the styles related to the Departments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.departments {
+	.department_summary {
+		width: 500px;
+		margin: 0 40px 60px 0;
+		float: left;
+		position: relative;
+		
+		h2 {
+			font-size: 18px;
+			padding-bottom: 2px;
+			margin-bottom: 10px;
+			float: right;
+			width: 430px;
+			text-align: left;
+			font-weight: lighter;
+			display: block;
+			
+			a {
+				text-decoration: none;
+			}
+		}
+		.status_bar {
+			height: 180px;
+			width: 50px;
+			float: left;
+			div {
+				width: 100%;
+				height: 60px;
+				margin: 0;
+				padding: 0;
+			}
+			div.offline {
+				background-color: red;
+			}
+			div.unavailable {
+				background-color: yellow;
+			}
+			div.available {
+				background-color: green;
+			}
+		}
+		.info_row {
+			display: block;
+			margin-bottom: 5px;
+			margin-left: 70px;
+			width: 330px;
+			height: 40px;
+			clear: right;
+			position: relative;
+			
+			strong {
+				display: block;
+				text-align: left;
+				width: 40px;
+				height: 40px;
+				line-height: 40px;
+				vertical-align: middle;
+				float: left;
+				font-size: 20px;
+				font-variant: small-caps;
+			}
+			div.mac_icon {
+				display: block;
+				text-align: left;
+				width: 40px;
+				height: 40px;
+				float: left;
+			}
+			div.windows_icon {
+				display: block;
+				text-align: left;
+				width: 40px;
+				height: 40px;
+				float: left;
+			}
+			span {
+				display: block;
+				float: right;
+				width: 250px;
+				height: 40px;
+				padding-left: 5px;
+				line-height: 40px;
+				vertical-align: middle;
+				font-size: 26px;
+			}
+		}
+	}
+	
+	#departments_table {
+		width: 40%;
+		margin-bottom: 20px;
+	}
+}
