@@ -2,7 +2,7 @@ class DepartmentsController < ApplicationController
   def index
     @title = "Departments"
     @page_heading = "Departments"
-    @departments = Department.all
+    @departments = DepartmentDecorator.all
   end
 
   def show
