@@ -1,10 +1,7 @@
 <% @departments.each do |dept| %>
-  <div class="department_summary">
+  <div class="department_summary" data-available="10" data-unavailable="20" data-offline="5">
     <h2><%= link_to dept.display_name, department_path(dept) %></h2>
-    <div class="status_bar">
-      <div class="ui-state-error"></div>
-      <div class="ui-state-highlight"></div>
-      <div class="ui-state-success"></div>
+    <div id="<%= dept.short_name %>_chart" class="status_chart">
     </div>
     <div class="info_row">
       <strong>Sites</strong>
@@ -18,7 +15,7 @@
     </div>
     <div class="info_row">
       <div class="windows_icon">
-        <%= image_tag "windows.png", :title => "Windows CLients", :size => "35x35", :class => "type_icon" %>
+        <%= image_tag "windows.png", :title => "Windows Clients", :size => "35x35", :class => "type_icon" %>
       </div>
       <span>34</span>
     </div>

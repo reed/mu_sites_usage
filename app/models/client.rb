@@ -19,8 +19,9 @@ class Client < ActiveRecord::Base
   belongs_to :site    
   has_many :logs
   
+  scope :enabled, where(:enabled => true)
   scope :stale, lambda { where('last_checkin < ?', 10.minutes.ago) }
-  
+
   before_update :maintain_site
   
   def self.find_or_create(properties)

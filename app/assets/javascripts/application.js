@@ -11,6 +11,8 @@
 //= require jquery.tablesorter.pager
 //= require jquery_ujs
 //= require table2CSV
+//= require highcharts/highcharts
+//= require highcharts/themes/dark-green
 //= require_tree .
 $(function(){
 	resize_menu();
