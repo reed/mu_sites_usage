@@ -187,4 +187,20 @@ describe Client do
       @client.reload.current_status.should_not == "offline"
     end
   end
+  
+  describe "scopes" do
+    before(:each) do
+        Factory(:client, :client_type => 'tc')
+        Factory(:client, :client_type => 'pc')
+        Factory(:client, :client_type => 'mac')
+    end
+    
+    it "should only count windows clients" do
+      Client.windows.count.should == 2
+    end
+    
+    it "should only count mac clients" do
+      Client.macs.count.should == 1
+    end
+  end
 end

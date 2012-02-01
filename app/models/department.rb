@@ -10,4 +10,26 @@ class Department < ActiveRecord::Base
                          
   has_many :sites
   has_many :users
+  
+  def client_count(type)
+    sum = 0
+    sites.each do |site|
+      sum += site.client_count(type)
+    end
+    sum
+  end
+  
+  def status_count
+    statuses = {
+      :available => 0,
+      :unavailable => 0,
+      :offline => 0
+    }
+    statuses.each_key do |s| 
+      total = 0
+      sites.each { |site| total += site.status_count(s) }
+      statuses[s.to_sym] = total 
+    end  
+    statuses
+  end
 end

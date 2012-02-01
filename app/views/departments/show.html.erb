@@ -1,2 +1,6 @@
-<h1>Departments#show</h1>
-<p>Find me in app/views/departments/show.html.erb</p>
+<% @department.sites.each do |site| %>
+  <div class="site_summary" data-macs="20-17-2-1" data-pcs="40-30-5-5" data-thinclients="30-5-10-15">
+    <div id="<%= site.short_name %>_chart" class="status_chart">
+    </div>
+  </div>
+<% end %>

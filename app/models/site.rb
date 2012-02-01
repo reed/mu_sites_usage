@@ -17,4 +17,19 @@ class Site < ActiveRecord::Base
     name.upcase!
     where(["? LIKE (name_filter || '%')", name]).first
   end
+  
+  def client_count(type)
+    if type == "windows"
+      clients.enabled.windows.count
+    elsif type == "macs"
+      clients.enabled.macs.count
+    else
+      0
+    end
+  end
+  
+  def status_count(status)
+    clients.enabled.where(:current_status => status).count
+  end
+
 end
