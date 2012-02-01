@@ -1,6 +1,18 @@
 class DepartmentDecorator < ApplicationDecorator
   decorates :department
-
+  
+  def status_data
+    counts = model.status_count
+    "data-available=""#{counts[:available]}"" data-unavailable=""#{counts[:unavailable]}"" data-offline=""#{counts[:offline]}"""
+  end
+  
+  def windows_client_count
+    sites.count > 0 ? model.client_count("windows") : 0
+  end
+  
+  def mac_client_count
+    sites.count > 0 ? model.client_count("macs") : 0
+  end
   # Accessing Helpers
   #   You can access any helper via a proxy
   #

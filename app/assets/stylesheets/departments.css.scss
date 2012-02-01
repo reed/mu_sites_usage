@@ -3,79 +3,74 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .departments {
 	.department_summary {
-		width: 600px;
+		width: 350px;
+		height: 350px;
 		margin: 0 40px 60px 0;
 		float: left;
 		position: relative;
 		
-		h2 {
-			font-size: 18px;
-			padding-bottom: 2px;
-			margin-bottom: 10px;
-			float: right;
-			width: 250px;
-			text-align: left;
-			font-weight: lighter;
-			display: block;
-			
-			a {
-				text-decoration: none;
-			}
-		}
 		.status_chart {
 			height: 350px;
 			width: 350px;
-			/*float: left;*/
+			position: fixed;
 		}
-		.info_row {
-			display: block;
-			margin-bottom: 5px;
-			margin-left: 70px;
-			width: 330px;
-			height: 40px;
-			clear: right;
+		.department_data {
+			width: 80%;
+			margin: 105px auto 0;
 			position: relative;
-			
-			strong {
-				display: block;
-				text-align: left;
-				width: 40px;
+			.department_title {
 				height: 40px;
-				line-height: 40px;
-				vertical-align: middle;
-				float: left;
+				text-align: center;
+				font-size: 18px;
+			}
+			.label_row {
+				height: 40px;
 				font-size: 20px;
-				font-variant: small-caps;
+				text-align: center;
+				margin: 0 auto;
+				overflow: hidden;
+				.label {
+					display: inline-block;
+					width: 75px;
+					height: 40px;
+					font-size: 20px;
+					font-variant: small-caps;
+					overflow: hidden;
+					line-height: 40px;
+					vertical-align: top;
+				}
+				div.mac_icon, div.windows_icon {
+					display: inline-block;
+					width: 75px;
+					height: 40px;
+				}
 			}
-			div.mac_icon {
-				display: block;
-				text-align: left;
-				width: 40px;
+			.data_row {
 				height: 40px;
-				float: left;
-			}
-			div.windows_icon {
-				display: block;
-				text-align: left;
-				width: 40px;
-				height: 40px;
-				float: left;
-			}
-			span {
-				display: block;
-				float: right;
-				width: 250px;
-				height: 40px;
-				padding-left: 5px;
-				line-height: 40px;
-				vertical-align: middle;
-				font-size: 26px;
+				margin: 0 auto;
+				text-align: center;
+				div {
+					display: inline-block;
+					width: 75px;
+					height: 40px;
+					line-height: 40px;
+					vertical-align: middle;
+					font-size: 26px;
+				}
 			}
 		}
 	}
-	
-	#departments_table {
-		width: 40%;
-		margin-bottom: 20px;
+	.site_summary {
+		width: 350px;
+		height: 350px;
+		margin: 0 40px 60px 0;
+		float: left;
+		position: relative;
+		
+		.status_chart {
+			height: 350px;
+			width: 350px;
+			position: fixed;
+		}
 	}
 }

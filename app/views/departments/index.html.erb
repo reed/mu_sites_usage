@@ -1,23 +1,23 @@
 <% @departments.each do |dept| %>
-  <div class="department_summary" data-available="10" data-unavailable="20" data-offline="5">
-    <h2><%= link_to dept.display_name, department_path(dept) %></h2>
+  <div class="department_summary" <%= dept.status_data %>>
     <div id="<%= dept.short_name %>_chart" class="status_chart">
     </div>
-    <div class="info_row">
-      <strong>Sites</strong>
-      <span><%= dept.sites.count + 59 %></span>
-    </div>
-    <div class="info_row">
-      <div class="mac_icon">
-        <%= image_tag "mac.png", :title => "Mac Clients", :size => "40x40", :class => "type_icon" %>
+    <div class="department_data">
+      <div class="department_title">
+        <%= link_to dept.display_name, department_path(dept) %>
       </div>
-      <span>27</span>
-    </div>
-    <div class="info_row">
-      <div class="windows_icon">
-        <%= image_tag "windows.png", :title => "Windows Clients", :size => "40x40", :class => "type_icon" %>
+      <div class="label_row"><!--
+        --><div class="windows_icon">
+          <%= image_tag "windows.png", :title => "Windows Clients", :size => "40x40", :class => "type_icon" %>
+        </div><!--
+        --><div class="label">Sites</div><!--
+        --><div class="mac_icon">
+          <%= image_tag "mac.png", :title => "Mac Clients", :size => "40x40", :class => "type_icon" %>
+        </div><!--
+      --></div>
+      <div class="data_row">
+        <div><%= dept.client_count("windows") %></div><div><%= dept.sites.count %></div><div><%= dept.client_count("macs") %></div>
       </div>
-      <span>34</span>
     </div>
   </div>
 <% end %>

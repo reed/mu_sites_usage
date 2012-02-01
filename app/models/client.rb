@@ -20,6 +20,8 @@ class Client < ActiveRecord::Base
   has_many :logs
   
   scope :enabled, where(:enabled => true)
+  scope :windows, where(:client_type => ["tc", "pc"])
+  scope :macs, where(:client_type => "mac")
   scope :stale, lambda { where('last_checkin < ?', 10.minutes.ago) }
 
   before_update :maintain_site
