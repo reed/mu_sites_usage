@@ -67,6 +67,11 @@
 		float: left;
 		position: relative;
 		
+		.site_title {
+			display: block;
+			text-align: center;
+			font-size: 18px;
+		}
 		.status_chart {
 			height: 350px;
 			width: 350px;

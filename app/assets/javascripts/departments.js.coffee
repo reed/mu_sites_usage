@@ -70,113 +70,76 @@ renderSiteCharts = ->
 	$('.site_summary').each ->
 		chartDiv = $('.status_chart', $(this))
 		types = {
-			macs: $(this).data('macs').split('-')
-			pcs: $(this).data('pcs').split('-')
-			tcs: $(this).data('thinclients').split('-') 
+			Macs: $(this).data('macs').split('-')
+			PCs: $(this).data('pcs').split('-')
+			"Thin Clients": $(this).data('thinclients').split('-') 
 		}
-		totalClients = parseInt(types["macs"][0]) + parseInt(types["pcs"][0]) + parseInt(types["tcs"][0])
+		totalClients = parseInt(types["Macs"][0]) + parseInt(types["PCs"][0]) + parseInt(types["Thin Clients"][0])
 		data = []
 		categories = []
 		colors = []
+		type_colors = {
+			Macs: "#437D99"
+			PCs: "#64BBE6"
+			"Thin Clients": "#87C7E6"
+		}
 		
-		if types["macs"][0] > 0
-			categories.push("Macs")
-			mac_statuses = []
-			mac_status_data = []
-			mac_colors = []
-			if types["macs"][1] > 0
-				mac_statuses.push("Available")
-				mac_status_data.push(((types["macs"][1] / types["macs"][0]) * 100).toFixed(0) * 1)
-				mac_colors.push("#5BBD5C")
-			if types["macs"][2] > 0
-				mac_statuses.push("Unavailable")
-				mac_status_data.push(((types["macs"][2] / types["macs"][0]) * 100).toFixed(0) * 1)	
-				mac_colors.push("#DBC067")
-			if types["macs"][3] > 0
-				mac_statuses.push("Offline")
-				mac_status_data.push(((types["macs"][3] / types["macs"][0]) * 100).toFixed(0) * 1)
-				mac_colors.push("#D66781")
-			
-			drilldown = {
-				name: "Macs"
-				categories: mac_statuses
-				data: mac_status_data
-				colors: mac_colors
-			}
-			type_data = {
-				y: ((types["macs"][0] / totalClients) * 100).toFixed(0) * 1
-				drilldown: drilldown
-			}	
-			data.push(type_data)
-		if types["pcs"][0] > 0
-			categories.push("PCs")
-			pc_statuses = []
-			pc_status_data = []
-			pc_colors = []
-			if types["pcs"][1] > 0
-				pc_statuses.push("Available")
-				pc_status_data.push(((types["pcs"][1] / types["pcs"][0]) * 100).toFixed(0) * 1)
-				pc_colors.push("#5BBD5C")
-			if types["pcs"][2] > 0
-				pc_statuses.push("Unavailable")
-				pc_status_data.push(((types["pcs"][2] / types["pcs"][0]) * 100).toFixed(0) * 1)	
-				pc_colors.push("#DBC067")
-			if types["pcs"][3] > 0
-				pc_statuses.push("Offline")
-				pc_status_data.push(((types["pcs"][3] / types["pcs"][0]) * 100).toFixed(0) * 1)
-				pc_colors.push("#D66781")
-			
-			drilldown = {
-				name: "PCs"
-				categories: pc_statuses
-				data: pc_status_data
-				colors: pc_colors
-			}
-			type_data = {
-				y: ((types["pcs"][0] / totalClients) * 100).toFixed(0) * 1
-				drilldown: drilldown
-			}	
-			data.push(type_data)
-		if types["tcs"][0] > 0
-			categories.push("Thin Clients")
-			tc_statuses = []
-			tc_status_data = []
-			tc_colors = []
-			if types["tcs"][1] > 0
-				tc_statuses.push("Available")
-				tc_status_data.push(((types["tcs"][1] / types["tcs"][0]) * 100).toFixed(0) * 1)
-				tc_colors.push("#5BBD5C")
-			if types["tcs"][2] > 0
-				tc_statuses.push("Unavailable")
-				tc_status_data.push(((types["tcs"][2] / types["tcs"][0]) * 100).toFixed(0) * 1)	
-				tc_colors.push("#DBC067")
-			if types["tcs"][3] > 0
-				tc_statuses.push("Offline")
-				tc_status_data.push(((types["tcs"][3] / types["tcs"][0]) * 100).toFixed(0) * 1)
-				tc_colors.push("#D66781")
-			
-			drilldown = {
-				name: "Thin Clients"
-				categories: tc_statuses
-				data: tc_status_data
-				colors: tc_colors
-			}
-			type_data = {
-				y: ((types["tcs"][0] / totalClients) * 100).toFixed(0) * 1
-				drilldown: drilldown
-			}	
-			data.push(type_data)
+		for type, typeCounts of types
+			if typeCounts[0] > 0
+				categories.push(type)
+				type_statuses = []
+				type_status_data = []
+				status_colors = []
+				if typeCounts[1] > 0
+					type_statuses.push("Available " + type)
+					type_status_data.push((typeCounts[1] / totalClients) * 100)
+					status_colors.push("#5BBD5C")
+				if typeCounts[2] > 0
+					type_statuses.push("Unavailable " + type)
+					type_status_data.push((typeCounts[2] / totalClients) * 100) 	
+					status_colors.push("#DBC067")
+				if typeCounts[3] > 0
+					type_statuses.push("Offline " + type)
+					type_status_data.push((typeCounts[3] / totalClients) * 100) 
+					status_colors.push("#D66781")
 
-		#if data.length is 0
-		#	data.push(["No clients", 100.0])
-		#	colors.push("#797982")
+				drilldown = {
+					name: type
+					categories: type_statuses
+					data: type_status_data
+					colors: status_colors
+				}
+				type_data = {
+					y: (typeCounts[0] / totalClients) * 100
+					color: type_colors[type]
+					drilldown: drilldown
+				}	
+				data.push(type_data)
 		
+		if data.length is 0
+			noClients = true
+			drilldown = {
+				name: "No clients"
+				categories: ["No clients"]
+				data: [100.0]
+				colors: [Highcharts.Color("#797982").brighten(0.2).get()]
+			}
+			type_data = {
+				y: 100.0
+				color: "#797982"
+				drilldown: drilldown
+			}
+			data.push(type_data)
+		else
+			noClients = false
+			
 		typeData = []
 		typeStatusData = []
 		for type, i in data
 			typeData.push({
 				name: categories[i]
 				y: type.y
+				color: type.color
 			})
 			for status, j in type.drilldown.categories
 				typeStatusData.push({
@@ -184,17 +147,33 @@ renderSiteCharts = ->
 					y: type.drilldown.data[j]
 					color: type.drilldown.colors[j]
 				})
-		
+	
 		typeDataSeries = {
 			name: "Client Types"
-			size: '80%'
+			size: '85%'
+			innerSize: '10%'
 			data: typeData
+			dataLabels: {
+				color: '#001621'
+				distance: -60
+				style: {
+					fontSize: '16px'
+				}
+				formatter: ->
+					if noClients
+						'<b>No computers</b>'
+					else
+						'<b>' + this.point.name + '</b>'
+			}
 		}
 		typeStatusDataSeries = {
 			name: "Status"
 			size: '100%'
-			innerSize: '80%'
+			innerSize: '85%'
 			data: typeStatusData
+			dataLabels: {
+				enabled: false
+			}
 		}
 		series = [
 			typeDataSeries
@@ -214,14 +193,17 @@ renderSiteCharts = ->
 			colors: colors
 			tooltip:
 				formatter: ->
-					if this.point.name == "No clients"
-						this.point.name
+					if noClients
+						"No Computers"
+					else if this.series.name == "Client Types"
+						this.point.name.replace("<br/>", " ") + ': ' + ((this.percentage / 100) * totalClients).toFixed(0)
 					else
-						this.point.name.replace("<br/>", " ") + ': ' + this.y
+						this.point.name + ": " + ((this.percentage / 100) * totalClients).toFixed(0)
 			plotOptions:
 				pie:
 					allowPointSelect: true
-					borderWidth: 0
+					borderWidth: 1
+					borderColor: "#001621"
 					cursor: "pointer"
 					size: "100%"
 			series: series
