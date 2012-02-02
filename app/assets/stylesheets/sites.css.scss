@@ -1,3 +1,162 @@
 // Place all the styles related to the sites controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$main_blue: #3399CC;
+$light_blue: #64BBE6;
+$lightest_blue: #87C7E6;
+$dark_blue: #437D99;
+$darkest_blue: #115F85;
+$page_bg: #0F2835;
+$page_bg2: #001621;
+
+$main_gold: #FFC736;
+$light_gold: #FFD568;
+$lightest_gold: #FFE090;
+$dark_gold: #BFA04E;
+$darkest_gold: #A67D12;
+
+.sites {
+	.site_header, .site_header a {
+		font-size: 18px;
+		color: #FFD24A;
+		font-style: italic;
+		font-variant: small-caps;
+		padding: 2px 2px 0px 6px;
+		position: relative;
+		width: 1150px;
+		text-decoration: none;
+	}
+	.summary {
+		position: absolute;
+		font-size: 12px;
+		font-style: normal;
+		color: #3399CC;
+		top: 2px;
+		right: 140px;
+		
+		div {
+			display: inline-block;
+		}
+	}
+	.throbbler_container {
+		position: absolute;
+		top: 1px;
+		right: 140px;
+	}
+	.toggle_button {
+		position: absolute;
+		font-size: 11px;
+		color: #3399CC;
+		padding: 3px;
+		border-left: 1px solid $light_blue;
+		border-top: 2px solid $light_blue;
+		border-right: 1px solid $light_blue;
+		right: 60px;
+		top: 2px;
+		bottom: 0px;
+		cursor: pointer;
+		font-style: normal;
+	}
+	.toggle_button:hover {
+		background-color: $light_blue;
+		color: #001621;
+	}
+	.refresh_button {
+		position: absolute;
+		font-size: 11px;
+		color: #3399CC;
+		padding: 3px;
+		border-left: 1px solid $light_blue;
+		border-top: 2px solid $light_blue;
+		border-right: 1px solid $light_blue;
+		right: 30px;
+		top: 2px;
+		bottom: 0px;
+		cursor: pointer;
+		font-style: normal;
+	}
+	.refresh_button:hover {
+		background-color: $light_blue;
+		color: #001621;
+	}
+	.hide_button {
+		position: absolute;
+		font-size: 11px;
+		color: #3399CC;
+		padding: 3px;
+		border-left: 1px solid $light_blue;
+		border-top: 2px solid $light_blue;
+		border-right: 1px solid $light_blue;
+		right: 4px;
+		top: 2px;
+		bottom: 0px;
+		cursor: pointer;
+		font-style: normal;
+		text-align: center;
+		width: 10px;
+	}
+	.hide_button:hover {
+		background-color: $light_blue;
+		color: #001621;
+	}
+	.site_pane {
+		width: 1150px;
+		display: block;
+		border: 2px solid $light_blue;
+		margin-bottom: 20px;
+		
+		.type_header {
+			width: 100%;
+			height: 25px;
+			display: block;
+			padding: 3px 0px;
+			text-align: center;
+		}
+		.type_pane {
+			width: 100%;
+			display: block;
+			font-size: 0px;
+			.device_column {
+				width: 191px;
+				display: inline-block;
+				vertical-align: top;
+				.device {
+					line-height: 24px;
+					font-size: 14px;
+					cursor: pointer;
+					text-align: center;
+					margin: 2px;
+				}
+				.available {
+					background-color: #5BBD5C;
+					color: #303D30;
+					text-shadow: 0px 0px 8px #1E3D1E;
+				}
+				.unavailable {
+					background-color: #DBC067;
+					color: #5B5746;
+					text-shadow: 0px 0px 8px #5B502B;
+				}
+				.offline {
+					background-color: #D66781;
+					color: #562A34;
+					text-shadow: 0px 0px 8px #893448;
+				}
+			}
+		}
+	}
+	
+	.light {
+		margin-left: 5px;
+		margin-right: 10px;
+		height: 16px;
+		vertical-align: -2px;
+	}
+	.light-right {
+		margin-right: 5px;
+		margin-left: 10px;
+		height: 16px;
+		vertical-align: -2px;
+	}
+	
+}

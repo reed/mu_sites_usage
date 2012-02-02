@@ -6,7 +6,7 @@ class DepartmentsController < ApplicationController
   end
 
   def show
-    @department = Department.find(params[:id])
+    @department = DepartmentDecorator.find(params[:id])
     @title = @department.display_name
   end
 

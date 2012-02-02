@@ -19,17 +19,45 @@ class Site < ActiveRecord::Base
   end
   
   def client_count(type)
-    if type == "windows"
+    case type
+    when "windows"
       clients.enabled.windows.count
-    elsif type == "macs"
+    when "macs", "mac"
       clients.enabled.macs.count
+    when "thinclients", "tc"
+      clients.enabled.thinclients.count
+    when "pcs", "pc"
+      clients.enabled.pcs.count
     else
       0
     end
   end
   
-  def status_count(status)
-    clients.enabled.where(:current_status => status).count
+  def status_count(status, type = "all")
+    case type
+    when "all"
+      clients.enabled.where(:current_status => status).count
+    when "pcs", "pc"
+      clients.enabled.pcs.where(:current_status => status).count
+    when "tcs", "tc"
+      clients.enabled.thinclients.where(:current_status => status).count
+    when "macs", "mac"
+      clients.enabled.macs.where(:current_status => status).count
+    else
+      0
+    end
   end
-
+  
+  def status_counts_by_type
+    counts = Hash.new
+    [:pc, :tc, :mac].each do |type|
+      counts[type] = {
+        :total => client_count(type.to_s),
+        :available => status_count('available', type.to_s),
+        :unavailable => status_count('unavailable', type.to_s),
+        :offline => status_count('offline', type.to_s)
+      }
+    end
+    counts
+  end
 end
