@@ -4,6 +4,7 @@ class SitesController < ApplicationController
 
   def show
     @department = Department.find(params[:department_id])
+    @site = SiteDecorator.find(params[:id])
   end
 
 end

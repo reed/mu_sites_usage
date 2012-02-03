@@ -2,7 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $main_blue: #3399CC;
-$light_blue: #64BBE6;
+//$light_blue: #64BBE6;
+$light_blue: #A6D3FD;
 $lightest_blue: #87C7E6;
 $dark_blue: #437D99;
 $darkest_blue: #115F85;
@@ -30,7 +31,7 @@ $darkest_gold: #A67D12;
 		position: absolute;
 		font-size: 12px;
 		font-style: normal;
-		color: #3399CC;
+		color: $light_blue;
 		top: 2px;
 		right: 140px;
 		
@@ -46,7 +47,7 @@ $darkest_gold: #A67D12;
 	.toggle_button {
 		position: absolute;
 		font-size: 11px;
-		color: #3399CC;
+		color: $light_blue;
 		padding: 3px;
 		border-left: 1px solid $light_blue;
 		border-top: 2px solid $light_blue;
@@ -64,7 +65,7 @@ $darkest_gold: #A67D12;
 	.refresh_button {
 		position: absolute;
 		font-size: 11px;
-		color: #3399CC;
+		color: $light_blue;
 		padding: 3px;
 		border-left: 1px solid $light_blue;
 		border-top: 2px solid $light_blue;
@@ -82,7 +83,7 @@ $darkest_gold: #A67D12;
 	.hide_button {
 		position: absolute;
 		font-size: 11px;
-		color: #3399CC;
+		color: $light_blue;
 		padding: 3px;
 		border-left: 1px solid $light_blue;
 		border-top: 2px solid $light_blue;
@@ -104,6 +105,7 @@ $darkest_gold: #A67D12;
 		display: block;
 		border: 2px solid $light_blue;
 		margin-bottom: 20px;
+		font-size: 0px;
 		
 		.type_header {
 			width: 100%;
@@ -112,49 +114,50 @@ $darkest_gold: #A67D12;
 			padding: 3px 0px;
 			text-align: center;
 		}
-		.type_pane {
-			width: 100%;
-			display: block;
-			font-size: 0px;
-			.device_column {
-				width: 191px;
-				display: inline-block;
-				vertical-align: top;
-				.device {
-					line-height: 24px;
-					font-size: 14px;
-					cursor: pointer;
-					text-align: center;
-					margin: 2px;
-				}
-				.available {
-					background-color: #5BBD5C;
-					color: #303D30;
-					text-shadow: 0px 0px 8px #1E3D1E;
-				}
-				.unavailable {
-					background-color: #DBC067;
-					color: #5B5746;
-					text-shadow: 0px 0px 8px #5B502B;
-				}
-				.offline {
-					background-color: #D66781;
-					color: #562A34;
-					text-shadow: 0px 0px 8px #893448;
-				}
+		.device_column {
+			width: 230px;
+			display: inline-block;
+			vertical-align: top;
+			.device {
+				line-height: 24px;
+				font-size: 14px;
+				cursor: pointer;
+				text-align: center;
+				margin: 2px;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			.available {
+				background-color: #5BBD5C;
+				color: #303D30;
+				text-shadow: 0px 0px 8px #1E3D1E;
+			}
+			.unavailable {
+				background-color: #DBC067;
+				color: #5B5746;
+				text-shadow: 0px 0px 8px #5B502B;
+			}
+			.offline {
+				background-color: #D66781;
+				color: #562A34;
+				text-shadow: 0px 0px 8px #893448;
 			}
 		}
 	}
 	
 	.light {
 		margin-left: 5px;
-		margin-right: 10px;
+		margin-right: 5px;
 		height: 16px;
 		vertical-align: -2px;
 	}
-	.light-right {
+	.type-icon {
 		margin-right: 5px;
-		margin-left: 10px;
+		height: 16px;
+		vertical-align: -2px;
+	}
+	.type-icon-right {
+		margin-left: 5px;
 		height: 16px;
 		vertical-align: -2px;
 	}
