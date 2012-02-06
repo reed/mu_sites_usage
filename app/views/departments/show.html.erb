@@ -1,6 +1,6 @@
 <% @department.sites.each do |site| %>
   <div class="site_summary" <%= SiteDecorator.find(site).status_data %>>
-    <%= link_to site.display_name, department_site_path(site), :class => "site_title" %>
+    <%= link_to site.display_name, department_site_path(@department, site), :class => "site_title" %>
     <div id="<%= site.short_name %>_chart" class="status_chart">
     </div>
   </div>

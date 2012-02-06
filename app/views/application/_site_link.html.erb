@@ -1,3 +1,11 @@
 <li id="site_<%= site_link.id %>">
-  <%= link_to site_link.display_name, department_site_path(site_link.department_id, site_link) %>
+  <% if params[:controller] == "sites" %>
+    <a class="show" 
+      data-site="<%= site_link.id %>" 
+      data-site-name="<%= site_link.short_name %>" 
+      data-url="<%= department_site_path(site_link.department, site_link) + "?partial" %>"
+    ><%= site_link.display_name %></a>
+  <% else %>
+    <%= link_to site_link.display_name, department_site_path(site_link.department, site_link) %>
+  <% end %>
 </li>

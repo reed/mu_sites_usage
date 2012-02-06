@@ -10,17 +10,21 @@ class SiteDecorator < ApplicationDecorator
     "data-macs=""#{formatted_counts[:mac]}"" data-pcs=""#{formatted_counts[:pc]}"" data-thinclients=""#{formatted_counts[:tc]}"""
   end
   
-  def client_pane
-    devices = Array.new
-    ClientDecorator.decorate(model.clients.enabled.order(:name)).each do |client| 
-      devices << client.client_cell
+  def client_pane(details = false)
+    if model.clients.enabled.empty?
+      h.content_tag :div, "No computers", :class => "no_computers"
+    else
+      devices = Array.new
+      ClientDecorator.decorate(model.clients.enabled.order(:name)).each do |client| 
+        devices << client.client_cell(details)
+      end
+      columnize(devices)
     end
-    columnize(devices)
   end
   
   private
   
-  def columnize(devices, column_count = 5)
+  def columnize(devices, column_count = 4)
     columns = Array.new
     if devices.length < column_count
       devices.each do |device|

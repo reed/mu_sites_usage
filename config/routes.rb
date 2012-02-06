@@ -3,13 +3,18 @@ SitesUsage::Application.routes.draw do
   resources :sessions, :only => [:new, :create, :destroy]
 
   resources :users, :except => [:show]
-
+  
   resources :departments do 
     resources :sites
   end
   
+  match '/departments/:department_id/sites/*sites', :to => 'sites#show'
+  match '/sites/refresh/*sites', :to => 'sites#refresh'
+  
   match '/login', :to => 'sessions#new'
   match '/logout', :to => 'sessions#destroy'
+  match '/stats', :to => 'stats#index'
+  match '/logs', :to => 'logs#index'
   
   root :to => 'departments#index'
   post 'clients/upload'

@@ -32,6 +32,11 @@ module ApplicationHelper
   end
   
   def department_link_active?(id)
-    @department.present? && @department.id == id
+    (params[:controller] == "departments" || params[:controller] == "sites") && @department.present? && @department.id == id
   end
+  
+  def submenu_link_active?(name)
+    name == params[:controller]
+  end
+      
 end

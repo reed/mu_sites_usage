@@ -1,84 +1,26 @@
-<header class="site_header" data-site="<%= @site.id %>">
-  <%= link_to @site.display_name, department_site_path(@site) %>
+<% @sites.each do |site| %>
+<header class="site_header" data-site="<%= site.id %>" data-site-name="<%= site.short_name %>">
+  <%= link_to site.display_name, department_site_path(site.department, site) %>
   <div class="summary">
     <% ["available", "unavailable", "offline"].each do |status| %>
       <div class="<%= status %>_summary">
-        <%= @site.light status %>
-        <span class="<%= status %>_count"><%= @site.status_count status %></span>
+        <%= site.light status %>
+        <span class="<%= status %>_count"><%= site.status_count status %></span>
       </div>
     <% end %>
   </div>
   <div class="throbbler_container">
     <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
   </div>
-  <div class="toggle_button">Details</div>
+  <% if can? :view_client_status_details, site %>
+    <div class="toggle_button">Details</div>
+  <% end %>
   <div class="refresh_button">
     <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
   </div>
   <div class="hide_button" title="Hide">X</div>
 </header>
-<section class="site_pane" data-site="<%= @site.id %>">
-    <%= @site.client_pane %>
-    <!--<div class="device_column">
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <%= image_tag "windows.png", :title => "Windows", :height => "16", :class => "type-icon" %>
-        <span>ELLIS114-PC-01</span>
-        <%= image_tag "windows.png", :title => "Windows", :height => "16", :class => "type-icon-right" %>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-      <div class="device unavailable">
-        <%= image_tag "yellow.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "yellow.png", :class => "light-right" %>
-      </div>
-    </div>
-		<div class="device_column">
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-    </div>
-		<div class="device_column">
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-    </div>
-    <div class="device_column">
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-    </div>
-    <div class="device_column">
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-      <div class="device available">
-        <%= image_tag "green.png", :class => "light" %>
-        <span>AAS-PC-01</span>
-        <%= image_tag "green.png", :class => "light-right" %>
-      </div>
-    </div>-->
+<section class="site_pane" data-site="<%= site.id %>" data-site-name="<%= site.short_name %>">
+    <%= site.client_pane(can? :view_client_status_details, site) %>
 </section>
+<% end %>
