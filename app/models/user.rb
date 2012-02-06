@@ -22,6 +22,22 @@ class User < ActiveRecord::Base
   
   belongs_to :department
   
+  def authenticated_user?
+    ROLES.include?(role)
+  end
+  
+  def site_manager?
+    ["site_manager", "department_manager", "administrator"].include?(role)
+  end
+  
+  def department_manager?
+    ["department_manager", "administrator"].include?(role)
+  end
+  
+  def administrator?
+    role == "administrator"
+  end
+  
   def self.authenticate(username, password)
     user = User.find_by_username(username)
     return nil if user.nil?

@@ -1,4 +1,7 @@
 class Site < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :short_name
+  
   attr_accessible :display_name, :short_name, :name_filter, :department_id
   
   short_name_regex = /\A[a-z0-9]*\z/

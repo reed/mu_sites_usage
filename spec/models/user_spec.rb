@@ -81,4 +81,104 @@ describe User do
       @dept.users.build(@attr.merge({:role => "other"})).should_not be_valid
     end
   end
+
+  describe "roles" do
+    before(:each) do
+      @department = Factory(:department)
+      @attr = {
+        :username => "testuser",
+        :name => "Test User",
+        :email => "testuser@missouri.edu",
+        :role => "authenticated_user"
+      }
+    end
+    
+    describe "authenticated user" do
+      before(:each) do
+        @user = @department.users.create!(@attr)
+      end
+      
+      it "should be an authenticated user" do
+        @user.should be_authenticated_user
+      end
+      
+      it "should not be a site manager" do
+        @user.should_not be_site_manager
+      end
+      
+      it "should not be a department manager" do
+        @user.should_not be_department_manager
+      end
+      
+      it "should not be an administrator" do
+        @user.should_not be_administrator
+      end
+    end
+    
+    describe "site manager" do
+      before(:each) do
+        @user = @department.users.create!(@attr.merge({:role => "site_manager"}))
+      end
+      
+      it "should be an authenticated user" do
+        @user.should be_authenticated_user
+      end
+      
+      it "should be a site manager" do
+        @user.should be_site_manager
+      end
+      
+      it "should not be a department manager" do
+        @user.should_not be_department_manager
+      end
+      
+      it "should not be an administrator" do
+        @user.should_not be_administrator
+      end
+    end
+    
+    describe "department manager" do
+      before(:each) do
+        @user = @department.users.create!(@attr.merge({:role => "department_manager"}))
+      end
+      
+      it "should be an authenticated user" do
+        @user.should be_authenticated_user
+      end
+      
+      it "should be a site manager" do
+        @user.should be_site_manager
+      end
+      
+      it "should be a department manager" do
+        @user.should be_department_manager
+      end
+      
+      it "should not be an administrator" do
+        @user.should_not be_administrator
+      end
+    end
+    
+    describe "administrator" do
+      before(:each) do
+        @user = @department.users.create!(@attr.merge({:role => "administrator"}))
+      end
+      
+      it "should be an authenticated user" do
+        @user.should be_authenticated_user
+      end
+      
+      it "should be a site manager" do
+        @user.should be_site_manager
+      end
+      
+      it "should be a department manager" do
+        @user.should be_department_manager
+      end
+      
+      it "should be an administrator" do
+        @user.should be_administrator
+      end
+    end
+  end
 end
