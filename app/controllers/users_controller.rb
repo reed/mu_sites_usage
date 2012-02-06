@@ -1,19 +1,18 @@
 class UsersController < ApplicationController
+  load_and_authorize_resource
+  
   def index
-    @title = "All users"
-    @users = User.all
+    @title = "#{current_user.department.display_name} Users"
   end
 
   def new
-    @user = User.new
     @title = "New User"
   end
 
   def create
-    @department = Department.first #to be changed
+    @department = current_user.department
     @user = @department.users.build(params[:user]) 
     if @user.save
-      #sign_in @user
       flash[:success] = "Successfully added #{@user.name}"
       redirect_to users_path
     else
@@ -40,12 +39,12 @@ class UsersController < ApplicationController
 
   def destroy
     @user = User.find(params[:id])
-    #if !current_user?(@user)
+    if !current_user?(@user)
       @user.destroy
       flash[:success] = "User destroyed."
-    #else
-    #  flash[:error] = "Cannot destroy yourself."
-    #end
+    else
+      flash[:error] = "Cannot destroy yourself."
+    end
     redirect_to users_path
   end
 

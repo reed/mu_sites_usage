@@ -29,7 +29,7 @@
   </div>
   <div class="form_field">
     <div class="buttonset">
-      <% User::ROLES.each do |r| %>
+      <% current_user.assignable_roles.each do |r| %>
         <%= f.radio_button :role, r %>
         <%= label "user_role", r %>
       <% end %>

@@ -6,12 +6,18 @@ class Ability
     if user.administrator?
       can :manage, :all
     else
-      #if user.department_manager?
-      
-      #end
-      #if user.site_manager?
-    
-      #end
+      if user.department_manager?
+        can :manage, User, User.beneath_me(user) do |other_user|
+          ["authenticated_user", "site_manager"].include? other_user.role && other_user.try(:department) == user.department
+        end
+      end
+      if user.site_manager?
+        can :create, User
+        can :manage, User, User.beneath_me(user) do |other_user|
+          #other_user.role == "authenticated_user" && other_user.try(:department) == user.department
+          other_user.try(:department) == user.department
+        end 
+      end
       if user.authenticated_user?
         can :view_client_status_details, Site do |site|
           site.try(:department) == user.department
