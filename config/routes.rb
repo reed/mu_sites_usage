@@ -4,6 +4,8 @@ SitesUsage::Application.routes.draw do
 
   resources :users, :except => [:show]
   
+  resources :sites, :except => [:show]
+  
   resources :departments do 
     resources :sites
   end

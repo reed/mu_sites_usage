@@ -1,2 +1,16 @@
-<h1>Sites#index</h1>
-<p>Find me in app/views/sites/index.html.erb</p>
+<table id="sites_table">
+  <thead>
+    <th>Display Name</th>
+    <th>Short Name</th>
+    <th>Name Filter</th>
+    <th>Department</th>
+    <th># Devices</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    <%= render @sites %>
+  </tbody>
+</table>
+
+<%= link_to "Add", new_site_path, :class => "button" %>

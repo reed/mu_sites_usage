@@ -10,7 +10,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    @department = current_user.department
+    if current_user.administrator? && params[:user][:department_id].present?
+      @department = Department.find(params[:user][:department_id])
+    end
+    @department ||= current_user.department
     @user = @department.users.build(params[:user]) 
     if @user.save
       flash[:success] = "Successfully added #{@user.name}"
@@ -41,9 +44,9 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if !current_user?(@user)
       @user.destroy
-      flash[:success] = "User destroyed."
+      flash[:success] = "User remove."
     else
-      flash[:error] = "Cannot destroy yourself."
+      flash[:error] = "Cannot remove yourself."
     end
     redirect_to users_path
   end

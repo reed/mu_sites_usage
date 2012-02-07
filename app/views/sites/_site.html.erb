@@ -1,0 +1,10 @@
+<tr>
+  <td><%= site.display_name %></td>
+  <td><%= site.short_name %></td>
+  <td><%= site.name_filter %></td>
+  <td><%= site.department.display_name %></td>
+  <td><%= site.clients.count %></td>
+  <td><%= link_to "edit", edit_site_path(site) %></td>
+  <td><%= link_to "delete", site, :method => :delete, :confirm => "You sure?",
+                                  :title => "Delete #{site.display_name}" %></td>
+</tr>

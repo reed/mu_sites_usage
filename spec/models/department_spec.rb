@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Department do
-  describe "Department creation" do
+  describe "creation" do
     before(:each) do 
       @attr = {
         :display_name => "Computing Sites",

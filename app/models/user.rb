@@ -22,18 +22,14 @@ class User < ActiveRecord::Base
   
   belongs_to :department
   
-  scope :beneath_me_and_me, lambda { |current_user|
-    beneath_me + current_user
-  }
-  
   def self.beneath_me(me)
     case me.role
     when "administrator" 
       where("role == ? OR role == ? OR role == ? OR id == ?", "authenticated_user", "site_manager", "department_manager", me.id)
     when "department_manager" 
-      here("role == ? OR role == ? OR id == ?", "authenticated_user", "site_manager", me.id)
+      where("(role == ? OR role == ? OR id == ?) AND department_id == ?", "authenticated_user", "site_manager", me.id, me.department_id)
     when "site_manager" 
-      where("role == ? OR id == ?", "authenticated_user", me.id)
+      where("(role == ? OR id == ?) AND department_id == ?", "authenticated_user", me.id, me.department_id)
     end
   end
   

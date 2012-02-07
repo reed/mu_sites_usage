@@ -5,9 +5,15 @@
     <%= department_links %>
   </ul>
   <ul id="submenu">
-    <li <%= "class=active" if submenu_link_active? "users" %>><%= link_to "Users", users_path %></li>
-    <li <%= "class=active" if submenu_link_active? "stats" %>><%= link_to "Statistics", stats_path %></li>
-    <li <%= "class=active" if submenu_link_active? "logs" %>><%= link_to "Logs", logs_path %></li>
+    <% if can? :read, Log %>
+      <li <%= "class=active" if submenu_link_active? "logs" %>><%= link_to "Logs", logs_path %></li>
+    <% end %>
+    <% if can? :read, StatsController %>
+      <li <%= "class=active" if submenu_link_active? "stats" %>><%= link_to "Statistics", stats_path %></li>
+    <% end %>
+    <% if can? :read, User %>
+      <li <%= "class=active" if submenu_link_active? "users" %>><%= link_to "Users", users_path %></li>
+    <% end %>
     <% if signed_in? %>
       <li><%= link_to "Log Out", logout_path, :method => :delete %></li>
     <% else %>

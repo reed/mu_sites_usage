@@ -1,7 +1,7 @@
-<%= form_for(@department) do |f| %>
+<%= form_for(@site) do |f| %>
   <%= render 'fields', :f => f %>
   <div class="actions">
     <%= f.submit "Create" %>
-    <%= link_to "Cancel", departments_path, :class => "button" %>
+    <%= link_to "Cancel", sites_path, :class => "button" %>
   </div>
 <% end %>
