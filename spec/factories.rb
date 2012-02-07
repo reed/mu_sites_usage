@@ -16,6 +16,13 @@ Factory.define :client do |f|
   f.ip_address "100.200.300.400"
   f.association :site
 end
+Factory.define :user do |f|
+  f.sequence(:username) { |n| "user#{n}" }
+  f.sequence(:name) { |n| "User #{n}" }
+  f.sequence(:email) { |n| "user#{n}@missouri.edu" }
+  f.role "authenticated_user"
+  f.association :department
+end
 #  Factory.define :site do |f|
 #    f.sequence(:display_name) { |n| "Test Site #{n}" }
 #    f.sequence(:short_name) { |n| "testsite#{n}" }

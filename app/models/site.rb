@@ -14,7 +14,7 @@ class Site < ActiveRecord::Base
   validates :department_id, :presence => true
   
   belongs_to :department
-  has_many :clients
+  has_many :clients, :dependent => :nullify
   
   def self.match_name_with_site(name)
     name.upcase!

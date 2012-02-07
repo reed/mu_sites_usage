@@ -1,26 +1,26 @@
 <%= render 'shared/error_messages', :object => f.object %>
 <div class="form_row">
   <div class="form_label">
-    <%= f.label :username %>
+    <%= f.label :display_name %>
   </div>
   <div class="form_field">
-    <%= f.text_field :username %>
+    <%= f.text_field :display_name %>
   </div>
 </div>
 <div class="form_row">
   <div class="form_label">
-    <%= f.label :name %>
+    <%= f.label :short_name %>
   </div>
   <div class="form_field">
-    <%= f.text_field :name %>
+    <%= f.text_field :short_name %>
   </div>
 </div>
 <div class="form_row">
   <div class="form_label">
-    <%= f.label :email %>
+    <%= f.label :name_filter %>
   </div>
   <div class="form_field">
-    <%= f.text_field :email %>
+    <%= f.text_field :name_filter %>
   </div>
 </div>
 <% if current_user.administrator? %>
@@ -33,16 +33,3 @@
   </div>
 </div>
 <% end %>
-<div class="form_row">
-  <div class="form_label">
-    <%= f.label :role %>
-  </div>
-  <div class="form_field">
-    <div class="buttonset">
-      <% current_user.assignable_roles.each do |r| %>
-        <%= f.radio_button :role, r %>
-        <%= label "user_role", r %>
-      <% end %>
-    </div>
-  </div>
-</div>

@@ -7,14 +7,15 @@ class Ability
       can :manage, :all
     else
       if user.department_manager?
-        can :manage, User, User.beneath_me(user) do |other_user|
-          ["authenticated_user", "site_manager"].include? other_user.role && other_user.try(:department) == user.department
+        can [:manage], Site, Site.scoped_by_department_id(user.department_id) do |site|
+          site.try(:department) == user.department
         end
       end
       if user.site_manager?
+        can :manage, StatsController
+        can :manage, Log
         can :create, User
         can :manage, User, User.beneath_me(user) do |other_user|
-          #other_user.role == "authenticated_user" && other_user.try(:department) == user.department
           other_user.try(:department) == user.department
         end 
       end
@@ -24,7 +25,7 @@ class Ability
         end
       end
       can :read, Department
-      can :read, Site
+      #can :read, Site
     end
     #
     # The first argument to `can` is the action you are giving the user permission to do.

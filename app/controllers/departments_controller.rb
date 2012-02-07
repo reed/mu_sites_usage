@@ -1,4 +1,6 @@
 class DepartmentsController < ApplicationController
+  load_and_authorize_resource
+  
   def index
     @title = "Departments"
     @page_heading = "Departments"

@@ -6,8 +6,9 @@
 		width: 350px;
 		height: 350px;
 		margin: 0 40px 60px 0;
-		float: left;
+		/*float: left;*/
 		position: relative;
+		display: inline-block;
 		
 		.status_chart {
 			height: 350px;
@@ -25,7 +26,7 @@
 			}
 			.label_row {
 				height: 40px;
-				font-size: 20px;
+				font-size: 0px;
 				text-align: center;
 				margin: 0 auto;
 				overflow: hidden;
@@ -58,13 +59,21 @@
 					font-size: 26px;
 				}
 			}
+			.admin_row {
+				text-align: center;
+				margin: 10px auto 0px;
+				a {
+					display: inline-block;
+					margin: 0px 3px;
+				}
+			}
 		}
 	}
 	.site_summary {
 		width: 350px;
 		height: 350px;
 		margin: 0 40px 60px 0;
-		float: left;
+		display: inline-block;
 		position: relative;
 		
 		.site_title {

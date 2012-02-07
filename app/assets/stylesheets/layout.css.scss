@@ -185,14 +185,19 @@ body {
 
 #page_title {
 	border-left: 1px solid #A6D3FD;
-	color: $main_gold;
-	font-size: 20px;
-	letter-spacing: 0.3px;
-	line-height: 150%;
+	line-height: 30px;
 	margin-bottom: 40px;
 	padding: 5px 0 5px 20px;
-	font-variant: small-caps;
+	display: block;
+	
+	h1 {
+		color: $main_gold;
+		letter-spacing: 0.3px;
+		font-size: 20px;
+		font-variant: small-caps;
+	}
 }
+
 a {
 	color: #A6D3FD;
 	text-decoration: none;
@@ -214,11 +219,39 @@ th {
 	text-align: center;
 }
 
+th:first-child {
+	text-align: left;
+}
+
+tbody tr {
+	font-size: 13px;
+	
+	td:first-child {
+		text-align: left;
+	}
+	td {
+		padding: 2px;
+		text-align: center;
+	}
+}
+
 input[type="text"], input[type="password"] {
 	background-color: transparent;
 	border: 1px solid #A6D3FD;
 	color: #FFFFFF;
 	padding: 3px;
+}
+
+select {
+	background-color: transparent;
+	border: 1px solid #A6D3FD;
+	color: #FFFFFF;
+	padding: 1px;
+	-webkit-appearance: none;
+	option {
+		background-color: #498AC7;
+		color: #FFFFFF;
+	}
 }
 
 form {
@@ -241,22 +274,6 @@ form {
 		display: inline;
 	}
 }	
-	
-th:first-child {
-	text-align: left;
-}
-
-tbody tr {
-	font-size: 13px;
-	
-	td:first-child {
-		text-align: left;
-	}
-	td {
-		padding: 2px;
-		text-align: center;
-	}
-}
 
 #error_explanation {
 	display: inline-block;
@@ -290,6 +307,9 @@ tbody tr {
 		font-size: 16px;
 		@include rounded-corners(10px)
 	}
+}
+.debug_dump {
+	margin-top: 50px;
 }
 * {
 	border: medium none;

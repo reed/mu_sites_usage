@@ -11,8 +11,8 @@ class Department < ActiveRecord::Base
                          :uniqueness => { :case_sensitive => false },
                          :format => { :with => short_name_regex }
                          
-  has_many :sites
-  has_many :users
+  has_many :sites, :dependent => :destroy
+  has_many :users, :dependent => :destroy
   
   def client_count(type)
     sum = 0
