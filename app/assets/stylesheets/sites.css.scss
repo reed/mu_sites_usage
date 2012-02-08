@@ -18,34 +18,38 @@ $darkest_gold: #A67D12;
 
 .sites {
 	.site_header, .site_header a {
+		font-family: Tahoma;
 		font-size: 18px;
 		color: #FFD24A;
 		font-style: italic;
 		font-variant: small-caps;
 		padding: 2px 2px 0px 6px;
 		position: relative;
-		width: 920px;
+		width: 1148px;
 		text-decoration: none;
+		height: 25px;
 	}
 	.summary {
-		position: absolute;
+		float: right;
 		font-size: 12px;
 		font-style: normal;
 		color: $light_blue;
-		top: 2px;
+		margin: 2px 6px 0px 6px;
 		right: 140px;
-		
+		height: 23px;
 		div {
 			display: inline-block;
 		}
 	}
 	.throbbler_container {
-		position: absolute;
-		top: 1px;
+		float: right;
+		margin: 0px 6px;
 		right: 140px;
 	}
 	.toggle_button {
-		position: absolute;
+		float: right;
+		margin-left: 6px;
+		font-family: Tahoma;
 		font-size: 11px;
 		color: $light_blue;
 		padding: 3px;
@@ -53,7 +57,7 @@ $darkest_gold: #A67D12;
 		border-top: 2px solid $light_blue;
 		border-right: 1px solid $light_blue;
 		right: 60px;
-		top: 2px;
+		height: 19px;
 		bottom: 0px;
 		cursor: pointer;
 		font-style: normal;
@@ -63,15 +67,16 @@ $darkest_gold: #A67D12;
 		color: #001621;
 	}
 	.refresh_button {
-		position: absolute;
+		float: right;
+		margin-left: 6px;
 		font-size: 11px;
 		color: $light_blue;
-		padding: 3px;
+		padding: 2px 3px;
 		border-left: 1px solid $light_blue;
 		border-top: 2px solid $light_blue;
 		border-right: 1px solid $light_blue;
 		right: 30px;
-		top: 2px;
+		height: 21px;
 		bottom: 0px;
 		cursor: pointer;
 		font-style: normal;
@@ -81,7 +86,9 @@ $darkest_gold: #A67D12;
 		color: #001621;
 	}
 	.hide_button {
-		position: absolute;
+		float: right;
+		margin-left: 6px;
+		font-family: Tahoma;
 		font-size: 11px;
 		color: $light_blue;
 		padding: 3px;
@@ -89,7 +96,7 @@ $darkest_gold: #A67D12;
 		border-top: 2px solid $light_blue;
 		border-right: 1px solid $light_blue;
 		right: 4px;
-		top: 2px;
+		height: 19px;
 		bottom: 0px;
 		cursor: pointer;
 		font-style: normal;
@@ -101,7 +108,7 @@ $darkest_gold: #A67D12;
 		color: #001621;
 	}
 	.site_pane {
-		width: 920px;
+		width: 1150px; //920px;
 		display: block;
 		border: 2px solid $light_blue;
 		margin-bottom: 20px;
@@ -120,8 +127,26 @@ $darkest_gold: #A67D12;
 			padding: 3px 0px;
 			text-align: center;
 		}
+		.details_header {
+			font-size: 12px;
+			color: #FADF8F;
+			background-color: #1E3A54;
+			font-variant: small-caps;
+			div:first-child {
+				width: 140px;
+				padding-left: 30px;
+				text-align: left;
+			}
+			div {
+				width: 120px;
+				display: inline-block;
+				vertical-align: middle;
+				line-height: 20px;
+				text-align: center;
+			}
+		}
 		.device_column {
-			width: 230px;
+			width: 20%; //230px;
 			display: inline-block;
 			vertical-align: top;
 			.device {
@@ -148,6 +173,26 @@ $darkest_gold: #A67D12;
 				color: #562A34;
 				text-shadow: 0px 0px 8px #893448;
 			}
+			.device_detail {
+				line-height: 20px;
+				height: 20px;
+				font-size: 14px;
+				.details {
+					font-size: 12px;
+				}
+			}
+			.available_detail {
+				color: #5BBD5C;
+			}
+			.unavailable_detail {
+				color: #DBC067;
+			}
+			.offline_detail {
+				color: #D66781;
+			}
+		}
+		.centered {
+			text-align: center;
 		}
 	}
 	

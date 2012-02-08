@@ -1,6 +1,6 @@
 class SitesController < ApplicationController
   load_and_authorize_resource
-  skip_authorize_resource :only => :show
+  skip_authorize_resource :only => [:show, :refresh]
   
   def index
     @title = "Sites"
@@ -78,7 +78,7 @@ class SitesController < ApplicationController
       @sites = SiteDecorator.decorate(Site.where(:short_name => params[:sites].split('/')))
       site_hash = Hash.new
       @sites.each do |site|
-        site_hash[site.id] = site.client_pane
+        site_hash[site.id] = site.client_pane(can? :view_client_status_details, site)
       end
       render :json => site_hash
     else

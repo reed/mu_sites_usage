@@ -13,6 +13,7 @@ jQuery ->
 	$('.hide_button, .selected').one('click', hideSite)
 	$('.refresh_button').click(refreshSite)
 	$('.show').one('click', buildSite)
+	$('.toggle_button').one('click', showDetails)
 
 cycleInfo = ->
 	device = $(this)
@@ -81,3 +82,81 @@ refreshSite = ->
 			$('.summary', siteHeader).show()
 		)
 	)
+	
+showDetails = ->
+	pane = $(this).parent().next('.site_pane')
+	detailsHeader = $('<div class="details_header"></div>')
+	$('<div>Hostname</div>').appendTo(detailsHeader)
+	$('<div>MAC Address</div>').appendTo(detailsHeader)
+	$('<div>IP Address</div>').appendTo(detailsHeader)
+	$('<div>User</div>').appendTo(detailsHeader)
+	#$('<div>Connected VM</div>').appendTo(detailsHeader)
+	$('<div>Status</div>').appendTo(detailsHeader)
+	devices = $('.device', pane)
+	newHeight = 20 * (devices.length + 1)
+	pane.animate({height: newHeight}, 500)
+	pane.css('paddingTop', '0px')
+	pane.html(detailsHeader).append(columnizeDetails(devices))
+	#$('.light-right', pane).remove()
+	$('.user:contains("Unknown User")', pane).text("").addClass('empty_details')
+	#$('.vm:contains("Unknown VM")', pane).text("").addClass('empty-details')
+	$('.device_detail span', pane).not('.user-toggler').show()
+	$('.device_column:eq(0)', pane).css('width', '170px')
+	$('.device_column:gt(0)', pane).each ->
+		$(this).addClass('centered').css('width', '121px')
+		$('span:not(".user-toggler")', this).addClass('details')
+	$('.device_column:eq(3), .details_header div:eq(3)', pane).css('width', '211px')
+	$('.device_column:eq(4), .details_header div:eq(4)', pane).css('width', '141px')
+	$('.device_column:eq(5), .details_header div:eq(5)', pane).css('width', '386px')
+	#$('.user-toggler', pane).click(toggleUser);
+	#$(this).text('Basic').one('click', function(){
+	#	$(this).text('Details').one('click', showDetails);
+	#	var pane = $(this).parent().next('.sitePane');
+	#	update(pane);
+	#});
+	
+columnizeDetails = (devices) ->
+	columns = []
+	columnCount = 5
+	columns[j] = [] for j in [0..columnCount - 1]
+	#for (j = 0; j < columnCount; j++){
+	#	columns[j] = [];
+	#}
+	for device, i in devices
+		dev = $(device)
+		status = dev.data("status") + '_detail'
+		img = $('<div>').append($('img:first-child', dev).clone()).remove().html()
+		for j in [0..columnCount - 1]
+			span = $('<div>').append($('span:not(".user-toggler, .vm"):eq(' + j + ')', dev).clone()).remove().html()
+			if j == 0
+				columns[j].push('<div class="device_detail ' + status + '">' + img + span + '</div>')
+			else
+				columns[j].push('<div class="device_detail ' + status + '">' + span + '</div>')
+	
+			
+	# for (i = 0; i < tcs.length; i++){
+	# 	tc = $(tcs[i]);
+	# 
+	# 	status = tc.attr('data-status') + '_detail';
+	# 	img = $('<div>').append($('img', tc).clone()).remove().html();
+	# 	for (j = 0; j < columnCount; j++){
+	# 		span = $('<div>').append($('span:not(".userToggler"):eq(' + j + ')', tc).clone()).remove().html();
+	# 		if (j == 0){
+	# 			columns[j].push('<div class="thinclient-detail ' + status + '">' + img + span + '</div>');
+	# 		}else{
+	# 			columns[j].push('<div class="thinclient-detail ' + status + '">' + span + '</div>');
+	# 		}
+	# 	}
+	# }
+	html = ''
+	for column in columns
+		col = '<div class="device_column">' + column.join('') + '</div>'
+		html = html + col
+	
+	html	
+	# for (i = 0; i < columns.length; i++){
+	# 	col = '<div class="thinclient_list_pane">' + columns[i].join('') + '</div>';
+	# 	html = html + col;
+	# }
+	# return html;
+	

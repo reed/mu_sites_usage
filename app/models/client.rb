@@ -70,16 +70,16 @@ class Client < ActiveRecord::Base
     end
   end
   
+  def logged_in?
+    (current_status == "unavailable")
+  end
+  
   private
   
   def check_in
     touch(:last_checkin)
   end
-  
-  def logged_in?
-    (current_status == "unavailable")
-  end
-  
+ 
   def log_in
     record_action("logout") if logged_in?
     login_time = Time.now
