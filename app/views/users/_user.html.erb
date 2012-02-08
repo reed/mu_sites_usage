@@ -1,7 +1,7 @@
 <tr>
-  <td><%= user.name %></td>
-  <td><%= user.username %></td>
-  <td><%= user.email %></td>
+  <td><%= best_in_place user, :name %></td>
+  <td><%= best_in_place user, :username %></td>
+  <td><%= best_in_place user, :email %></td>
   <td><%= user.department.display_name %></td>
   <td><%= user.role.titleize %></td>
   <td><%= user.logins %></td>

@@ -49,12 +49,20 @@ class SitesController < ApplicationController
    
   def update
     @site = Site.find(params[:id])
-    if @site.update_attributes(params[:site])
-      flash[:success] = "Site updated."
-      redirect_to sites_path
-    else
-      @title = "Edit Site"
-      render 'edit'
+    respond_to do |format|
+      if @site.update_attributes(params[:site])
+        format.html { 
+          flash[:success] = "Site successfully updated."
+          redirect_to(sites_path) 
+        }
+        format.json { respond_with_bip(@site) }
+      else
+        format.html { 
+          @title = "Edit Site"
+          render :action => "edit" 
+        }
+        format.json { respond_with_bip(@site) }
+      end
     end
   end
 
