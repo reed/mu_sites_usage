@@ -32,6 +32,9 @@ GEM
     annotate (2.4.0)
     ansi (1.4.1)
     arel (2.2.1)
+    best_in_place (1.0.6)
+      jquery-rails
+      rails (~> 3.1)
     builder (3.0.0)
     cancan (1.6.7)
     capybara (1.1.2)
@@ -169,6 +172,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate (~> 2.4.0)
+  best_in_place
   cancan
   capybara
   coffee-rails (~> 3.1.1)

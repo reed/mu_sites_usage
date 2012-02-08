@@ -308,6 +308,14 @@ form {
 		@include rounded-corners(10px)
 	}
 }
+.purr {
+	position: fixed;
+	top: 40px;
+	right: 20px;
+	width: 250px;
+	padding: 20px;
+	@include rounded-corners(10px)
+}
 .debug_dump {
 	margin-top: 50px;
 }

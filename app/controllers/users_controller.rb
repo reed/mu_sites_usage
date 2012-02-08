@@ -31,12 +31,20 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(params[:user])
-      flash[:success] = "User updated."
-      redirect_to users_path
-    else
-      @title = "Edit user"
-      render 'edit'
+    respond_to do |format|
+      if @user.update_attributes(params[:user])
+        format.html { 
+          flash[:success] = "User successfully updated."
+          redirect_to(users_path) 
+        }
+        format.json { respond_with_bip(@user) }
+      else
+        format.html { 
+          @title = "Edit User"
+          render :action => "edit" 
+        }
+        format.json { respond_with_bip(@user) }
+      end
     end
   end
 

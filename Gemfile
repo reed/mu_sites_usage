@@ -22,6 +22,7 @@ gem 'draper', '~> 0.10.0'
 gem 'net-ldap'
 gem 'friendly_id'
 gem 'cancan'
+gem 'best_in_place'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
