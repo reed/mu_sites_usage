@@ -11,10 +11,57 @@ class ClientDecorator < ApplicationDecorator
       name = h.content_tag :span, model.name, :class => "cycle"
       mac = h.content_tag :span, model.mac_address, :class => "cycle"
       ip = h.content_tag :span, model.ip_address, :class => "cycle"
-      h.content_tag :div, light + left_type_icon + name + mac + ip + right_type_icon + light, :class => "device #{status}"
+      msg = h.content_tag :span, status_message, :class => "status-message"
+      data = name + mac + ip + user_info + vm_name + msg
     else
       name = h.content_tag :span, model.name
-      h.content_tag :div, light + left_type_icon + name + right_type_icon + light, :class => "device #{status}"  
+      data = name  
+    end
+    h.content_tag :div, light + left_type_icon + data + right_type_icon + light, {:class => "device #{status}", "data-status" => status }  
+  end
+  
+  def user_info 
+    if model.logged_in? && model.current_user.present?
+      uid = h.content_tag :span, model.current_user, :class => "user-toggler uid"
+      ldap = Ldap.new
+      u_name = h.content_tag :span, ldap.get_display_name(model.current_user), :class => "user-toggler display-name"
+      data = uid + u_name
+    else
+      data = "Unknown User"
+    end
+    h.content_tag :span, data, :class => "user"
+  end
+  
+  def vm_name
+    if model.logged_in? && model.current_vm.present?
+      h.content_tag :span, model.current_vm, :class => "vm"
+    else
+      h.content_tag :span, "Unknown VM", :class => "vm"
+    end
+  end
+  
+  def status_message
+    case model.current_status
+    when "available"
+      if model.last_login.present?
+        if model.last_login < 1.day.ago
+          "Last login: #{model.last_login.strftime("%a, %-m/%-d at %-l:%M %p")} (#{h.time_ago_in_words(model.last_login)} ago)"
+        else
+          "Last login: #{model.last_login.strftime("%-l:%M %p")} (#{h.time_ago_in_words(model.last_login)} ago)"
+        end
+      else
+        "No previous logins"
+      end
+    when "unavailable"
+      "Logged in for #{h.time_ago_in_words(model.last_login)}"
+    when "offline"
+      last_checkin = model.last_checkin
+      last_checkin ||= model.updated_at
+      if last_checkin < 1.day.ago
+        "Offline since #{last_checkin.strftime("%a, %-m/%-d at %-l:%M %p")} (#{h.time_ago_in_words(last_checkin)} ago)"
+      else
+        "Offline since #{last_checkin.strftime("%-l:%M %p")} (#{h.time_ago_in_words(last_checkin)} ago)"
+      end
     end
   end
 end

@@ -1,6 +1,16 @@
 <% @sites.each do |site| %>
 <header class="site_header" data-site="<%= site.id %>" data-site-name="<%= site.short_name %>">
   <%= link_to site.display_name, department_site_path(site.department, site) %>
+  <div class="hide_button" title="Hide">X</div>
+  <div class="refresh_button">
+    <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
+  </div>
+  <% if can? :view_client_status_details, site %>
+     <div class="toggle_button">Details</div>
+   <% end %>
+   <div class="throbbler_container">
+     <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
+   </div>
   <div class="summary">
     <% ["available", "unavailable", "offline"].each do |status| %>
       <div class="<%= status %>_summary">
@@ -9,16 +19,6 @@
       </div>
     <% end %>
   </div>
-  <div class="throbbler_container">
-    <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
-  </div>
-  <% if can? :view_client_status_details, site %>
-    <div class="toggle_button">Details</div>
-  <% end %>
-  <div class="refresh_button">
-    <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
-  </div>
-  <div class="hide_button" title="Hide">X</div>
 </header>
 <section class="site_pane" data-site="<%= site.id %>" data-site-name="<%= site.short_name %>">
     <%= site.client_pane(can? :view_client_status_details, site) %>
