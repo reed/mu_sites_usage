@@ -23,6 +23,7 @@ gem 'net-ldap'
 gem 'friendly_id'
 gem 'cancan'
 gem 'best_in_place'
+gem 'will_paginate'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -39,6 +40,11 @@ gem 'best_in_place'
 group :development do
 	gem 'rspec-rails', '~> 2.7.0'
 	gem 'annotate', '~> 2.4.0'
+end
+
+group :staging do
+  gem 'tiny_tds'
+  gem 'activerecord-sqlserver-adapter'
 end
 
 group :test do

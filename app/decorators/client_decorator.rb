@@ -5,8 +5,8 @@ class ClientDecorator < ApplicationDecorator
     status = model.current_status
     type = model.client_type == "mac" ? "mac" : "windows"
     light = light(status)
-    left_type_icon = h.image_tag "#{type}.png", :title => type.capitalize, :height => "16", :class => "type-icon"
-    right_type_icon = h.image_tag "#{type}.png", :title => type.capitalize, :height => "16", :class => "type-icon-right"
+    left_type_icon = h.image_tag "#{type}_#{status}.png", :title => type.capitalize, :height => "16", :class => "type-icon"
+    right_type_icon = h.image_tag "#{type}_#{status}.png", :title => type.capitalize, :height => "16", :class => "type-icon-right"
     if details
       name = h.content_tag :span, model.name, :class => "cycle"
       mac = h.content_tag :span, model.mac_address, :class => "cycle"
@@ -17,14 +17,14 @@ class ClientDecorator < ApplicationDecorator
       name = h.content_tag :span, model.name
       data = name  
     end
-    h.content_tag :div, light + left_type_icon + data + right_type_icon + light, {:class => "device #{status}", "data-status" => status }  
+    h.content_tag :div, light + left_type_icon + data + right_type_icon + light, {:class => "device #{status}", "data-status" => status, "data-type" => type }  
   end
   
   def user_info 
     if model.logged_in? && model.current_user.present?
-      uid = h.content_tag :span, model.current_user, :class => "user-toggler uid"
+      uid = h.content_tag :span, model.current_user, :class => "user_toggler uid"
       ldap = Ldap.new
-      u_name = h.content_tag :span, ldap.get_display_name(model.current_user), :class => "user-toggler display-name"
+      u_name = h.content_tag :span, ldap.get_display_name(model.current_user), :class => "user_toggler display-name"
       data = uid + u_name
     else
       data = "Unknown User"

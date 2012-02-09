@@ -16,8 +16,21 @@ $lightest_gold: #FFE090;
 $dark_gold: #BFA04E;
 $darkest_gold: #A67D12;
 
+@mixin site-header-button() {
+	font-size: 11px;
+	float: right;
+	color: $light_blue;
+  	border-left: 1px solid $light_blue;
+	border-top: 2px solid $light_blue;
+	border-right: 1px solid $light_blue;
+	cursor: pointer;
+	font-style: normal;
+	margin-left: 6px;
+	font-family: Tahoma;
+}
+
 .sites {
-	.site_header, .site_header a {
+	.site_header, .site_title {
 		font-family: Tahoma;
 		font-size: 18px;
 		color: #FFD24A;
@@ -47,63 +60,29 @@ $darkest_gold: #A67D12;
 		right: 140px;
 	}
 	.toggle_button {
-		float: right;
-		margin-left: 6px;
-		font-family: Tahoma;
-		font-size: 11px;
-		color: $light_blue;
 		padding: 3px;
-		border-left: 1px solid $light_blue;
-		border-top: 2px solid $light_blue;
-		border-right: 1px solid $light_blue;
-		right: 60px;
 		height: 19px;
-		bottom: 0px;
-		cursor: pointer;
-		font-style: normal;
+		@include site-header-button()
 	}
-	.toggle_button:hover {
-		background-color: $light_blue;
-		color: #001621;
+	.edit_button {
+		padding: 3px;
+		height: 19px;
+		text-decoration: none;
+		@include site-header-button()
 	}
 	.refresh_button {
-		float: right;
-		margin-left: 6px;
-		font-size: 11px;
-		color: $light_blue;
 		padding: 2px 3px;
-		border-left: 1px solid $light_blue;
-		border-top: 2px solid $light_blue;
-		border-right: 1px solid $light_blue;
-		right: 30px;
 		height: 21px;
-		bottom: 0px;
-		cursor: pointer;
-		font-style: normal;
-	}
-	.refresh_button:hover {
-		background-color: $light_blue;
-		color: #001621;
+		@include site-header-button()
 	}
 	.hide_button {
-		float: right;
-		margin-left: 6px;
-		font-family: Tahoma;
-		font-size: 11px;
-		color: $light_blue;
 		padding: 3px;
-		border-left: 1px solid $light_blue;
-		border-top: 2px solid $light_blue;
-		border-right: 1px solid $light_blue;
-		right: 4px;
 		height: 19px;
-		bottom: 0px;
-		cursor: pointer;
-		font-style: normal;
 		text-align: center;
 		width: 10px;
+		@include site-header-button()
 	}
-	.hide_button:hover {
+	.toggle_button:hover, .edit_button:hover, .refresh_button:hover, .hide_button:hover {
 		background-color: $light_blue;
 		color: #001621;
 	}
@@ -133,12 +112,12 @@ $darkest_gold: #A67D12;
 			background-color: #1E3A54;
 			font-variant: small-caps;
 			div:first-child {
-				width: 140px;
-				padding-left: 30px;
+				width: 153px;
+				padding-left: 47px;
 				text-align: left;
 			}
 			div {
-				width: 120px;
+				width: 140px;
 				display: inline-block;
 				vertical-align: middle;
 				line-height: 20px;
@@ -180,6 +159,12 @@ $darkest_gold: #A67D12;
 				.details {
 					font-size: 12px;
 				}
+				.user_toggler {
+					cursor: pointer;
+				}
+			}
+			.name_toggler {
+				cursor: pointer;
 			}
 			.available_detail {
 				color: #5BBD5C;
@@ -211,6 +196,9 @@ $darkest_gold: #A67D12;
 		margin-left: 5px;
 		height: 16px;
 		vertical-align: -2px;
+	}
+	#type_icon_reserve {
+		display: none;
 	}
 	#sites_table {
 		width: 80%;
