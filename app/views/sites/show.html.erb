@@ -1,16 +1,19 @@
 <% @sites.each do |site| %>
 <header class="site_header" data-site="<%= site.id %>" data-site-name="<%= site.short_name %>">
-  <%= link_to site.display_name, department_site_path(site.department, site) %>
+  <%= link_to site.display_name, department_site_path(site.department, site), :class => "site_title" %>
   <div class="hide_button" title="Hide">X</div>
   <div class="refresh_button">
     <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
   </div>
   <% if can? :view_client_status_details, site %>
      <div class="toggle_button">Details</div>
-   <% end %>
-   <div class="throbbler_container">
-     <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
-   </div>
+  <% end %>
+  <% if can? :edit, site %>
+   <%= link_to "Edit Site", edit_site_path(site), :class => "edit_button" %>
+  <% end %>
+  <div class="throbbler_container">
+    <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
+  </div>
   <div class="summary">
     <% ["available", "unavailable", "offline"].each do |status| %>
       <div class="<%= status %>_summary">
@@ -24,3 +27,7 @@
     <%= site.client_pane(can? :view_client_status_details, site) %>
 </section>
 <% end %>
+<div id="type_icon_reserve">
+  <%= image_tag "mac.png", :title => "Mac", :height => "16", :class => "type-icon mac" %>
+  <%= image_tag "windows.png", :title => "Windows", :height => "16", :class => "type-icon windows" %>
+</div>

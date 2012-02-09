@@ -6,4 +6,6 @@ class Log < ActiveRecord::Base
                       :inclusion => { :in => ["login", "logout"] }
                       
   belongs_to :client
+  
+  default_scope order('updated_at DESC')
 end

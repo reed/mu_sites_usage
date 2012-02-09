@@ -1,3 +1,14 @@
 // Place all the styles related to the logs controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.logs {
+	#logs_table {
+		width: 80%;
+		margin-bottom: 20px;
+		table-layout: fixed;
+		
+		.device_info_toggler {
+			cursor: pointer;
+		}
+	}
+}

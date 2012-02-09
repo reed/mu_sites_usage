@@ -5,7 +5,8 @@ jQuery ->
 	$('.best_in_place').best_in_place()
 	$('.throbbler_container', '.sites').hide()
 	$('.device').each ->
-		$('span:gt(0)', this).hide()
+		$('span:gt(0)', this).not('.user_toggler').hide()
+		$('.uid', this).hide()
 		$(this).click(cycleInfo)
 	$('.site_header', '.sites').each ->
 		siteID = $(this).data('site')
@@ -57,6 +58,7 @@ buildSite = ->
 		header = $('.site_header[data-site=' + siteID + ']')
 		$('.hide_button', header).one('click', hideSite)
 		$('.refresh_button', header).click(refreshSite)
+		$('.toggle_button', header).one('click', showDetails)
 		link.removeClass('show').addClass('selected').one('click', hideSite)
 	)
 	
@@ -72,14 +74,20 @@ refreshSite = ->
 			sitePane = $('.site_pane[data-site=' + id + ']')
 			newClients = $(clients)
 			$('.device', newClients).each ->
-				$('span:gt(0)', this).hide()
+				$('span:gt(0)', this).not('.user_toggler').hide()
+				$('.uid', this).hide()
 				$(this).click(cycleInfo)
+			newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
+			newHeight = newHeight + "px"
+			sitePane.css('height', newHeight)
 			sitePane.html(newClients)
 			$('.available_count', siteHeader).text($('.available', sitePane).length)
 			$('.unavailable_count', siteHeader).text($('.unavailable', sitePane).length)
 			$('.offline_count', siteHeader).text($('.offline', sitePane).length)
 			$('.throbbler_container', siteHeader).hide()
 			$('.summary', siteHeader).show()
+			if $('.toggle_button', siteHeader).text() == "Basic"
+				$('.toggle_button', siteHeader).unbind('click').one('click', showDetails).click()
 		)
 	)
 	
@@ -90,73 +98,60 @@ showDetails = ->
 	$('<div>MAC Address</div>').appendTo(detailsHeader)
 	$('<div>IP Address</div>').appendTo(detailsHeader)
 	$('<div>User</div>').appendTo(detailsHeader)
-	#$('<div>Connected VM</div>').appendTo(detailsHeader)
 	$('<div>Status</div>').appendTo(detailsHeader)
 	devices = $('.device', pane)
 	newHeight = 20 * (devices.length + 1)
 	pane.animate({height: newHeight}, 500)
-	pane.css('paddingTop', '0px')
 	pane.html(detailsHeader).append(columnizeDetails(devices))
-	#$('.light-right', pane).remove()
 	$('.user:contains("Unknown User")', pane).text("").addClass('empty_details')
-	#$('.vm:contains("Unknown VM")', pane).text("").addClass('empty-details')
-	$('.device_detail span', pane).not('.user-toggler').show()
-	$('.device_column:eq(0)', pane).css('width', '170px')
+	$('.device_detail span', pane).not('.user_toggler').show()
+	$('.device_column:eq(0)', pane).css('width', '200px')
 	$('.device_column:gt(0)', pane).each ->
-		$(this).addClass('centered').css('width', '121px')
-		$('span:not(".user-toggler")', this).addClass('details')
-	$('.device_column:eq(3), .details_header div:eq(3)', pane).css('width', '211px')
-	$('.device_column:eq(4), .details_header div:eq(4)', pane).css('width', '141px')
-	$('.device_column:eq(5), .details_header div:eq(5)', pane).css('width', '386px')
-	#$('.user-toggler', pane).click(toggleUser);
-	#$(this).text('Basic').one('click', function(){
-	#	$(this).text('Details').one('click', showDetails);
-	#	var pane = $(this).parent().next('.sitePane');
-	#	update(pane);
-	#});
+		$(this).addClass('centered').css('width', '140px')
+		$('span:not(".user_toggler")', this).addClass('details')
+	$('.device_column:eq(3), .details_header div:eq(3)', pane).css('width', '230px')
+	$('.device_column:eq(4), .details_header div:eq(4)', pane).css('width', '440px')
+	$('.user_toggler', pane).click(toggleUser)
+	$('.vm', pane).hide()
+	$('.name_toggler span', pane).click(toggleName)
+	$(this).text('Basic').one('click', ->
+		$(this).text('Details').one('click', showDetails)
+		pane = $(this).parent().next('.site_pane')
+		$('.refresh_button', $(this).parent()).click()
+	)
 	
 columnizeDetails = (devices) ->
 	columns = []
 	columnCount = 5
 	columns[j] = [] for j in [0..columnCount - 1]
-	#for (j = 0; j < columnCount; j++){
-	#	columns[j] = [];
-	#}
 	for device, i in devices
 		dev = $(device)
 		status = dev.data("status") + '_detail'
-		img = $('<div>').append($('img:first-child', dev).clone()).remove().html()
+		light = $('<div>').append($('img:eq(0)', dev).clone()).remove().html()
+		typeIcon = $('<div>').append($('.' + dev.data('type'), '#type_icon_reserve').clone()).remove().html()
 		for j in [0..columnCount - 1]
-			span = $('<div>').append($('span:not(".user-toggler, .vm"):eq(' + j + ')', dev).clone()).remove().html()
+			span = $('<div>').append($('span:not(".user_toggler, .vm"):eq(' + j + ')', dev).clone()).remove().html()
 			if j == 0
-				columns[j].push('<div class="device_detail ' + status + '">' + img + span + '</div>')
+				if $('.vm', dev).text() != "Unknown VM"
+					vm = $('<div>').append($('.vm', dev).clone()).remove().html()
+					columns[j].push('<div class="device_detail name_toggler ' + status + '">' + light + typeIcon + span + vm + '</div>')
+				else
+					columns[j].push('<div class="device_detail ' + status + '">' + light + typeIcon + span + '</div>')
 			else
 				columns[j].push('<div class="device_detail ' + status + '">' + span + '</div>')
 	
-			
-	# for (i = 0; i < tcs.length; i++){
-	# 	tc = $(tcs[i]);
-	# 
-	# 	status = tc.attr('data-status') + '_detail';
-	# 	img = $('<div>').append($('img', tc).clone()).remove().html();
-	# 	for (j = 0; j < columnCount; j++){
-	# 		span = $('<div>').append($('span:not(".userToggler"):eq(' + j + ')', tc).clone()).remove().html();
-	# 		if (j == 0){
-	# 			columns[j].push('<div class="thinclient-detail ' + status + '">' + img + span + '</div>');
-	# 		}else{
-	# 			columns[j].push('<div class="thinclient-detail ' + status + '">' + span + '</div>');
-	# 		}
-	# 	}
-	# }
 	html = ''
 	for column in columns
 		col = '<div class="device_column">' + column.join('') + '</div>'
 		html = html + col
-	
 	html	
-	# for (i = 0; i < columns.length; i++){
-	# 	col = '<div class="thinclient_list_pane">' + columns[i].join('') + '</div>';
-	# 	html = html + col;
-	# }
-	# return html;
-	
+
+toggleUser = ->
+	container = $(this).parent('.details')
+	$('.user_toggler', container).each ->
+		$(this).toggle()
+		
+toggleName = ->
+	container = $(this).parent('.name_toggler')
+	$('span', container).each ->
+		$(this).toggle()
