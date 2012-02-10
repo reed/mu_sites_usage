@@ -1,4 +1,5 @@
 class ClientsController < ApplicationController
+  skip_before_filter :verify_authenticity_token, :only => :upload
   before_filter :validate_data, :only => :upload
   
   def upload
@@ -13,8 +14,14 @@ class ClientsController < ApplicationController
       end
     else
       operation = params[:operation]
+      user_id = params[:user_id]
+      vm = params[:vm]
       @client = Client.find_or_create(params)
-      @client.record_action(operation)
+      if operation == "login" && params[:client_type] != "tc"
+        @client.record_action(operation, user_id, vm)
+      else
+        @client.record_action(operation)
+      end
     end
     success
   end
@@ -32,17 +39,19 @@ class ClientsController < ApplicationController
       return fail if params[:mac_address].empty? || params[:ip_address].empty? || params[:operation].empty?
       return fail unless ["check-in", "startup", "login", "logout"].include? params[:operation].downcase
     end
-    if params[:client_type] != "tc"
+    if params[:client_type] != "tc" && params[:operation] == "login"
       return fail if params[:user_id].nil?
     end
     return true
   end
   
   def fail
-    render :nothing => true, :status => 400 and return false
+    #render :nothing => true, :status => 400 and return false
+    head :bad_request, :connection => "close" and return false
   end
   
   def success
-    render :nothing => true, :status => 200 and return true
+    #render :nothing => true, :status => 200 and return true
+    head :ok, :connection => "close" and return true
   end
 end

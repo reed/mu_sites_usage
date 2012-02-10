@@ -57,14 +57,14 @@ class Client < ActiveRecord::Base
     end
   end
   
-  def record_action(operation)
+  def record_action(operation, user_id = nil, vm = nil)
     case operation.downcase
     when "check-in"
       check_in
     when "startup"
       record_action("logout") if logged_in?
     when "login"
-      log_in
+      log_in(user_id, vm)
     when "logout"
       log_out if logged_in?
     end
@@ -80,11 +80,11 @@ class Client < ActiveRecord::Base
     touch(:last_checkin)
   end
  
-  def log_in
+  def log_in(user_id = nil, vm = nil)
     record_action("logout") if logged_in?
     login_time = Time.now
-    logs.create!({ :operation => "login", :login_time => login_time })
-    update_attributes!({ :last_login => login_time, :current_status => "unavailable" })
+    logs.create!({ :operation => "login", :login_time => login_time, :user_id => user_id, :vm => vm })
+    update_attributes!({ :last_login => login_time, :current_status => "unavailable", :current_user => user_id, :current_vm => vm })
   end
   
   def log_out

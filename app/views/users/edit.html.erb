@@ -1,7 +1,11 @@
 <%= form_for(@user) do |f| %>
   <%= render 'fields', :f => f %>
   <div class="actions">
-    <%= f.submit "Update" %>
     <%= link_to "Cancel", users_path, :class => "button" %>
+    <%= f.submit "Update" %>
   </div>
 <% end %>
+
+<aside id="roles_explanation">
+  <%= render :partial => 'roles_explanation' %>
+</aside>

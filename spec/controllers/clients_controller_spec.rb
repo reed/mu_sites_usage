@@ -58,9 +58,9 @@ describe ClientsController do
         response.should_not be_success
       end
       
-      it "should require a username if the client_type isn't a TC" do
+      it "should require a username if the client_type isn't a TC and the operation is login" do
         ["pc", "mac", "vm"].each do |client_type|
-          post :upload, @post_data.merge(:client_type => client_type, :vm => "vm")
+          post :upload, @post_data.merge(:client_type => client_type, :vm => "vm", :operation => "login")
           response.should_not be_success
         end
       end
