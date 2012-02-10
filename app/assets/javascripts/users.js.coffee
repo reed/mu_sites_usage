@@ -4,3 +4,11 @@
 jQuery ->
 	$('.buttonset').buttonset()
 	$('.best_in_place').best_in_place()
+	$('#roles_explanation').dialog({
+		autoOpen: false
+		title: "Role Definitions"
+		minHeight: 610
+		minWidth: 1020
+	})
+	$('#roles_explanation_button, .roles_explanation_button_inline').click ->
+		$('#roles_explanation').dialog('open')
