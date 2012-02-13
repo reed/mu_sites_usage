@@ -2,7 +2,7 @@ class Site < ActiveRecord::Base
   extend FriendlyId
   friendly_id :short_name
   
-  attr_accessible :display_name, :short_name, :name_filter, :department_id
+  attr_accessible :display_name, :short_name, :name_filter, :enabled, :department_id
   
   short_name_regex = /\A[a-z0-9]*\z/
   
@@ -13,12 +13,18 @@ class Site < ActiveRecord::Base
   validates :name_filter, :presence => true
   validates :department_id, :presence => true
   
+  scope :enabled, where(:enabled => true)
+  
   belongs_to :department
   has_many :clients, :dependent => :nullify
   
   def self.match_name_with_site(name)
     name.upcase!
     where(["? LIKE (name_filter || '%')", name]).first
+  end
+  
+  def self.refilter_clients
+    Client.recheck_sites
   end
   
   def client_count(type)
@@ -63,4 +69,5 @@ class Site < ActiveRecord::Base
     end
     counts
   end
+  
 end

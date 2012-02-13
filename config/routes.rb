@@ -6,8 +6,13 @@ SitesUsage::Application.routes.draw do
   
   resources :sites, :except => [:show]
   
+  resources :clients, :only => [:index, :update, :destroy]
+  
   resources :departments do 
-    resources :sites
+    resources :sites, :only => [:show]
+    member do
+      match 'sites', :to => redirect("/sites")
+    end
   end
   
   match '/departments/:department_id/sites/*sites', :to => 'sites#show'
@@ -17,6 +22,7 @@ SitesUsage::Application.routes.draw do
   match '/logout', :to => 'sessions#destroy'
   match '/stats', :to => 'stats#index'
   match '/logs', :to => 'logs#index'
+  match '/clients', :to => 'clients#index'
   
   root :to => 'departments#index'
   post 'clients/upload'
