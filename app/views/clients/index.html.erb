@@ -1,0 +1,19 @@
+<%= will_paginate @clients %>
+
+<table id="clients_table">
+  <thead>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Site</th>
+    <th>Enabled</th>
+    <th>MAC Address</th>
+    <th>IP Address</th>
+    <th>Last Check-in</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <%= render @clients %>
+  </tbody>
+</table>
+
+<%= will_paginate @clients %>

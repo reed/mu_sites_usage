@@ -11,9 +11,9 @@ class SitesController < ApplicationController
   def show
     @department = Department.find(params[:department_id])
     if params[:sites].present?
-      @sites = SiteDecorator.decorate(@department.sites.where(:short_name => params[:sites].split('/')).order(:display_name))
+      @sites = SiteDecorator.decorate(@department.sites.enabled.where(:short_name => params[:sites].split('/')).order(:display_name))
     else
-      @sites = [SiteDecorator.find(params[:id])]
+      @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
       if params.has_key? :partial
         render :layout => false
       else
@@ -49,8 +49,10 @@ class SitesController < ApplicationController
    
   def update
     @site = Site.find(params[:id])
+    new_filter = params[:site][:name_filter].present? && params[:site][:name_filter] != @site.name_filter
     respond_to do |format|
       if @site.update_attributes(params[:site])
+        Site.refilter_clients if new_filter
         format.html { 
           flash[:success] = "Site successfully updated."
           redirect_to(sites_path) 
@@ -75,7 +77,7 @@ class SitesController < ApplicationController
   
   def refresh
     if params[:sites].present?
-      @sites = SiteDecorator.decorate(Site.where(:short_name => params[:sites].split('/')))
+      @sites = SiteDecorator.decorate(Site.enabled.where(:short_name => params[:sites].split('/')))
       site_hash = Hash.new
       @sites.each do |site|
         site_hash[site.id] = site.client_pane(can? :view_client_status_details, site)

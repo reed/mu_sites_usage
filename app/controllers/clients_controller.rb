@@ -1,6 +1,33 @@
 class ClientsController < ApplicationController
+  load_and_authorize_resource :only => [:index, :destroy]
   skip_before_filter :verify_authenticity_token, :only => :upload
   before_filter :validate_data, :only => :upload
+  
+  def index
+    @title = "Device Management"
+    if current_user.administrator?
+      @clients = Client.includes(:site).page(params[:page])
+    else
+      c_ids = current_user.department.sites.map { |c| c.id } << nil
+      puts c_ids
+      @clients = Client.where(:site_id => c_ids).includes(:site).page(params[:page])
+    end
+  end
+  
+  def update
+    @client = Client.find(params[:id])
+    respond_to do |format|
+      @client.update_attributes(params[:client])
+      format.json { respond_with_bip(@client) }
+    end
+  end
+
+  def destroy
+    @client = Client.find(params[:id])
+    @client.destroy
+    flash[:success] = "Client removed."
+    redirect_to clients_path
+  end
   
   def upload
     if params[:client_type] == "vm"

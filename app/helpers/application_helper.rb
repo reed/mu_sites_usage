@@ -27,7 +27,7 @@ module ApplicationHelper
   end
   
   def site_links(dept_id)
-    sites = Department.find(dept_id).sites.order("display_name")
+    sites = Department.find(dept_id).sites.enabled.order("display_name")
     render :partial => 'site_link', :collection => sites
   end
   

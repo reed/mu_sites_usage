@@ -311,6 +311,10 @@ form {
 		@include rounded-corners(10px)
 	}
 }
+.clickable:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
 .purr {
 	position: fixed;
 	top: 40px;

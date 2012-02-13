@@ -7,8 +7,10 @@ class Ability
       can :manage, :all
     else
       if user.department_manager?
-        can [:create], Site
-        can [:manage], Site, Site.scoped_by_department_id(user.department_id) do |site|
+        can :manage, Client
+        cannot :destroy, Client, :site => nil        
+        can :create, Site
+        can :manage, Site, Site.scoped_by_department_id(user.department_id) do |site|
           site.try(:department) == user.department
         end
       end

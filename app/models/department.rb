@@ -12,6 +12,7 @@ class Department < ActiveRecord::Base
                          :format => { :with => short_name_regex }
                          
   has_many :sites, :dependent => :destroy
+  #has_many :clients, :through => :sites
   has_many :users, :dependent => :destroy
   
   def client_count(type)
