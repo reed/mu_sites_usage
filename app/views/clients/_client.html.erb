@@ -5,7 +5,7 @@
   <td><span class="clickable"><%= best_in_place client, :enabled, :type => :checkbox %></span></td>
   <td><%= client.mac_address %></td>
   <td><%= client.ip_address %></td>
-  <td><%= time_ago_in_words(client.last_checkin) %> ago</td>
+  <td><%= time_ago_in_words(client.last_checkin) + " ago" if client.last_checkin %></td>
   <td><%= link_to "delete", client, :method => :delete, :confirm => "You sure?",
                                   :title => "Delete #{client.name}" if can? :destroy, client %></td>
 </tr>

@@ -39,6 +39,7 @@ class SitesController < ApplicationController
     @department ||= current_user.department
     @site = @department.sites.build(params[:site]) 
     if @site.save
+      Site.refilter_clients
       flash[:success] = "Successfully added #{@site.display_name}"
       redirect_to sites_path
     else

@@ -52,6 +52,10 @@ class Client < ActiveRecord::Base
         site.clients.create!(properties)
       end
     else
+      if !client.enabled? && Client.where({:mac_address => properties[:mac_address], :enabled => true}).exists?
+        update_all({:enabled => false}, :mac_address => properties[:mac_address])
+        properties.merge!({:enabled => true}) 
+      end
       client.update_attributes(properties)
       client
     end
