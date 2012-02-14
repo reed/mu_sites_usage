@@ -24,7 +24,9 @@ class ClientDecorator < ApplicationDecorator
     if model.logged_in? && model.current_user.present?
       uid = h.content_tag :span, model.current_user, :class => "user_toggler uid"
       ldap = Ldap.new
-      u_name = h.content_tag :span, ldap.get_display_name(model.current_user), :class => "user_toggler display-name"
+      display_name = ldap.get_display_name(model.current_user)
+      display_name = model.current_user if display_name.empty?
+      u_name = h.content_tag :span, display_name, :class => "user_toggler display-name"
       data = uid + u_name
     else
       data = "Unknown User"
