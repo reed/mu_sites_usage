@@ -13,7 +13,7 @@ class Client < ActiveRecord::Base
                           :format => { :with => mac_regex }
   validates :ip_address, :format => { :with => ip_regex }
   validates :client_type, :presence => true,
-                          :inclusion => { :in => ["tc", "pc", "mac"] }
+                          :inclusion => { :in => ["tc", "zc", "pc", "mac"] }
   validates :current_status, :inclusion => { :in => ["available", "unavailable", "offline"] }
   
   belongs_to :site
@@ -21,10 +21,10 @@ class Client < ActiveRecord::Base
   has_many :logs
   
   scope :enabled, where(:enabled => true)
-  scope :windows, where(:client_type => ["tc", "pc"])
+  scope :windows, where(:client_type => ["tc", "zc", "pc"])
   scope :macs, where(:client_type => "mac")
   scope :pcs, where(:client_type => "pc")
-  scope :thinclients, where(:client_type => "tc") 
+  scope :thinclients, where(:client_type => ["tc", "zc"]) 
   scope :stale, lambda { where('last_checkin < ?', 10.minutes.ago) }
   scope :orphaned, where(:site_id => nil)
   
@@ -79,7 +79,7 @@ class Client < ActiveRecord::Base
     when "check-in"
       check_in
     when "startup"
-      record_action("logout") if logged_in?
+      logged_in? ? record_action("logout") : check_in
     when "login"
       log_in(user_id, vm)
     when "logout"
@@ -101,12 +101,12 @@ class Client < ActiveRecord::Base
     record_action("logout") if logged_in?
     login_time = Time.now
     logs.create!({ :operation => "login", :login_time => login_time, :user_id => user_id, :vm => vm })
-    update_attributes!({ :last_login => login_time, :current_status => "unavailable", :current_user => user_id, :current_vm => vm })
+    update_attributes!({ :last_login => login_time, :current_status => "unavailable", :current_user => user_id, :current_vm => vm, :last_checkin => login_time })
   end
   
   def log_out
     logs.order('login_time desc').first.update_attributes!({ :operation => "logout", :logout_time => Time.now })
-    update_attributes!({ :current_status => "available", :current_user => nil, :current_vm => nil })
+    update_attributes!({ :current_status => "available", :current_user => nil, :current_vm => nil, :last_checkin => Time.now })
   end
   
   def maintain_site

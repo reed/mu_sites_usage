@@ -58,7 +58,7 @@ describe Client do
     end
     
     it "should accept valid types" do
-      valid_types = ["tc", "pc", "mac"]
+      valid_types = ["tc", "pc", "mac", "zc"]
       valid_types.each do |valid_type|
         Client.new(@attr.merge(:client_type => valid_type)).should be_valid
       end
