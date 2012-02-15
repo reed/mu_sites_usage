@@ -57,7 +57,7 @@ class ClientsController < ApplicationController
   
   def validate_data
     return fail if params[:client_type].nil?
-    return fail unless ["tc", "pc", "mac", "vm"].include? params[:client_type].downcase
+    return fail unless ["tc", "pc", "mac", "vm", "zc"].include? params[:client_type].downcase
     return fail if params[:name].nil? || params[:name].empty?
     if params[:client_type] == "vm"
       return fail if params[:vm].nil?

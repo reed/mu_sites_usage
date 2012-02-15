@@ -38,7 +38,7 @@ gem 'will_paginate'
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 group :development do
-	gem 'rspec-rails', '~> 2.7.0'
+	gem 'rspec-rails', '~> 2.8.1'
 	gem 'annotate', '~> 2.4.0'
 end
 
@@ -48,12 +48,12 @@ group :staging do
 end
 
 group :test do
-  gem 'rspec', '~> 2.7.0'
+  gem 'rspec', '~> 2.8.0'
   gem "factory_girl_rails"
   gem "capybara"
-  gem "guard-rspec"
-  gem 'guard-spork'
-  gem 'spork', '> 0.9.0.rc'
+  gem "guard-rspec", '~> 0.6.0'
+  gem 'guard-spork', '~> 0.5.2'
+  gem 'spork', '~> 1.0.0rc0'
   gem 'rb-fsevent'
   gem 'growl'
   # Pretty printed test output

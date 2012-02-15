@@ -1,6 +1,7 @@
 class Ldap
   require 'net/ldap'
-  LDAP_SETTINGS = SitesUsage::Application.config.ldap
+  #LDAP_SETTINGS = SitesUsage::Application.config.ldap
+  LDAP_SETTINGS = YAML.load_file("#{Rails.root}/config/ldap.yml")
   
   def initialize(username = LDAP_SETTINGS['username'], password = LDAP_SETTINGS['password'])
     options = { :host => LDAP_SETTINGS['host'],
