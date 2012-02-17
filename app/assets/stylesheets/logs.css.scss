@@ -2,6 +2,21 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .logs {
+	#search_form {
+		margin-bottom: 30px;
+		width: 100%;
+		p {
+			display: inline-block;
+			text-align: center;
+			input, label, select {
+				display: block;
+				text-align: center;
+			}
+		}
+	}
+	.no_logs {
+		font-size: 16px;
+	}
 	#logs_table {
 		width: 90%;
 		margin-bottom: 20px;
