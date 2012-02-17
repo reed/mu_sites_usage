@@ -1,25 +1,32 @@
 <%= form_tag logs_path, :method => 'get', :id => 'search_form' do %>
   <%= hidden_field_tag :direction, params[:direction] %>
   <%= hidden_field_tag :sort, params[:sort] %>
-  <p>
-    <%= label_tag :search_name, "Device Name" %>
-    <%= text_field_tag :search_name, params[:search] %>
-  </p>
-  <p>
-    <%= label_tag :search_start_date, "Starting Date" %>
-    <%= text_field_tag :search_start_date, params[:search], :id => "start_date" %>
-  </p>
-  <p>
-    <%= label_tag :search_end_date, "Ending Date" %>
-    <%= text_field_tag :search_end_date, params[:search], :id => "end_date" %>
-  </p>
-  <p>
-     <%= label_tag :search_site, "Site" %>
-     <%= select_tag :search_site, ("<option value='-1'></option>" + options_from_collection_for_select(Site.all, :id, :display_name)).html_safe, :id => "site" %>
-   </p>
-  <p>
-    <%= submit_tag "Search", :name => nil %>
-  </p>
+  <div id="filter_row">
+    <p>
+      <%= label_tag :search_text, "Name/MAC/IP/VM/User" %>
+      <%= text_field_tag :search_text, params[:search_text] %>
+    </p>
+    <p>
+      <%= label_tag :search_start_date, "Starting Date" %>
+      <%= text_field_tag :search_start_date, params[:search_start_date], :id => "start_date" %>
+    </p>
+    <p>
+      <%= label_tag :search_end_date, "Ending Date" %>
+      <%= text_field_tag :search_end_date, params[:search_end_date], :id => "end_date" %>
+    </p>
+    <p>
+       <%= label_tag :search_site, "Site" %>
+       <%= select_tag :search_site, options_from_collection_for_select(Site.all, :id, :display_name, params[:search_site]), :include_blank => true, :id => "site" %>
+    </p>
+  </div>
+  <div id="button_row">
+    <p>
+      <%= submit_tag "Search", :name => nil, :id => "submit_button" %>
+    </p>
+    <p>
+      <a id="reset_form">Reset</a>
+    </p>
+  </div>
 <% end %>
 
 <div id="logs"><%= render 'logs' %></div>

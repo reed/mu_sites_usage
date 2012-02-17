@@ -217,6 +217,25 @@ th {
 	font-size: 14px;
 	font-variant: small-caps;
 	text-align: center;
+	.sort-icon {
+		display: inline-block !important;
+		margin-left: 5px;
+		position: relative;
+		top: 3px;
+	}
+	.current {
+		padding-right: 12px;
+		background-repeat: no-repeat;
+		background-position: right center;
+	}
+	.asc {
+		background-image: image_url("ui-icons_9ccdfc_256x240.png");
+		background-position: 0 -16px;
+	}
+	.desc {
+		background-image: image_url("ui-icons_9ccdfc_256x240.png");
+		background-position: -64px -16px;
+	}
 }
 
 th:first-child {

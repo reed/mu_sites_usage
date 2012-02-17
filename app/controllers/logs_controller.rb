@@ -12,8 +12,8 @@ class LogsController < ApplicationController
   
   def build_search_filters(data)
     filters = Hash.new
-    if data[:search_name] && !data[:search_name].empty?
-      filters[:name] = data[:search_name]
+    if data[:search_text] && !data[:search_text].empty?
+      filters[:text] = data[:search_text]
     end
     if data[:search_start_date] && !data[:search_start_date].empty?
       filters[:start_date] = data[:search_start_date]
