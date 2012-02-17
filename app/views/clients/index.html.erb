@@ -1,19 +1,27 @@
-<%= will_paginate @clients %>
-
-<table id="clients_table">
-  <thead>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Site</th>
-    <th>Enabled</th>
-    <th>MAC Address</th>
-    <th>IP Address</th>
-    <th>Last Check-in</th>
-    <th></th>
-  </thead>
-  <tbody>
-    <%= render @clients %>
-  </tbody>
-</table>
-
-<%= will_paginate @clients %>
+<%= form_tag clients_path, :method => 'get', :id => 'search_form' do %>
+  <%= hidden_field_tag :direction, params[:direction] %>
+  <%= hidden_field_tag :sort, params[:sort] %>
+  <div id="filter_row">
+    <p>
+      <%= label_tag :search_text, "Name/MAC/IP" %>
+      <%= text_field_tag :search_text, params[:search_text] %>
+    </p>
+    <p>
+       <%= label_tag :search_type, "Device Type" %>
+       <%= select_tag :search_type, options_for_select([["Mac", "mac"], ["PC", "pc"], ["Thin Client", "tc"], ["Zero Client", "zc"]]), :include_blank => true, :id => "type" %>
+    </p>
+    <p>
+       <%= label_tag :search_site, "Site" %>
+       <%= select_tag :search_site, options_from_collection_for_select(Site.all, :id, :display_name, params[:search_site]), :include_blank => true, :id => "site" %>
+    </p>
+  </div>
+  <div id="button_row">
+    <p>
+      <%= submit_tag "Search", :name => nil, :id => "submit_button" %>
+    </p>
+    <p>
+      <a id="reset_form">Reset</a>
+    </p>
+  </div>
+<% end %>
+<div id="clients"><%= render 'clients' %></div>

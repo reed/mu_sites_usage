@@ -1,0 +1,2 @@
+$("#clients").html("<%= escape_javascript(render("clients")) %>");
+document.title = "<%= escape_javascript("Sites Usage | Devices by #{(params[:sort] || 'name').sub(".", " ").titleize} - Page #{params[:page] || 1}") %>"

@@ -1,16 +1,19 @@
 class ClientsController < ApplicationController
   load_and_authorize_resource :only => [:index, :destroy]
+  helper_method :sort_column, :sort_direction
+  
   skip_before_filter :verify_authenticity_token, :only => :upload
   before_filter :validate_data, :only => :upload
   
   def index
     @title = "Device Management"
+    search_filters = build_search_filters(params)
     if current_user.administrator?
-      @clients = Client.includes(:site).page(params[:page])
+      @clients = Client.search(search_filters).order(sort_column + " " + sort_direction).page(params[:page])
     else
       c_ids = current_user.department.sites.map { |c| c.id } << nil
       puts c_ids
-      @clients = Client.where(:site_id => c_ids).includes(:site).page(params[:page])
+      @clients = Client.where(:site_id => c_ids).search(search_filters).order(sort_column + " " + sort_direction).page(params[:page])
     end
   end
   
@@ -73,12 +76,32 @@ class ClientsController < ApplicationController
   end
   
   def fail
-    #render :nothing => true, :status => 400 and return false
     head :bad_request, :connection => "close" and return false
   end
   
   def success
-    #render :nothing => true, :status => 200 and return true
     head :ok, :connection => "close" and return true
+  end
+  
+  def build_search_filters(data)
+    filters = Hash.new
+    if data[:search_text] && !data[:search_text].empty?
+      filters[:text] = data[:search_text]
+    end
+    if data[:search_type] && !data[:search_type].empty?
+      filters[:type] = data[:search_type]
+    end
+    if data[:search_site] && data[:search_site].to_i > 0
+      filters[:site] = data[:search_site]
+    end
+    filters
+  end
+  
+  def sort_column
+    (Client.column_names + ["sites.display_name"]).include?(params[:sort]) ? params[:sort] : "name"
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end

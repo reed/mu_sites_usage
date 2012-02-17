@@ -1,0 +1,21 @@
+<% if @clients.any? %>
+  <table id="clients_table">
+    <thead>
+      <th><%= sortable "name" %></th>
+      <th><%= sortable "client_type", "Type" %></th>
+      <th><%= sortable "sites.display_name", "Site" %></th>
+      <th><%= sortable "enabled" %></th>
+      <th><%= sortable "mac_address", "MAC Address" %></th>
+      <th><%= sortable "ip_address", "IP Address" %></th>
+      <th><%= sortable "last_checkin", "Last Check-in" %></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <%= render @clients %>
+    </tbody>
+  </table>
+
+  <%= will_paginate @clients %>
+<% else %>
+  <p class="no_clients">There are no devices that match your query.</p>
+<% end %>

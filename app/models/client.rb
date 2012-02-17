@@ -74,6 +74,28 @@ class Client < ActiveRecord::Base
     end
   end
   
+  def self.search(filters)
+    if filters
+      s = includes(:site)
+      if filters[:text]
+        s = s.where("name LIKE ? 
+                      OR mac_address LIKE ? 
+                      OR ip_address LIKE ?", "%#{filters[:text]}%",
+                                              "%#{filters[:text]}%",
+                                              "%#{filters[:text]}%")
+      end
+      if filters[:type]
+        s = s.where(:client_type => filters[:type])
+      end
+      if filters[:site]
+        s = s.where("site_id" => filters[:site])
+      end
+      s
+    else
+      includes(:site)
+    end
+  end
+  
   def record_action(operation, user_id = nil, vm = nil)
     case operation.downcase
     when "check-in"
