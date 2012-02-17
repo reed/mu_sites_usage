@@ -44,7 +44,6 @@ module ApplicationHelper
     icons = {"asc" => "ui-icon-triangle-1-n", "desc" => "ui-icon-triangle-1-s"}
     icon = column == sort_column ? content_tag(:span, "", :class => "sort-icon ui-icon #{icons[sort_direction]}") : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
-    puts params
     link = link_to title, params.merge(:sort => column, :direction => direction, :page => nil).reject { |k,v| k == "_" }
     link + icon
   end
