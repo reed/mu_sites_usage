@@ -2,40 +2,47 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 pstateAvailable = (history && history.pushState)
+initialURL = location.href
+popped = false
+reset = false
 
 jQuery ->
-	$('#start_date, #end_date').each ->
-		$(this).datepicker()
+	$('#logs .device_info_toggler').live('click', cycleDeviceInfo)
+
+	$('.logs #start_date, .logs #end_date').each ->
+		$(this).datepicker({ maxDate: '+0d' })
+	
+	$('.logs #reset_form').hide().click(resetSearchForm)
+		
 	$('#logs th a, #logs .pagination a').live("click", ->
 		$.getScript(this.href)
 		history.pushState(null, document.title, this.href) if pstateAvailable
 		false
 	)
 	
-	$('#search_form').submit ->
-		$.get(this.action, $(this).serialize(), null, "script")
-		history.pushState(null, document.title, $('#search_form').attr('action') + "?" + $('#search_form').serialize()) if pstateAvailable
+	$('.logs #search_form').submit ->
+		$.get(this.action, serializeFilter(), null, "script")
+		history.pushState(null, document.title, $('#search_form').attr('action') + "?" + serializeFilter()) if pstateAvailable
 		false
 		
-	$('#search_form input').keyup ->
-		$.get($('#search_form').attr('action'), $('#search_form').serialize(), null, "script")
-		history.replaceState(null, document.title, $('#search_form').attr('action') + "?" + $('#search_form').serialize()) if pstateAvailable
-	
-	setUpDeviceInfoCycler()
+	$('.logs #search_form input').keyup(submitForm)
+	$('.logs #search_form #start_date, .logs #search_form #end_date, .logs #search_form #site').change(submitForm)
 	
 	if pstateAvailable
 		$(window).bind("popstate", ->
+			if location.href == initialURL and not popped
+				return
+			popped = true
 			$.getScript(location.href)
 		)
+		$('.logs #submit_button').hide()
 		
 	$(document).ajaxComplete ->
-		setUpDeviceInfoCycler()
+		if reset
+			reset = false
+		else
+			$('.logs #reset_form').show()
 
-setUpDeviceInfoCycler = ->
-	$('.device_info_toggler').each ->
-		$('span:gt(0)', this).hide()
-		$(this).click(cycleDeviceInfo)
-	
 cycleDeviceInfo = ->
 	entry = $(this)
 	current = $('span:visible', entry)
@@ -45,3 +52,23 @@ cycleDeviceInfo = ->
 	else
 		current.hide()
 		current.next('span').show()
+
+serializeFilter = ->
+	filteredSerialization = []
+	unfilteredSerialization = $('#search_form').serialize().split('&')
+	for field in unfilteredSerialization
+		if field.indexOf('=') isnt (field.length - 1)
+			filteredSerialization.push(field)
+	filteredSerialization.join('&')	
+	
+submitForm = ->
+	$.get($('#search_form').attr('action'), serializeFilter(), null, "script")
+	history.replaceState(null, document.title, $('#search_form').attr('action') + "?" + serializeFilter()) if pstateAvailable
+	
+resetSearchForm = ->
+	$('#search_form input').not('#submit_button').each ->
+		$(this).val('')
+	$('#search_form select').val('')
+	reset = true
+	$('#search_form').submit()
+	$('#reset_form').hide()
