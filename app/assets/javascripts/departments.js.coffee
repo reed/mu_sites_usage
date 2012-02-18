@@ -4,12 +4,17 @@
 jQuery ->
 	if $('.department_summary').length > 0
 		renderDepartmentCharts()
+		$('.highcharts-container').each ->
+			$(this).hover ->
+				deptDiv = $(this).closest('.department_summary')
+				$('.tooltip', deptDiv).toggleClass('visible')
 	if $('.site_summary').length > 0
 		renderSiteCharts()
-		
+	
 renderDepartmentCharts = ->
 	$('.department_summary').each ->
 		chartDiv = $('.status_chart', $(this))
+		deptDiv = $(this)
 		counts = {
 			Available: $(this).data 'available'
 			Unavailable: $(this).data 'unavailable'
@@ -46,10 +51,13 @@ renderDepartmentCharts = ->
 			colors: colors
 			tooltip:
 				formatter: ->
+					ttip = $('.tooltip', deptDiv)
+					ttip.removeClass('tooltip_Available tooltip_Unavailable tooltip_Offline')
 					if this.point.name == "No clients"
-						this.point.name
+						ttip.html(this.point.name)
 					else
-						this.point.name.replace("<br/>", " ") + ': ' + counts[this.point.name]
+						ttip.html(counts[this.point.name] + ' ' + this.point.name).addClass('tooltip_' + this.point.name)
+					return false
 			plotOptions:
 				pie:
 					allowPointSelect: true

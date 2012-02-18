@@ -1,11 +1,12 @@
 class SitesController < ApplicationController
   load_and_authorize_resource
   skip_authorize_resource :only => [:show, :refresh]
+  helper_method :sort_column, :sort_direction
   
   def index
     @title = "Sites"
     @page_heading = current_user.administrator? ? "All Sites" : "#{current_user.department.display_name} | Sites"
-    #@sites = Site.all
+    @sites = Site.includes(:department).order(sort_column + " " + sort_direction).page(params[:page])
   end
 
   def show
@@ -87,6 +88,16 @@ class SitesController < ApplicationController
     else
       render :nothing => true
     end
+  end
+  
+  private
+  
+  def sort_column
+    (Site.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "display_name"
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
   
 end

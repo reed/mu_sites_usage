@@ -1,6 +1,10 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+pstateAvailable = (history && history.pushState)
+initialURL = location.href
+popped = false
+
 jQuery -> 
 	$('.best_in_place').best_in_place()
 	$('.throbbler_container', '.sites').hide()
@@ -15,6 +19,19 @@ jQuery ->
 	$('.refresh_button').click(refreshSite)
 	$('.show').one('click', buildSite)
 	$('.toggle_button').one('click', showDetails)
+	$('#sites th a, #sites .pagination a').live("click", ->
+		$.getScript(this.href)
+		history.pushState(null, document.title, this.href) if pstateAvailable
+		false
+	)
+	
+	if pstateAvailable
+		$(window).bind("popstate", ->
+			if location.href == initialURL and not popped
+				return
+			popped = true
+			$.getScript(location.href)
+		)
 
 cycleInfo = ->
 	device = $(this)

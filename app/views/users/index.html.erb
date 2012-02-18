@@ -1,18 +1,4 @@
-<table id="users_table">
-  <thead>
-    <th>Name</th>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Department</th>
-    <th>Role <span class="roles_explanation_button_inline">(<a>?</a>)</span></th>
-    <th>Logins</th>
-    <th></th>
-    <th></th>
-  </thead>
-  <tbody>
-    <%= render @users %>
-  </tbody>
-</table>
+<div id="users"><%= render 'users' %></div>
 
 <%= link_to "Add", new_user_path, :class => "button" %>
 

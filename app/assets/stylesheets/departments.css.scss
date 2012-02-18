@@ -1,15 +1,24 @@
 // Place all the styles related to the Departments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@mixin rounded-corners($radius) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
 .departments {
 	.department_summary {
 		width: 350px;
 		height: 350px;
 		margin: 0 40px 60px 0;
-		/*float: left;*/
 		position: relative;
 		display: inline-block;
+		text-align: center;
 		
+		.highcharts-tooltip rect {
+			position: absolute;
+		}
 		.status_chart {
 			height: 350px;
 			width: 350px;
@@ -67,6 +76,36 @@
 					margin: 0px 3px;
 				}
 			}
+		}
+		.tooltip {
+			text-align: center;
+			visibility: hidden;
+			padding: 5px;
+			position: relative;
+			display: inline-block;
+			color: #FFFFFF;
+			top: 5px;
+			margin-top: 2px;
+			margin-bottom: 2px;
+			@include rounded-corners(5px)
+		}
+		.tooltip_Available {
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border: 2px solid #5BBD5C;
+		}
+		.tooltip_Unavailable {
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border: 2px solid #DBC067;
+		}
+		.tooltip_Offline {
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border: 2px solid #D66781;
+		}
+		.visible {
+			visibility: visible;
 		}
 	}
 	.site_summary {
