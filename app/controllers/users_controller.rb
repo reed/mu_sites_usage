@@ -1,8 +1,10 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
+  helper_method :sort_column, :sort_direction
   
   def index
     @title = "#{current_user.department.display_name} Users"
+    @users = User.order(sort_column + " " + sort_direction).page(params[:page])
   end
 
   def new
@@ -59,4 +61,13 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
 
+  private
+  
+  def sort_column
+    (User.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "username"
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
 end

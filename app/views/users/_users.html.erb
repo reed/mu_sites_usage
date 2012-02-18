@@ -1,0 +1,17 @@
+<table id="users_table">
+  <thead>
+    <th><%= sortable "name" %></th>
+    <th><%= sortable "username" %></th>
+    <th><%= sortable "email" %></th>
+    <th><%= sortable "department.display_name", "Department" %></th>
+    <th><%= sortable "role" %> <span class="roles_explanation_button_inline">(<a class="dialog_open">?</a>)</span></th>
+    <th><%= sortable "logins" %></th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    <%= render @users %>
+  </tbody>
+</table>
+
+<%= will_paginate @users %>

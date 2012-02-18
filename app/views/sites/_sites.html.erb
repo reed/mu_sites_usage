@@ -1,0 +1,17 @@
+<table id="sites_table">
+  <thead>
+    <th><%= sortable "display_name" %></th>
+    <th><%= sortable "short_name" %></th>
+    <th><%= sortable "name_filter" %></th>
+    <th><%= sortable "enabled" %></th>
+    <th><%= sortable "departments.display_name", "Department" %></th>
+    <th># Devices</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    <%= render @sites %>
+  </tbody>
+</table>
+
+<%= will_paginate @sites %>

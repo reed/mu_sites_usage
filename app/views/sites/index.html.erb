@@ -1,17 +1,4 @@
-<table id="sites_table">
-  <thead>
-    <th>Display Name</th>
-    <th>Short Name</th>
-    <th>Name Filter</th>
-    <th>Enabled</th>
-    <th>Department</th>
-    <th># Devices</th>
-    <th></th>
-    <th></th>
-  </thead>
-  <tbody>
-    <%= render @sites %>
-  </tbody>
-</table>
+<div id="sites"><%= render 'sites' %></div>
+
 
 <%= link_to "Add", new_site_path, :class => "button" %>
