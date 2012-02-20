@@ -26,10 +26,12 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+    adapter: sqlserver
+    host: SQL2008.col.missouri.edu
+    database: MUDoITSitesUsageDB
+    username: UMC-USERS\mudoitsitesusagedb
+    password: Y5QFVG?g3U.J
+    timeout: 5000
   
 staging:
     adapter: sqlserver
