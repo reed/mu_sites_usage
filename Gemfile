@@ -17,6 +17,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'therubyracer', require: "v8"
 gem 'whenever', :require => false
 gem 'draper', '~> 0.10.0'
 gem 'net-ldap'
