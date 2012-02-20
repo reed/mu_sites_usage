@@ -43,10 +43,10 @@ group :development do
 	gem 'annotate', '~> 2.4.0'
 end
 
-group :staging do
+#group :staging do
   gem 'tiny_tds'
   gem 'activerecord-sqlserver-adapter'
-end
+#end
 
 group :test do
   gem 'rspec', '~> 2.8.0'
