@@ -20,7 +20,7 @@ class Site < ActiveRecord::Base
   
   def self.match_name_with_site(name)
     name.upcase!
-    where(["? LIKE (name_filter || '%')", name]).first
+    where(["? LIKE (name_filter + '%')", name]).first
   end
   
   def self.refilter_clients

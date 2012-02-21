@@ -1,17 +1,21 @@
-<table id="sites_table">
-  <thead>
-    <th><%= sortable "display_name" %></th>
-    <th><%= sortable "short_name" %></th>
-    <th><%= sortable "name_filter" %></th>
-    <th><%= sortable "enabled" %></th>
-    <th><%= sortable "departments.display_name", "Department" %></th>
-    <th># Devices</th>
-    <th></th>
-    <th></th>
-  </thead>
-  <tbody>
-    <%= render @sites %>
-  </tbody>
-</table>
+<% if @sites.any? %>
+  <table id="sites_table">
+    <thead>
+      <th><%= sortable "sites.display_name", "Display Name" %></th>
+      <th><%= sortable "short_name" %></th>
+      <th><%= sortable "name_filter" %></th>
+      <th><%= sortable "enabled" %></th>
+      <th><%= sortable "departments.display_name", "Department" %></th>
+      <th># Devices</th>
+      <th></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <%= render @sites %>
+    </tbody>
+  </table>
 
-<%= will_paginate @sites %>
+  <%= will_paginate @sites %>
+<% else %>
+  <p class="no_sites">There are no devices that match your query.</p>
+<% end %>

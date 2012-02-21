@@ -31,7 +31,7 @@ SitesUsage::Application.configure do
   # config.force_ssl = true
 
   # See everything in the log (default is :info)
-  # config.log_level = :debug
+   config.log_level = :debug
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new
@@ -57,4 +57,8 @@ SitesUsage::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  
+  config.middleware.use ExceptionNotifier,
+    sender_address: 'noreply@sitesusage.doit.missouri.edu',
+    exception_recipients: 'reednj@missouri.edu'
 end

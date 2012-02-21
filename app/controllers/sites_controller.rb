@@ -93,7 +93,7 @@ class SitesController < ApplicationController
   private
   
   def sort_column
-    (Site.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "display_name"
+    (Site.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "sites.display_name"
   end
   
   def sort_direction
