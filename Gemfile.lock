@@ -59,6 +59,8 @@ GEM
     draper (0.10.0)
       activesupport (>= 2.3.10)
     erubis (2.7.0)
+    exception_notification (2.5.2)
+      actionmailer (>= 3.0.4)
     execjs (1.3.0)
       multi_json (~> 1.0)
     factory_girl (2.5.2)
@@ -182,6 +184,7 @@ DEPENDENCIES
   capybara
   coffee-rails (~> 3.2.2)
   draper (~> 0.10.0)
+  exception_notification
   factory_girl_rails
   friendly_id
   growl

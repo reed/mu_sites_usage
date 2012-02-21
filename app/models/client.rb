@@ -25,7 +25,7 @@ class Client < ActiveRecord::Base
   scope :macs, where(:client_type => "mac")
   scope :pcs, where(:client_type => "pc")
   scope :thinclients, where(:client_type => ["tc", "zc"]) 
-  scope :stale, lambda { where('last_checkin < ?', 10.minutes.ago) }
+  scope :stale, lambda { where(:client_type => ["mac", "pc", "tc"]).where('last_checkin < ?', 10.minutes.ago) }
   scope :orphaned, where(:site_id => nil)
   
   before_update :maintain_site
