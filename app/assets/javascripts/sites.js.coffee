@@ -48,8 +48,10 @@ hideSite = ->
 		header = $(this).parent()
 		pane = $(this).parent().next('.site_pane')
 		siteID = header.data('site')
+		siteName = header.data('site-name')
 	else
 		siteID = $(this).data('site')
+		siteName = $(this).data('site-name')
 		header = $('.site_header[data-site=' + siteID + ']')
 		pane = $('.site_pane[data-site=' + siteID + ']')
 
@@ -60,11 +62,13 @@ hideSite = ->
 		$(this).remove()
 		$('a', '#site_' + siteID).removeClass("selected").addClass('show').one('click', buildSite)
 	)
+	history.pushState(null, document.title, location.href.replace("/" + siteName, "")) if pstateAvailable
 
 buildSite = ->
 	link = $(this)
 	url = $(this).data('url')
 	siteID = $(this).data('site')
+	siteName = $(this).data('site-name')
 	$.get(url, (data) ->
 		newSite = $(data)
 		$('.throbbler_container', newSite).hide()
@@ -77,6 +81,7 @@ buildSite = ->
 		$('.refresh_button', header).click(refreshSite)
 		$('.toggle_button', header).one('click', showDetails)
 		link.removeClass('show').addClass('selected').one('click', hideSite)
+		history.pushState(null, document.title, location.href + '/' + siteName) if pstateAvailable
 	)
 	
 refreshSite = ->
