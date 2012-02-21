@@ -36,7 +36,11 @@ module ApplicationHelper
   end
   
   def submenu_link_active?(name)
-    name == params[:controller]
+    if name == "sites"
+      name == params[:controller] && params[:action] == "index"
+    else
+      name == params[:controller]
+    end
   end
   
   def sortable(column, title = nil)
