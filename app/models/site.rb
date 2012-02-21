@@ -20,7 +20,8 @@ class Site < ActiveRecord::Base
   
   def self.match_name_with_site(name)
     name.upcase!
-    where(["? LIKE (name_filter + '%')", name]).first
+    concat_operator = ENV['RAILS_ENV'] == "production" ? "+" : "||"
+    where(["? LIKE (name_filter #{concat_operator} '%')", name]).first
   end
   
   def self.refilter_clients

@@ -73,7 +73,8 @@ buildSite = ->
 		newSite = $(data)
 		$('.throbbler_container', newSite).hide()
 		$('.device', newSite).each ->
-			$('span:gt(0)', this).hide()
+			$('span:gt(0)', this).not('.user_toggler').hide()
+			$('.uid', this).hide()
 			$(this).click(cycleInfo)
 		newSite.appendTo('#container')
 		header = $('.site_header[data-site=' + siteID + ']')
