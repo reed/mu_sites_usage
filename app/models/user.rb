@@ -21,13 +21,14 @@ class User < ActiveRecord::Base
   belongs_to :department
   
   def self.beneath_me(me)
+    eq_op = ENV['RAILS_ENV'] == "production" ? "=" : "=="
     case me.role
     when "administrator" 
-      where("role == ? OR role == ? OR role == ? OR id == ?", "authenticated_user", "site_manager", "department_manager", me.id)
+      where("role #{eq_op} ? OR role #{eq_op} ? OR role #{eq_op} ? OR id #{eq_op} ?", "authenticated_user", "site_manager", "department_manager", me.id)
     when "department_manager" 
-      where("(role == ? OR role == ? OR id == ?) AND department_id == ?", "authenticated_user", "site_manager", me.id, me.department_id)
+      where("(role #{eq_op} ? OR role #{eq_op} ? OR id #{eq_op} ?) AND department_id #{eq_op} ?", "authenticated_user", "site_manager", me.id, me.department_id)
     when "site_manager" 
-      where("(role == ? OR id == ?) AND department_id == ?", "authenticated_user", me.id, me.department_id)
+      where("(role #{eq_op} ? OR id #{eq_op} ?) AND department_id #{eq_op} ?", "authenticated_user", me.id, me.department_id)
     end
   end
   
