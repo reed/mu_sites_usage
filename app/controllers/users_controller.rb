@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   
   def index
     @title = "#{current_user.department.display_name} Users"
-    @users = User.order(sort_column + " " + sort_direction).page(params[:page])
+    @users = @users.order(sort_column + " " + sort_direction).page(params[:page])
   end
 
   def new
@@ -28,11 +28,11 @@ class UsersController < ApplicationController
     
   def edit
     @title = "Edit user"
-    @user = User.find(params[:id])
+    #@user = User.find(params[:id])
   end
   
   def update
-    @user = User.find(params[:id])
+    #@user = User.find(params[:id])
     respond_to do |format|
       if @user.update_attributes(params[:user])
         format.html { 

@@ -6,7 +6,7 @@ class SitesController < ApplicationController
   def index
     @title = "Sites"
     @page_heading = current_user.administrator? ? "All Sites" : "#{current_user.department.display_name} | Sites"
-    @sites = Site.includes(:department).order(sort_column + " " + sort_direction).page(params[:page])
+    @sites = @sites.includes(:department).order(sort_column + " " + sort_direction).page(params[:page])
   end
 
   def show
