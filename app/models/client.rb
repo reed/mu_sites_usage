@@ -16,8 +16,7 @@ class Client < ActiveRecord::Base
                           :inclusion => { :in => ["tc", "zc", "pc", "mac"] }
   validates :current_status, :inclusion => { :in => ["available", "unavailable", "offline"] }
   
-  belongs_to :site
-  #belongs_to :department    
+  belongs_to :site  
   has_many :logs
   
   scope :enabled, where(:enabled => true)
@@ -63,7 +62,7 @@ class Client < ActiveRecord::Base
   
   def self.check_statuses
     scoped_by_enabled(true).stale.each do |c|
-      c.update_attributes!({:current_status => 'offline' })
+      c.update_column(:current_status, 'offline')
     end
   end
   
@@ -117,7 +116,7 @@ class Client < ActiveRecord::Base
   
   def check_in
     touch(:last_checkin)
-    update_attributes!({ :current_status => "available" }) if current_status == "offline"
+    update_column(:current_status, "available") if current_status == "offline"
   end
  
   def log_in(user_id = nil, vm = nil)
