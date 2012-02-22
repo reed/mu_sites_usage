@@ -62,7 +62,7 @@ class Client < ActiveRecord::Base
   
   def self.check_statuses
     scoped_by_enabled(true).stale.each do |c|
-      c.update_column(:current_status, 'offline')
+      c.update_column(:current_status, 'offline') unless c.current_status == "offline"
     end
   end
   
