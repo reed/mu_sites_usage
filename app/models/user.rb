@@ -1,7 +1,7 @@
 require 'net/ldap'
 
 class User < ActiveRecord::Base
-  attr_accessible :username, :name, :email, :role
+  attr_accessible :username, :name, :email, :role, :department_id
   
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
@@ -19,6 +19,30 @@ class User < ActiveRecord::Base
   validates :department_id, :presence => true
   
   belongs_to :department
+  
+  def <(other)
+    return false unless other.kind_of?(self.class)
+    return true if self.role.nil?
+    ROLES.index(self.role) < ROLES.index(other.role) && self.department_id == other.department_id
+  end
+  
+  def <=(other)
+    return false unless other.kind_of?(self.class)
+    return true if self.role.nil?
+    ROLES.index(self.role) <= ROLES.index(other.role) && self.department_id == other.department_id
+  end
+  
+  def >(other)
+    return false unless other.kind_of?(self.class)
+    return false if self.role.nil?
+    ROLES.index(self.role) > ROLES.index(other.role) && self.department_id == other.department_id
+  end
+  
+  def >=(other)
+    return false unless other.kind_of?(self.class)
+    return false if self.role.nil?
+    ROLES.index(self.role) >= ROLES.index(other.role) && self.department_id == other.department_id
+  end
   
   def self.beneath_me(me)
     eq_op = ENV['RAILS_ENV'] == "production" ? "=" : "=="

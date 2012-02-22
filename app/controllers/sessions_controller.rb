@@ -4,11 +4,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    #if ENV['RAILS_ENV'] == "development" #&& params[:session][:username] == "reednj" && params[:session][:password].present?
-    #  user = User.find_by_username(params[:session][:username])
-    #else
+    if ENV['RAILS_ENV'] == "development" #&& params[:session][:username] == "reednj" && params[:session][:password].present?
+      user = User.find_by_username(params[:session][:username])
+    else
       user = User.authenticate(params[:session][:username], params[:session][:password])
-    #end
+    end
 
     if user.nil?
       flash.now[:error] = "Invalid username/password combination."
