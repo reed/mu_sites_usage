@@ -14,6 +14,7 @@ class Site < ActiveRecord::Base
   validates :department_id, :presence => true
   
   scope :enabled, where(:enabled => true)
+  default_scope order('display_name ASC')
   
   belongs_to :department
   has_many :clients, :dependent => :nullify
