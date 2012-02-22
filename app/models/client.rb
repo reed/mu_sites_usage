@@ -117,6 +117,7 @@ class Client < ActiveRecord::Base
   
   def check_in
     touch(:last_checkin)
+    update_attributes!({ :current_status => "available" }) if current_status == "offline"
   end
  
   def log_in(user_id = nil, vm = nil)
