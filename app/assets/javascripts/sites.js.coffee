@@ -102,7 +102,7 @@ refreshSite = ->
 				$(this).click(cycleInfo)
 			newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
 			newHeight = newHeight + "px"
-			sitePane.css('height', newHeight)
+			#sitePane.css('height', newHeight)
 			sitePane.html(newClients)
 			$('.available_count', siteHeader).text($('.available', sitePane).length)
 			$('.unavailable_count', siteHeader).text($('.unavailable', sitePane).length)
@@ -113,27 +113,27 @@ refreshSite = ->
 				$('.toggle_button', siteHeader).unbind('click').one('click', showDetails).click()
 		)
 	)
-	
+
 showDetails = ->
 	pane = $(this).parent().next('.site_pane')
-	detailsHeader = $('<div class="details_header"></div>')
-	$('<div>Hostname</div>').appendTo(detailsHeader)
-	$('<div>MAC Address</div>').appendTo(detailsHeader)
-	$('<div>IP Address</div>').appendTo(detailsHeader)
-	$('<div>User</div>').appendTo(detailsHeader)
-	$('<div>Status</div>').appendTo(detailsHeader)
+	detailsHeader = $('<tr class="details_table_header"></tr>')
+	$('<th>Hostname</th>').appendTo(detailsHeader)
+	$('<th>MAC Address</th>').appendTo(detailsHeader)
+	$('<th>IP Address</th>').appendTo(detailsHeader)
+	$('<th>User</th>').appendTo(detailsHeader)
+	$('<th>Status</th>').appendTo(detailsHeader)
+	detailsTable = $('<table></table>')
 	devices = $('.device', pane)
 	newHeight = 20 * (devices.length + 1)
-	pane.animate({height: newHeight}, 500)
-	pane.html(detailsHeader).append(columnizeDetails(devices))
+	#pane.animate({height: newHeight}, 500)
+	detailsTable.append(detailsHeader).append(columnizeDetails(devices))
+	pane.html(detailsTable)
 	$('.user:contains("Unknown User")', pane).text("").addClass('empty_details')
 	$('.device_detail span', pane).not('.user_toggler').show()
-	$('.device_column:eq(0)', pane).css('width', '200px')
-	$('.device_column:gt(0)', pane).each ->
-		$(this).addClass('centered').css('width', '140px')
-		$('span:not(".user_toggler")', this).addClass('details')
-	$('.device_column:eq(3), .details_header div:eq(3)', pane).css('width', '230px')
-	$('.device_column:eq(4), .details_header div:eq(4)', pane).css('width', '440px')
+	$('.device_row', pane).each ->
+		$('td:gt(0)', this).each ->
+			$(this).addClass('centered')
+			$('span:not(".user_toggler")', this).addClass('details')
 	$('.user_toggler', pane).click(toggleUser)
 	$('.vm', pane).hide()
 	$('.name_toggler span', pane).click(toggleName)
@@ -142,11 +142,11 @@ showDetails = ->
 		pane = $(this).parent().next('.site_pane')
 		$('.refresh_button', $(this).parent()).click()
 	)
-	
+
 columnizeDetails = (devices) ->
-	columns = []
+	rows = []
 	columnCount = 5
-	columns[j] = [] for j in [0..columnCount - 1]
+	rows[j] = [] for j in [0..devices.length - 1]
 	for device, i in devices
 		dev = $(device)
 		status = dev.data("status") + '_detail'
@@ -157,17 +157,72 @@ columnizeDetails = (devices) ->
 			if j == 0
 				if $('.vm', dev).text() != "Unknown VM"
 					vm = $('<div>').append($('.vm', dev).clone()).remove().html()
-					columns[j].push('<div class="device_detail name_toggler ' + status + '">' + light + typeIcon + span + vm + '</div>')
+					rows[i].push('<td class="device_detail name_toggler ' + status + '">' + light + typeIcon + span + vm + '</td>')
 				else
-					columns[j].push('<div class="device_detail ' + status + '">' + light + typeIcon + span + '</div>')
+					rows[i].push('<td class="device_detail ' + status + '">' + light + typeIcon + span + '</td>')
 			else
-				columns[j].push('<div class="device_detail ' + status + '">' + span + '</div>')
-	
+				rows[i].push('<td class="device_detail ' + status + '">' + span + '</td>')
+
 	html = ''
-	for column in columns
-		col = '<div class="device_column">' + column.join('') + '</div>'
-		html = html + col
-	html	
+	for row in rows
+		r = '<tr class="device_row">' + row.join('') + '</tr>'
+		html = html + r
+	html
+		
+# showDetails = ->
+# 	pane = $(this).parent().next('.site_pane')
+# 	detailsHeader = $('<div class="details_header"></div>')
+# 	$('<div>Hostname</div>').appendTo(detailsHeader)
+# 	$('<div>MAC Address</div>').appendTo(detailsHeader)
+# 	$('<div>IP Address</div>').appendTo(detailsHeader)
+# 	$('<div>User</div>').appendTo(detailsHeader)
+# 	$('<div>Status</div>').appendTo(detailsHeader)
+# 	devices = $('.device', pane)
+# 	newHeight = 20 * (devices.length + 1)
+# 	pane.animate({height: newHeight}, 500)
+# 	pane.html(detailsHeader).append(columnizeDetails(devices))
+# 	$('.user:contains("Unknown User")', pane).text("").addClass('empty_details')
+# 	$('.device_detail span', pane).not('.user_toggler').show()
+# 	$('.device_column:eq(0)', pane).css('width', '200px')
+# 	$('.device_column:gt(0)', pane).each ->
+# 		$(this).addClass('centered').css('width', '140px')
+# 		$('span:not(".user_toggler")', this).addClass('details')
+# 	$('.device_column:eq(3), .details_header div:eq(3)', pane).css('width', '230px')
+# 	$('.device_column:eq(4), .details_header div:eq(4)', pane).css('width', '440px')
+# 	$('.user_toggler', pane).click(toggleUser)
+# 	$('.vm', pane).hide()
+# 	$('.name_toggler span', pane).click(toggleName)
+# 	$(this).text('Basic').one('click', ->
+# 		$(this).text('Details').one('click', showDetails)
+# 		pane = $(this).parent().next('.site_pane')
+# 		$('.refresh_button', $(this).parent()).click()
+# 	)
+# 	
+# columnizeDetails = (devices) ->
+# 	columns = []
+# 	columnCount = 5
+# 	columns[j] = [] for j in [0..columnCount - 1]
+# 	for device, i in devices
+# 		dev = $(device)
+# 		status = dev.data("status") + '_detail'
+# 		light = $('<div>').append($('img:eq(0)', dev).clone()).remove().html()
+# 		typeIcon = $('<div>').append($('.' + dev.data('type'), '#type_icon_reserve').clone()).remove().html()
+# 		for j in [0..columnCount - 1]
+# 			span = $('<div>').append($('span:not(".user_toggler, .vm"):eq(' + j + ')', dev).clone()).remove().html()
+# 			if j == 0
+# 				if $('.vm', dev).text() != "Unknown VM"
+# 					vm = $('<div>').append($('.vm', dev).clone()).remove().html()
+# 					columns[j].push('<div class="device_detail name_toggler ' + status + '">' + light + typeIcon + span + vm + '</div>')
+# 				else
+# 					columns[j].push('<div class="device_detail ' + status + '">' + light + typeIcon + span + '</div>')
+# 			else
+# 				columns[j].push('<div class="device_detail ' + status + '">' + span + '</div>')
+# 	
+# 	html = ''
+# 	for column in columns
+# 		col = '<div class="device_column">' + column.join('') + '</div>'
+# 		html = html + col
+# 	html	
 
 toggleUser = ->
 	container = $(this).parent('.details')
