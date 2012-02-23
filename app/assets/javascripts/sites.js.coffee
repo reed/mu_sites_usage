@@ -77,6 +77,7 @@ hideSite = ->
 	history.pushState(null, document.title, location.href.replace("/" + siteName, "")) if pstateAvailable
 
 buildSite = ->
+	$('#main_throbbler').show()
 	link = $(this)
 	url = $(this).data('url')
 	siteID = $(this).data('site')
@@ -88,6 +89,7 @@ buildSite = ->
 			$('span:gt(0)', this).not('.user_toggler').hide()
 			$('.uid', this).hide()
 			$(this).click(cycleInfo)
+		$('#main_throbbler').hide()
 		newSite.hide().appendTo('#site_list').slideDown()
 		header = $('.site_header[data-site=' + siteID + ']')
 		$('.hide_button', header).one('click', hideSite)
