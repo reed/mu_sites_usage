@@ -16,7 +16,7 @@ class SitesController < ApplicationController
     else
       @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
       if params.has_key? :partial
-        render :layout => false
+        render :partial => 'site_pane', :collection => @sites
       else
         render 'show'
       end

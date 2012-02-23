@@ -1,0 +1,29 @@
+<li class="site_block" data-site="<%= site_pane.id %>" data-site-name="<%= site_pane.short_name %>">
+  <header class="site_header" data-site="<%= site_pane.id %>" data-site-name="<%= site_pane.short_name %>">
+    <%= link_to site_pane.display_name, department_site_path(site_pane.department, site_pane), :class => "site_title" %>
+    <div class="hide_button" title="Hide">X</div>
+    <div class="refresh_button">
+      <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
+    </div>
+    <% if can? :view_client_status_details, site_pane %>
+       <div class="toggle_button">Details</div>
+    <% end %>
+    <% if can? :edit, site_pane %>
+     <%= link_to "Edit Site", edit_site_path(site_pane), :class => "edit_button" %>
+    <% end %>
+    <div class="throbbler_container">
+      <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
+    </div>
+    <div class="summary">
+      <% ["available", "unavailable", "offline"].each do |status| %>
+        <div class="<%= status %>_summary">
+          <%= site_pane.light status %>
+          <span class="<%= status %>_count"><%= site_pane.status_count status %></span>
+        </div>
+      <% end %>
+    </div>
+  </header>
+  <section class="site_pane" data-site="<%= site_pane.id %>" data-site-name="<%= site_pane.short_name %>">
+      <%= site_pane.client_pane(can? :view_client_status_details, site_pane) %>
+  </section>
+</li>

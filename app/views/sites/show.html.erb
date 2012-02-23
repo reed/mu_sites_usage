@@ -1,32 +1,12 @@
-<% @sites.each do |site| %>
-<header class="site_header" data-site="<%= site.id %>" data-site-name="<%= site.short_name %>">
-  <%= link_to site.display_name, department_site_path(site.department, site), :class => "site_title" %>
-  <div class="hide_button" title="Hide">X</div>
-  <div class="refresh_button">
-    <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
+<div id="auto_update_row">
+  <div id="auto_update_box">
+    Auto Update: <span class="auto_update" data-interval="1">1m</span> <span class="auto_update selected_interval" data-interval="5">5m</span> <span class="auto_update" data-interval="10">10m</span> <span class="auto_update" data-interval="off">off</span><br />
+    Last Update: <span id="last_updated"><%= Time.now.strftime("%a, %-m/%-d/%y at %-l:%M %p") %></span> <%= image_tag "refresh.png", :id => "refresh_image", :height => "18", :width => "18", :alt => "Refresh", :title => "Refresh" %>
   </div>
-  <% if can? :view_client_status_details, site %>
-     <div class="toggle_button">Details</div>
-  <% end %>
-  <% if can? :edit, site %>
-   <%= link_to "Edit Site", edit_site_path(site), :class => "edit_button" %>
-  <% end %>
-  <div class="throbbler_container">
-    <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
-  </div>
-  <div class="summary">
-    <% ["available", "unavailable", "offline"].each do |status| %>
-      <div class="<%= status %>_summary">
-        <%= site.light status %>
-        <span class="<%= status %>_count"><%= site.status_count status %></span>
-      </div>
-    <% end %>
-  </div>
-</header>
-<section class="site_pane" data-site="<%= site.id %>" data-site-name="<%= site.short_name %>">
-    <%= site.client_pane(can? :view_client_status_details, site) %>
-</section>
-<% end %>
+</div>
+<ul id="site_list">
+    <%= render :partial => 'site_pane', :collection => @sites %>
+</ul>
 <div id="type_icon_reserve">
   <%= image_tag "mac.png", :title => "Mac", :height => "16", :class => "type-icon mac" %>
   <%= image_tag "windows.png", :title => "Windows", :height => "16", :class => "type-icon windows" %>
