@@ -3,6 +3,7 @@
   <td><%= best_in_place site, :short_name %></td>
   <td><%= best_in_place site, :name_filter %></td>
   <td><%= best_in_place site, :enabled, :type => :checkbox %></td>
+  <td><%= best_in_place site, :site_type, :type => :select, :collection => Site::TYPES.map {|t| [t, t.titleize]} %></td>
   <td><%= site.department.display_name %></td>
   <td><%= site.clients.count %></td>
   <td><%= link_to "edit", edit_site_path(site) %></td>
