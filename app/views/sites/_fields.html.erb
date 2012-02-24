@@ -23,6 +23,19 @@
     <%= f.text_field :name_filter %>
   </div>
 </div>
+<div class="form_row">
+  <div class="form_label">
+    <%= f.label :site_type %>
+  </div>
+  <div class="form_field">
+    <div class="buttonset">
+      <% Site::TYPES.each do |t| %>
+        <%= f.radio_button :site_type, t %>
+        <%= label "site_site_type", t, t.titleize %>
+      <% end %>
+    </div>
+  </div>
+</div>
 <% if current_user.administrator? %>
 <div class="form_row">
   <div class="form_label">
