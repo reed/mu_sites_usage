@@ -11,11 +11,18 @@ jQuery ->
 	$('.best_in_place').best_in_place()
 	$('#sites th a, #sites .pagination a').live("click", ->
 		$.getScript(this.href)
+		$('.best_in_place').best_in_place()
 		history.pushState(null, document.title, this.href) if pstateAvailable
 		false
 	)
 	# Show
 	$('.throbbler_container', '.sites').hide()
+	$('.throbbler_container', '.sites').ajaxError ->
+		$(this).hide()
+		header = $(this).parent()
+		$('.summary', header).show()
+	$('#main_throbbler').ajaxError ->
+		$(this).hide()
 	$('#site_list').sortable({ placeholder: "ui-state-active", forcePlaceholderSize: true })
 	$('.device').each ->
 		$('span:gt(0)', this).not('.user_toggler').hide()
