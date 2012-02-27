@@ -43,6 +43,16 @@ module ApplicationHelper
     end
   end
   
+  def site_type_link(type)
+    if params[:type].present?
+      klass = params[:type] == type ? "current" : ""
+    else
+      klass = type == "general_access" ? "current" : ""
+    end
+    link = link_to type.titleize + " Sites", department_path(@department) + "?type=" + type.to_param
+    content_tag(:li, link, :class => klass, "data-type" => type)
+  end
+  
   def sortable(column, title = nil)
     title ||= column.titleize
     icons = {"asc" => "ui-icon-triangle-1-n", "desc" => "ui-icon-triangle-1-s"}
