@@ -15,7 +15,8 @@ class DepartmentsController < ApplicationController
         redirect_to Department.find(params[:id]) unless @sites.pluck(:site_type).include?(params[:type])
         @site_type = params[:type]
       else
-        @site_type = @department.sites.unscoped.enabled.group(:site_type).count.max_by{|k,v| v}[0]
+        type_counts = @department.sites.unscoped.enabled.group(:site_type).count
+        @site_type = type_counts.has_key?("general_access") ? "general_access" : type_counts.max_by{|k,v| v}[0]
       end
       @sites = @sites.where(:site_type => @site_type)
     end
