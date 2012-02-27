@@ -5,7 +5,7 @@
       </div>
       <div class="department_data">
         <div class="department_title">
-          <%= link_to dept.display_name, department_path(dept) %>
+          <%= dept.sites.any? ? link_to(dept.display_name, department_path(dept)) : dept.display_name %>
         </div>
         <div class="label_row">
           <div class="windows_icon">

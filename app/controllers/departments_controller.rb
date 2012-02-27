@@ -10,7 +10,15 @@ class DepartmentsController < ApplicationController
   def show
     @department = DepartmentDecorator.find(params[:id])
     @sites = @department.sites.enabled
-    @sites = @sites.where(:site_type => params[:type]) if params[:type].present? && Site::TYPES.include?(params[:type])
+    if @sites.any?
+      if params[:type].present?
+        redirect_to Department.find(params[:id]) unless @sites.pluck(:site_type).include?(params[:type])
+        @site_type = params[:type]
+      else
+        @site_type = @sites.group(:site_type).count.max_by{|k,v| v}[0]
+      end
+      @sites = @sites.where(:site_type => @site_type)
+    end
     @title = @department.display_name
   end
 

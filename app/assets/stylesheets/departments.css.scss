@@ -32,6 +32,7 @@
 				height: 40px;
 				text-align: center;
 				font-size: 18px;
+				color: #A6D3FD;
 			}
 			.label_row {
 				height: 40px;
@@ -135,8 +136,7 @@
 		margin-left: 40px;
 		li {
 			display: inline-block;
-			padding: 3px;
-			width: 150px;
+			padding: 3px 30px 3px 0px;
 			a {
 				padding: 3px;
 			}
@@ -147,5 +147,9 @@
 		li.current a, li a:hover {
 			border-bottom: 3px solid #FFC736;
 		}
+	}
+	.no_sites {
+		font-size: 16px;
+		margin-bottom: 20px;
 	}
 }
