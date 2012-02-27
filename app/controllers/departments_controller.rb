@@ -15,7 +15,7 @@ class DepartmentsController < ApplicationController
         redirect_to Department.find(params[:id]) unless @sites.pluck(:site_type).include?(params[:type])
         @site_type = params[:type]
       else
-        @site_type = @sites.except(:order).group(:site_type).count.max_by{|k,v| v}[0]
+        @site_type = @department.sites.unscoped.enabled.group(:site_type).count.max_by{|k,v| v}[0]
       end
       @sites = @sites.where(:site_type => @site_type)
     end
