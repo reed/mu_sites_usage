@@ -62,7 +62,10 @@ class Client < ActiveRecord::Base
   
   def self.check_statuses
     scoped_by_enabled(true).stale.each do |c|
-      c.update_column(:current_status, 'offline') unless c.current_status == "offline"
+      unless c.current_status == "offline"
+        c.update_column(:current_status, 'offline')
+        c.offline_log_out if c.current_status == "unavailable"
+      end
     end
   end
   
@@ -129,6 +132,12 @@ class Client < ActiveRecord::Base
   def log_out
     logs.order('login_time desc').first.update_attributes!({ :operation => "logout", :logout_time => Time.now })
     update_attributes!({ :current_status => "available", :current_user => nil, :current_vm => nil, :last_checkin => Time.now })
+  end
+  
+  def offline_log_out
+    logs.order('login_time desc').first.update_attributes!({ :operation => "logout", :logout_time => Time.now })
+    update_column(:current_user => nil)
+    update_column(:current_vm => nil)
   end
   
   def maintain_site

@@ -9,6 +9,8 @@ class DepartmentsController < ApplicationController
 
   def show
     @department = DepartmentDecorator.find(params[:id])
+    @sites = @department.sites.enabled
+    @sites = @sites.where(:site_type => params[:type]) if params[:type].present? && Site::TYPES.include?(params[:type])
     @title = @department.display_name
   end
 

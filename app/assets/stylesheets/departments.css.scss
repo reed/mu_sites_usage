@@ -108,6 +108,9 @@
 			visibility: visible;
 		}
 	}
+	#site_list {
+		margin-top: 40px;
+	}
 	.site_summary {
 		width: 350px;
 		height: 350px;
@@ -124,6 +127,25 @@
 			height: 350px;
 			width: 350px;
 			position: absolute;
+		}
+	}
+	#type_select {
+		padding: 5px;
+		margin-top: -50px;
+		margin-left: 40px;
+		li {
+			display: inline-block;
+			padding: 3px;
+			width: 150px;
+			a {
+				padding: 3px;
+			}
+			a:hover {
+				text-decoration: none;
+			}
+		}
+		li.current a, li a:hover {
+			border-bottom: 3px solid #FFC736;
 		}
 	}
 }
