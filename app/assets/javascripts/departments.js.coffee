@@ -60,9 +60,7 @@ renderDepartmentCharts = ->
 					return false
 			plotOptions:
 				pie:
-					allowPointSelect: true
 					borderWidth: 0
-					cursor: "pointer"
 					size: "100%"
 					innerSize: "80%"
 					dataLabels: 
@@ -171,7 +169,7 @@ renderSiteCharts = ->
 					if noClients
 						'<b>No computers</b>'
 					else
-						'<b>' + this.point.name + '</b>'
+						'<b>' + this.point.name.replace(" ", "</b><br/><b>") + '</b>'
 			}
 		}
 		typeStatusDataSeries = {
@@ -209,10 +207,8 @@ renderSiteCharts = ->
 						this.point.name + ": " + ((this.percentage / 100) * totalClients).toFixed(0)
 			plotOptions:
 				pie:
-					allowPointSelect: true
 					borderWidth: 1
 					borderColor: "#001621"
-					cursor: "pointer"
 					size: "100%"
 			series: series
 		chart = new Highcharts.Chart options
