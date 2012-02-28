@@ -24,6 +24,8 @@ SitesUsage::Application.routes.draw do
   match '/logs', :to => 'logs#index'
   match '/clients', :to => 'clients#index'
   
+  post '/stats/show', :to => 'stats#show'
+  
   root :to => 'departments#index'
   post 'clients/upload'
   # The priority is based upon order of creation:
