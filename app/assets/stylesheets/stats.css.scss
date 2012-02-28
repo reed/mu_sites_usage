@@ -1,3 +1,77 @@
 // Place all the styles related to the stats controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@mixin rounded-corners($radius) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+.stats {
+	#filters {
+		#filters_list {
+			position: relative;
+		
+			.selection_li {
+				margin-bottom: 10px;
+				padding: 10px 0px;
+				background-color: #1E3A54;
+				@include rounded-corners(10px);
+			
+				.selection_label {
+					color: #FFFFFF;
+					display: inline-block;
+					vertical-align: middle;
+					width: 18%;
+					font-size: 16px;
+					padding-left: 10px;
+					font-family: Palatino, Verdana;
+					font-variant: small-caps;
+					.sublabel {
+						font-style: italic;
+					}
+				}
+				.selection_options {
+					display: inline-block;
+					vertical-align: middle;
+					width: 80%;
+					text-align: right;
+				}
+				#date_range_selection {
+					.date_range_row {
+						padding: 12px;
+					}
+					input[type="text"] {
+						background-color: #1E3A54;
+						color: #A6D3FD;
+						padding: 3px;
+						width: 100px;
+						border: 1px solid #A6D3FD;
+						margin-left: 10px;
+						text-align: center;
+					}
+					input[type="text"].input_selected {
+						background-color: #1E3A54;
+						color: #FFD24A;
+						border: 1px solid #9C947C;
+					}
+				}
+				.sublabel {
+					font-size: 12px;
+					color: #FADF8F;
+					font-family: Palatino, Verdana;
+					font-variant: small-caps;
+				}
+			}
+		}
+		#filter_btn_div {
+			padding: 10px;
+			text-align: center;
+		}
+	}
+	#throbbler_div {
+		width: 100%;
+		text-align: center;
+		padding-top: 30px;
+	}
+}
