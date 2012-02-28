@@ -4,6 +4,12 @@
 jQuery ->
 	initFilters()
 	$('#throbbler_div').hide()
+	$('#filter_form').submit ->
+		$.getJSON this.action, $('#filter_form').serialize(), (data) ->
+			chart = new Highcharts.Chart data
+			$('.stats').append('<pre id="return_json"></pre>')
+			$('#return_json').text(JSON.stringify(data, undefined, 3))
+		false
 	
 initFilters = ->
 	$('#start_date', '#filters_list').datepicker()

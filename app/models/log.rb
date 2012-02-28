@@ -38,4 +38,8 @@ class Log < ActiveRecord::Base
       includes(:client => :site)
     end
   end
+  
+  def self.total_logins_per_site(site_id)
+    Log.includes(:client).where('clients.site_id' => site_id).count
+  end
 end

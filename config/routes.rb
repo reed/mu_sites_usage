@@ -25,6 +25,7 @@ SitesUsage::Application.routes.draw do
   match '/clients', :to => 'clients#index'
   
   post '/stats/show', :to => 'stats#show'
+  get '/stats/show', :to => 'stats#show'
   
   root :to => 'departments#index'
   post 'clients/upload'
