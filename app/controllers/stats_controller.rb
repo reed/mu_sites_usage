@@ -47,6 +47,13 @@ class StatsController < ApplicationController
       sites = department.sites.where(:short_name => options[:site_select]).pluck(:id)
     end
     @data = Site.total_logins_per_site(sites, options[:start_date], options[:end_date])
+    @chart_type = options[:type_select]
+    if @chart_type == "pie"
+      @total = @data.values.inject(0){|sum, i| sum += i}
+      percentages = Hash.new
+      @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
+      @data = percentages.to_a
+    end 
     @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
     render 'total_logins_per_site', :formats => [:js]
   end
