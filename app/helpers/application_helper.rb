@@ -43,8 +43,6 @@ module ApplicationHelper
     end
   end
   
-  
-  
   def sortable(column, title = nil)
     title ||= column.titleize
     icons = {"asc" => "ui-icon-triangle-1-n", "desc" => "ui-icon-triangle-1-s"}

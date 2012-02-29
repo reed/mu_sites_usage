@@ -10,4 +10,5 @@ class ApplicationController < ActionController::Base
       redirect_to login_path, :flash => { :error => "Please sign in to access this page." }
     end
   end
+  
 end
