@@ -11,8 +11,9 @@ jQuery ->
 	$('#throbbler_div').ajaxSuccess ->
 		$(this).hide()
 	$('#filter_form').submit ->
-		$.get this.action, $('#filter_form').serialize(), "script"
-		false
+		toggleFilters()
+	#	$.get this.action, $('#filter_form').serialize(), "script"
+	#	false
 		# $.getJSON this.action, $('#filter_form').serialize(), (data) ->
 		# 	chart = new Highcharts.Chart data
 		# 	$('.stats').append('<pre id="return_json"></pre>')
@@ -20,10 +21,28 @@ jQuery ->
 		# false
 	
 initFilters = ->
-	$('#start_date', '#filters_list').datepicker()
-	$('#end_date', '#filters_list').datepicker()
-	$('#filter_btn_div', '#filters').hide()
+	dates = $('#start_date, #end_date', '#filters_list').datepicker({
+		maxDate: "+0d",
+		onSelect: (selectedDate) ->
+			$(this).addClass('date_input_selected')
+			option = if this.id is "start_date" then "minDate" else "maxDate"
+			instance = $(this).data("datepicker")
+			date = $.datepicker.parseDate(instance.settings.dateFormat or $.datepicker._defaults.dateFormat, selectedDate, instance.settings)
+			dates.not(this).datepicker("option", option, date)
+	})
+	#$('#end_date', '#filters_list').datepicker()
+	$('#start_date, #end_date', '#filters_list').change( ->
+		$(this).val("").removeClass('date_input_selected').datepicker("setDate", null)
+		dates.not(this).datepicker("option", "minDate", null) if this.id is "start_date" 
+		dates.not(this).datepicker("option", "maxDate", '+0d') if this.id is "end_date" 
+	)
+	$('#filter_btn_dv', '#filters').hide()
 	$('.selection_li:gt(0)', '#filters_list').hide()
+	$('input[name="chart_select"]').click(chartSelected)
+	$('input[name="total_subselect"], input[name="average_subselect"], input[name="concurrent_subselect"]').click(subSelected)
+	$('input[name="client_type_select[]"]').click(clientTypeSelected)
+	$('input[name="site_select[]"]').click(siteSelected)
+	$('input[name="type_select"]').click(typeSelected)
 	
 toggleFilters = ->
 	btn = $('#toggle_filters_btn')
@@ -33,7 +52,63 @@ toggleFilters = ->
 	else
 		$('#filters').show("blind", 1000)
 		btn.text("Hide Filters")
+
+chartSelected = ->
+	switch this.id
+		when 'total_logins' then showFilters('chart_selection', ['total_subselection'])
+		when 'average_logins' then showFilters('chart_selection', ['average_subselection'])
+		when 'concurrent_logins' then showFilters('chart_selection', ['concurrent_subselection'])
+
+subSelected = ->
+	g1 = ['date_range_selection', 'client_type_selection', 'site_selection']
+	g2 = ['date_range_selection', 'client_type_selection', 'type_selection']
+	switch this.id
+		when 'per_site', 'per_month_and_site', 'per_week_and_site', 'per_day_and_site', 'per_hour_and_site'
+			showFilters('total_subselection', g1)
+		when 'per_year', 'per_month', 'per_week', 'per_day', 'per_hour'
+			showFilters('total_subselection', g2)
+		when 'daily', 'weekly', 'monthly'
+			showFilters('average_subselection', g1)
+		when 'average_per_site', 'average_overall', 'maximum_per_site', 'maximum_overall'
+			showFilters('concurrent_subselection', g1)
+
+clientTypeSelected = ->
+	if this.id is "client_type_all"
+		$(this).attr('checked', 'checked') if not $(this).attr('checked')
+		$('#client_type_selection input:gt(0)').removeAttr('checked')
+	else
+		$('#client_type_all', '#client_type_selection').removeAttr('checked')
+	$('#client_type_selection').buttonset('refresh')
 	
+siteSelected = ->
+	if this.id is "site_all"
+		$('#site_selection input:gt(0)').removeAttr('checked')
+	else
+		$('#site_all', '#site_selection').removeAttr('checked')
+	$('#site_selection').buttonset('refresh')
+	showFilters('site_selection', ['type_selection'])
+
+typeSelected = ->
+	showFilters('type_selection', ['filter_btn'])
+				
+showFilters = (selected, toShow) ->
+	targetFilters = $('#' + selected + '_li').nextAll('.selection_li')
+	
+	resetFilters(targetFilters)
+	
+	targetFilters = targetFilters.add('#filter_btn_dv')
+	
+	hideQueue = targetFilters.filter(':visible').filter( ->
+		name = this.id.substr(0, this.id.length - 3)
+		($.inArray(name, toShow) < 0)
+	)
+	showQueue = targetFilters.filter(':hidden').filter( ->
+		name = this.id.substr(0, this.id.length - 3)
+		($.inArray(name, toShow) > -1)
+	)
+	
+	animateFilters($.makeArray(hideQueue), $.makeArray(showQueue))
+ 
 animateFilters = (toHide, toShow) ->
 	if toHide.length > 0
 		next = toHide.pop()
@@ -53,8 +128,14 @@ resetFilters = (filters) ->
 		filterID = this.id
 		filterName = filterID.substr(0, filterID.length - 3)
 		if filterName is "date_range_selection"
-			$('#start_date').datepicker("setDate", null)
-			$('#end_date').datepicker("setDate", null)
+			$('#start_date').datepicker("setDate", null).removeClass('date_input_selected')
+			$('#end_date').datepicker("setDate", null).removeClass('date_input_selected')
+		else if filterName is "client_type_selection"
+			$('#client_type_selection input')
+				.removeAttr('checked')
+				.button({disabled: false})
+			$('#client_type_all').attr('checked', 'checked')
+			$('#client_type_selection').buttonset('refresh')
 		else
 			$('#' + filterName + ' input')
 				.removeAttr('checked')

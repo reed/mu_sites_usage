@@ -3,6 +3,7 @@ class StatsController < ApplicationController
   def index
     @department = current_user.department
     @sites = @department.sites
+    @client_types = Hash["mac", "Macs", "pc", "PCs", "tc", "Thin Clients", "zc", "Zero Clients"]
   end
 
   def show
@@ -46,7 +47,7 @@ class StatsController < ApplicationController
     else
       sites = department.sites.where(:short_name => options[:site_select]).pluck(:id)
     end
-    @data = Site.total_logins_per_site(sites, options[:start_date], options[:end_date])
+    @data = Log.total_logins_per_site(sites, options[:start_date], options[:end_date], options[:client_type_select])
     @chart_type = options[:type_select]
     if @chart_type == "pie"
       @total = @data.values.inject(0){|sum, i| sum += i}
@@ -59,6 +60,17 @@ class StatsController < ApplicationController
   end
   
   def total_logins_per_year(options)
+    department = current_user.department
+    sites = department.sites.pluck(:id)
+    @data = Log.total_logins_per_year(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    if @chart_type == "pie"
+      @total = @data.values.inject(0){|sum, i| sum += i}
+      percentages = Hash.new
+      @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
+      @data = percentages.to_a
+    end
+    render 'total_logins_per_year', :formats => [:js]
   end
   
   def total_logins_per_month(options)

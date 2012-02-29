@@ -1,5 +1,5 @@
 <section id="filters">
-  <%= form_tag({:controller => "stats", :action => "show"}, :method => "get", :id => "filter_form") do %>
+  <%= form_tag({:controller => "stats", :action => "show"}, :method => "get", :id => "filter_form", :remote => true) do %>
   <ul id="filters_list">
     <li id="chart_selection_li" class="selection_li">
       <div class="selection_label">
@@ -64,6 +64,19 @@
         </div>
       </div>
     </li>
+    <li id="client_type_selection_li" class="selection_li">
+      <div class="selection_label">
+        Device Types
+      </div>
+      <div class="selection_options">
+        <div id="client_type_selection" class="buttonset">
+          <input type="checkbox" id="client_type_all" name="client_type_select[]" value="all" checked="checked" /><label for="client_type_all">All</label>
+          <% @client_types.each do |type, disp| %>
+            <input type="checkbox" id="client_type_<%= type %>" name="client_type_select[]" value="<%= type %>" /><label for="client_type_<%= type %>"><%= disp %></label>
+          <% end %>
+        </div>
+      </div>
+    </li>
     <li id="site_selection_li" class="selection_li">
       <div class="selection_label">
         Sites
@@ -90,7 +103,7 @@
       </div>
     </li>
   </ul>
-  <div id="filter_btn_div">
+  <div id="filter_btn_dv">
     <%= submit_tag "Submit", :name => nil, :id => "filter_btn" %>
   </div>
   <% end %>
