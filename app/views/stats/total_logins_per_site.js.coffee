@@ -64,6 +64,7 @@
 			[
 				type: "pie"
 				data: <%= raw @data.as_json %>
+				name: "Logins"
 			]
 			
 	<% if @subtitle.present? %>
