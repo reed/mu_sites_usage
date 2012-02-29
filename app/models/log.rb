@@ -24,11 +24,13 @@ class Log < ActiveRecord::Base
                                       "%#{filters[:text]}%")
       end
       if filters[:start_date] && filters[:end_date]
-        s = s.where(:login_time => DateTime.strptime(filters[:start_date], "%m/%d/%Y").utc..DateTime.strptime(filters[:end_date], "%m/%d/%Y").utc + 1.day)
+        formatted_start = DateTime.strptime(filters[:start_date] + " CST", "%m/%d/%Y %Z").utc.strftime("%F %T")
+        formatted_end = (DateTime.strptime(filters[:end_date] + " CST", "%m/%d/%Y %Z").utc + 1.day).strftime("%F %T")
+        s = s.where(:login_time => formatted_start..formatted_end)
       elsif filters[:start_date]
-        s = s.where("login_time >= ?", DateTime.strptime(filters[:start_date], "%m/%d/%Y").utc)
+        s = s.where("login_time >= ?", DateTime.strptime(filters[:start_date] + " CST", "%m/%d/%Y %Z").utc.strftime("%F %T"))
       elsif filters[:end_date]
-        s = s.where("login_time <= ?", DateTime.strptime(filters[:end_date], "%m/%d/%Y").utc + 1.day)
+        s = s.where("login_time <= ?", (DateTime.strptime(filters[:end_date] + " CST", "%m/%d/%Y %Z").utc + 1.day).strftime("%F %T"))
       end
       if filters[:site]
         s = s.where("clients.site_id" => filters[:site])
@@ -39,7 +41,4 @@ class Log < ActiveRecord::Base
     end
   end
   
-  def self.total_logins_per_site(site_id)
-    Log.includes(:client).where('clients.site_id' => site_id).count
-  end
 end

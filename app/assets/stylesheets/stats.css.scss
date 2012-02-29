@@ -69,6 +69,13 @@
 			text-align: center;
 		}
 	}
+	#toggle_filters_btn {
+		text-align: right;
+		cursor: pointer;
+	}
+	#toggle_filters_btn:hover {
+		text-decoration: underline;
+	}
 	#throbbler_div {
 		width: 100%;
 		text-align: center;

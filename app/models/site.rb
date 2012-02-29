@@ -33,6 +33,25 @@ class Site < ActiveRecord::Base
     Client.recheck_sites
   end
   
+  def self.total_logins_per_site(site_ids, start_date = nil, end_date = nil)
+    initial_hash = Hash.new
+    where(:id => site_ids).pluck(:display_name).each{|d| initial_hash[d] = 0 }
+    data = where(:id => site_ids).joins("LEFT OUTER JOIN clients on clients.site_id = sites.id LEFT OUTER JOIN logs on logs.client_id = clients.id")
+    if start_date.present? && end_date.present?
+      formatted_start = DateTime.strptime(start_date + " CST", "%m/%d/%Y %Z").utc.strftime("%F %T")
+      formatted_end = (DateTime.strptime(end_date + " CST", "%m/%d/%Y %Z").utc + 1.day).strftime("%F %T")
+      data = data.where('logs.login_time' => formatted_start..formatted_end)
+    elsif start_date.present?
+      data = data.where("logs.login_time >= ?", DateTime.strptime(start_date + " CST", "%m/%d/%Y %Z").utc.strftime("%F %T"))
+    elsif end_date.present?
+      data = data.where("logs.login_time <= ?", (DateTime.strptime(end_date + " CST", "%m/%d/%Y %Z").utc + 1.day).strftime("%F %T"))
+    else
+      data = data.where("logs.login_time <= ?", Time.zone.now.utc.strftime("%F %T"))
+    end
+    data = data.group(:display_name).count
+    initial_hash.merge(data)
+  end
+  
   def client_count(type)
     case type
     when "windows"

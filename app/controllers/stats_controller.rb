@@ -40,17 +40,15 @@ class StatsController < ApplicationController
   end
   
   def total_logins_per_site(options)
-    @department = current_user.department
+    department = current_user.department
     if options[:site_select].include? "all"
-      @sites = @department.sites
+      sites = department.sites.pluck(:id)
     else
-      @sites = @department.sites.where(:short_name => options[:site_select])
+      sites = department.sites.where(:short_name => options[:site_select]).pluck(:id)
     end
-    @data = Hash.new
-    @sites.all.each do |site|
-      @data[site.display_name] = Log.total_logins_per_site(site.id)
-    end
-    render 'total_logins_per_site', :formats => [:json]
+    @data = Site.total_logins_per_site(sites, options[:start_date], options[:end_date])
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    render 'total_logins_per_site', :formats => [:js]
   end
   
   def total_logins_per_year(options)
@@ -78,5 +76,27 @@ class StatsController < ApplicationController
   end
   
   def total_logins_per_hour_and_site(options)
+  end
+  
+  def format_date_subtitle(start_date = nil, end_date = nil)
+    f_start = DateTime.strptime(start_date, "%m/%d/%Y") if start_date.present?
+    f_end = DateTime.strptime(end_date, "%m/%d/%Y") if end_date.present?
+    if start_date.present? && end_date.present?
+      if start_date == end_date
+        f_start.strftime("%b %e, %Y")
+      elsif f_start.month == f_end.month && f_start.year == f_end.year
+        f_start.strftime("%b %e - ") + f_end.strftime("%e, %Y")
+      elsif f_start.year == f_end.year
+        f_start.strftime("%b %e - ") + f_end.strftime("%b %e, %Y")
+      else
+        f_start.strftime("%b %e, %Y - ") + f_end.strftime("%b %e, %Y")
+      end
+    elsif start_date.present?
+      f_start.strftime("Since %b %e, %Y")
+    elsif end_date.present?
+      f_end.strftime("Before %b %e, %Y")
+    else
+      ""
+    end
   end
 end
