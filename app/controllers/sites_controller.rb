@@ -90,6 +90,16 @@ class SitesController < ApplicationController
     end
   end
   
+  def api
+    @department = Department.find(params[:department_id])
+    if params[:sites].present?
+      @sites = SiteDecorator.decorate(@department.sites.enabled.where(:short_name => params[:sites].split('/')).order(:display_name))
+    else
+      @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
+    end
+    render 'show', :formats => [:json]
+  end
+  
   private
   
   def sort_column
