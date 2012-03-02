@@ -23,6 +23,14 @@ class Log < ActiveRecord::Base
     end
   end
   
+  def self.with_sites(site_ids)
+    where('clients.site_id' => site_ids)
+  end
+  
+  def self.with_client_types(types = ["all"])
+    types.include?("all") ? scoped : where('clients.client_type' => types)
+  end
+  
   def self.search(filters)
     if filters
       s = includes(:client => :site)
@@ -50,26 +58,171 @@ class Log < ActiveRecord::Base
   def self.total_logins_per_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     initial_hash = Hash.new
     Site.where(:id => site_ids).pluck(:display_name).each{|d| initial_hash[d] = 0 }
-    data = includes(:client => :site).where('clients.site_id' => site_ids).by_date(start_date, end_date)
-    
-    unless client_types.include? "all"
-      data = data.where('clients.client_type' => client_types)
-    end
-    
-    data = data.group('sites.display_name').order('sites.display_name').count
+    data = includes(:client => :site)
+              .with_sites(site_ids)
+              .by_date(start_date, end_date)
+              .with_client_types(client_types)
+              .group('sites.display_name')
+              .order('sites.display_name')
+              .count
     initial_hash.merge(data)
   end
   
   def self.total_logins_per_year(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
-    data = includes(:client).where('clients.site_id' => site_ids)
-    unless client_types.include? "all"
-      data = data.where('clients.client_type' => client_types)
-    end
-    data = data.by_date(start_date, end_date).group('YEAR(DATEADD(hour, -6, login_time))').order('YEAR(DATEADD(hour, -6, login_time))').count
+    data = includes(:client)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group('YEAR(DATEADD(hour, -6, login_time))')
+            .order('YEAR(DATEADD(hour, -6, login_time))')
+            .count
     s_data = Hash.new
     data.each{|k,v| s_data[k.to_s] = v}
     s_data
   end
   
-  #Log.group('CAST(DATEADD(hour, -6, login_time) as date)').count
+  def self.total_logins_per_month(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("CONVERT(VARCHAR(7), DATEADD(hour, -6, login_time), 120)")
+            .order("CONVERT(VARCHAR(7), DATEADD(hour, -6, login_time), 120)")
+            .count
+            
+    s_data = Hash.new
+    data.each{|k,v| s_data[Utilities::DateFormatters.month(k)] = v}
+    s_data
+  end
+  
+  def self.total_logins_per_month_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("CONVERT(VARCHAR(7), DATEADD(hour, -6, login_time), 120)", "sites.display_name")
+            .order("sites.display_name", "CONVERT(VARCHAR(7), DATEADD(hour, -6, login_time), 120)")
+            .count
+    
+    months = data.keys.collect{|x| x[0]}.uniq
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Array.new
+    sites.each do |s|
+      d = Array.new(months.count).fill(0)
+      months.each_with_index do |m, i|
+        d[i] = data[[m, s]] if data.has_key?([m, s])
+      end
+      f_data << {"name" => s, "data" => d}
+    end
+    months.collect!{|m| Utilities::DateFormatters.month(m)}
+    {:categories => months, :sites => f_data}
+  end
+  
+  def self.total_logins_per_week(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
+            .order("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
+            .count
+    s_data = Hash.new
+    data.each{|k,v| s_data[Utilities::DateFormatters.week(k)] = v}
+    s_data
+  end
+  
+  def self.total_logins_per_week_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))", "sites.display_name")
+            .order("sites.display_name", "DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
+            .count
+            
+    weeks = data.keys.collect{|x| x[0]}.uniq
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Array.new
+    sites.each do |s|
+      d = Array.new(weeks.count).fill(0)
+      weeks.each_with_index{|w, i| d[i] = data[[w, s]] if data.has_key?([w, s]) }
+      f_data << {"name" => s, "data" => d}
+    end
+    
+    weeks.collect!{|w| Utilities::DateFormatters.week(w)}
+    {:categories => weeks, :sites => f_data}
+  end
+  
+  def self.total_logins_per_day(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)")
+            .order("CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)")
+            .count
+    s_data = Hash.new
+    data.each{|k,v| s_data[Utilities::DateFormatters.day(k)] = v}
+    s_data
+  end
+  
+  def self.total_logins_per_day_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)", "sites.display_name")
+            .order("sites.display_name", "CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)")
+            .count
+            
+    days = data.keys.collect{|x| x[0]}.uniq
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Array.new
+    sites.each do |s|
+      d = Array.new(days.count).fill(0)
+      days.each_with_index do |day, i|
+        d[i] = data[[day, s]] if data.has_key?([day, s])
+      end
+      f_data << {"name" => s, "data" => d}
+    end
+    days.collect!{|d| Utilities::DateFormatters.day(d)}
+    {:categories => days, :sites => f_data}
+  end
+  
+  def self.total_logins_per_hour(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("CONVERT(VARCHAR(2), DATEADD(hour, -6, login_time), 108)")
+            .order("CONVERT(VARCHAR(2), DATEADD(hour, -6, login_time), 108)")
+            .count
+    s_data = Hash.new
+    hours = ("00".."23").to_a
+    hours.each{|h| s_data[Utilities::DateFormatters.hour(h)] = data[h] || 0}
+    s_data
+  end
+  
+  def self.total_logins_per_hour_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("CONVERT(VARCHAR(2), DATEADD(hour, -6, login_time), 108)", "sites.display_name")
+            .order("sites.display_name", "CONVERT(VARCHAR(2), DATEADD(hour, -6, login_time), 108)")
+            .count
+            
+    hours = ("00".."23").to_a
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Array.new
+    sites.each do |s|
+      d = Array.new(hours.count).fill(0)
+      hours.each_with_index do |hour, i|
+        d[i] = data[[hour, s]] if data.has_key?([hour, s])
+      end
+      f_data << {"name" => s, "data" => d}
+    end
+    hours.collect!{|h| Utilities::DateFormatters.hour(h)}
+    {:categories => hours, :sites => f_data}
+  end
 end

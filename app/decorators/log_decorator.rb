@@ -8,4 +8,13 @@ class LogDecorator < ApplicationDecorator
     h.content_tag :span, name + mac + ip, :class => "device_info_toggler"
   end
 
+  def duration
+    if model.login_time.present? && model.logout_time.present?
+      h.distance_of_time_in_words(model.login_time, model.logout_time).capitalize
+    elsif model.login_time.present?
+      h.distance_of_time_in_words_to_now(model.login_time).capitalize
+    else
+      ""
+    end
+  end
 end

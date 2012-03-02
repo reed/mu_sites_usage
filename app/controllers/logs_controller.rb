@@ -5,7 +5,9 @@ class LogsController < ApplicationController
   def index
     @title = "Device Logs"
     search_filters = build_search_filters(params)
-    @logs = LogDecorator.decorate(Log.search(search_filters).order(sort_column + " " + sort_direction).page(params[:page]))
+    @logs = Log.search(search_filters).order(sort_column + " " + sort_direction)
+    @log_count = @logs.count
+    @logs = LogDecorator.decorate(@logs.page(params[:page]))
   end
 
   private

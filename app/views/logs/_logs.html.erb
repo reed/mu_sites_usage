@@ -7,6 +7,7 @@
       <th><%= sortable "user_id", "User" %></th>
       <th><%= sortable "login_time" %></th>
       <th><%= sortable "logout_time" %></th>
+      <th>Duration</th>
     </thead>
     <tbody>
       <%= render @logs %>
@@ -14,6 +15,7 @@
   </table>
 
   <%= will_paginate @logs %>
+  <p class="log_count"><%= number_with_delimiter(@log_count) %> logs returned.</p>
 <% else %>
   <p class="no_logs">There are no logs that match your query.</p>
 <% end %>

@@ -42,11 +42,7 @@ class StatsController < ApplicationController
   
   def total_logins_per_site(options)
     department = current_user.department
-    if options[:site_select].include? "all"
-      sites = department.sites.pluck(:id)
-    else
-      sites = department.sites.where(:short_name => options[:site_select]).pluck(:id)
-    end
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
     @data = Log.total_logins_per_site(sites, options[:start_date], options[:end_date], options[:client_type_select])
     @chart_type = options[:type_select]
     if @chart_type == "pie"
@@ -70,31 +66,112 @@ class StatsController < ApplicationController
       @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
       @data = percentages.to_a
     end
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
     render 'total_logins_per_year', :formats => [:js]
   end
   
   def total_logins_per_month(options)
+    department = current_user.department
+    sites = department.sites.pluck(:id)
+    @data = Log.total_logins_per_month(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    if @chart_type == "pie"
+      @total = @data.values.inject(0){|sum, i| sum += i}
+      percentages = Hash.new
+      @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
+      @data = percentages.to_a
+    end
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    render 'total_logins_per_month', :formats => [:js]
   end
   
   def total_logins_per_month_and_site(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Log.total_logins_per_month_and_site(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    @subtitle = "Per Site"
+    date_subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    @subtitle = @subtitle + ", " + date_subtitle unless date_subtitle.empty?
+    render 'total_logins_per_month_and_site', :formats => [:js]
   end
   
   def total_logins_per_week(options)
+    department = current_user.department
+    sites = department.sites.pluck(:id)
+    @data = Log.total_logins_per_week(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    if @chart_type == "pie"
+      @total = @data.values.inject(0){|sum, i| sum += i}
+      percentages = Hash.new
+      @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
+      @data = percentages.to_a
+    end
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    render 'total_logins_per_week', :formats => [:js]
   end
   
   def total_logins_per_week_and_site(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Log.total_logins_per_week_and_site(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    @subtitle = "Per Site"
+    date_subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    @subtitle = @subtitle + ", " + date_subtitle unless date_subtitle.empty?
+    render 'total_logins_per_week_and_site', :formats => [:js]
   end
   
   def total_logins_per_day(options)
+    department = current_user.department
+    sites = department.sites.pluck(:id)
+    @data = Log.total_logins_per_day(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    if @chart_type == "pie"
+      @total = @data.values.inject(0){|sum, i| sum += i}
+      percentages = Hash.new
+      @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
+      @data = percentages.to_a
+    end
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    render 'total_logins_per_day', :formats => [:js]
   end
   
   def total_logins_per_day_and_site(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Log.total_logins_per_day_and_site(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    @subtitle = "Per Site"
+    date_subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    @subtitle = @subtitle + ", " + date_subtitle unless date_subtitle.empty?
+    render 'total_logins_per_day_and_site', :formats => [:js]
   end
   
   def total_logins_per_hour(options)
+    department = current_user.department
+    sites = department.sites.pluck(:id)
+    @data = Log.total_logins_per_hour(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    if @chart_type == "pie"
+      @total = @data.values.inject(0){|sum, i| sum += i}
+      percentages = Hash.new
+      @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
+      @data = percentages.to_a
+    end
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    render 'total_logins_per_hour', :formats => [:js]
   end
   
   def total_logins_per_hour_and_site(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Log.total_logins_per_hour_and_site(sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @chart_type = options[:type_select]
+    @subtitle = "Per Site"
+    date_subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+    @subtitle = @subtitle + ", " + date_subtitle unless date_subtitle.empty?
+    render 'total_logins_per_hour_and_site', :formats => [:js]
   end
   
   def format_date_subtitle(start_date = nil, end_date = nil)
