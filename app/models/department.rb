@@ -16,24 +16,24 @@ class Department < ActiveRecord::Base
   has_many :users, :dependent => :destroy
   
   def client_count(type)
-    sum = 0
-    sites.each do |site|
-      sum += site.client_count(type)
+    c = Client.enabled
+    case type
+    when "windows"
+      c = c.windows
+    when "macs", "mac"
+      c = c.macs
+    when "thinclients", "tc"
+      c = c.thinclients
+    when "pcs", "pc"
+      c = c.pcs
+    else
+      return 0
     end
-    sum
+    c.includes(:site).where("sites.department_id" => id).count
   end
   
   def status_count
-    statuses = {
-      :available => 0,
-      :unavailable => 0,
-      :offline => 0
-    }
-    statuses.each_key do |s| 
-      total = 0
-      sites.each { |site| total += site.status_count(s) }
-      statuses[s.to_sym] = total 
-    end  
-    statuses
+    statuses = Client.enabled.includes(:site).where("sites.department_id" => id).group('current_status').count
+    statuses = Hash[statuses.map{|k,v| [k.to_sym, v]}]
   end
 end

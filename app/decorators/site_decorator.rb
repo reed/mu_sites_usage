@@ -22,18 +22,6 @@ class SiteDecorator < ApplicationDecorator
     end
   end
   
-  # def client_details_pane
-  #   if model.clients.enabled.empty?
-  #     h.content_tag :div, "No computers", :class => "no_computers"
-  #   else
-  #     devices = Array.new
-  #     ClientDecorator.decorate(model.clients.enabled.order(:name)).each do |client| 
-  #       devices << client.client_cell(details)
-  #     end
-  #     columnize(devices)
-  #   end
-  # end
-  
   private
   
   def columnize(devices, column_count = 5)
@@ -55,7 +43,4 @@ class SiteDecorator < ApplicationDecorator
     columns.join('').html_safe
   end
   
-  # def columnize_details(devices)
-  #   
-  # end
 end

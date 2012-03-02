@@ -64,16 +64,23 @@ class Site < ActiveRecord::Base
   end
   
   def status_counts_by_type
-    counts = Hash.new
-    [:pc, :tc, :mac].each do |type|
-      counts[type] = {
-        :total => client_count(type.to_s),
-        :available => status_count('available', type.to_s),
-        :unavailable => status_count('unavailable', type.to_s),
-        :offline => status_count('offline', type.to_s)
-      }
+    init_counts = {
+      :total => 0,
+      :available => 0,
+      :unavailable => 0,
+      :offline => 0,
+    }
+    init_type_counts = {
+      :pc => init_counts.dup,
+      :tc => init_counts.dup,
+      :mac => init_counts.dup
+    }
+    counts = Client.enabled.where(:site_id => id).group(:client_type, :current_status).count
+    counts.each_pair do |k,v|
+      t = k[0] == "zc" ? :tc : k[0].to_sym
+      init_type_counts[t][k[1].to_sym] = v
     end
-    counts
+    init_type_counts.each_pair{|k,v| init_type_counts[k][:total] = v.values.inject(0){|sum, i| sum + i}}
   end
   
 end
