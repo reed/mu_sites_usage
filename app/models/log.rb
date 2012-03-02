@@ -55,7 +55,7 @@ class Log < ActiveRecord::Base
     end
   end
   
-  def self.total_logins_per_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     initial_hash = Hash.new
     Site.where(:id => site_ids).pluck(:display_name).each{|d| initial_hash[d] = 0 }
     data = includes(:client => :site)
@@ -68,7 +68,7 @@ class Log < ActiveRecord::Base
     initial_hash.merge(data)
   end
   
-  def self.total_logins_per_year(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_year(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -81,7 +81,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_logins_per_month(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_month(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -95,7 +95,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_logins_per_month_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_month_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -118,7 +118,7 @@ class Log < ActiveRecord::Base
     {:categories => months, :sites => f_data}
   end
   
-  def self.total_logins_per_week(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_week(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -131,7 +131,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_logins_per_week_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_week_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -153,7 +153,7 @@ class Log < ActiveRecord::Base
     {:categories => weeks, :sites => f_data}
   end
   
-  def self.total_logins_per_day(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_day(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -166,7 +166,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_logins_per_day_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_day_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -174,7 +174,7 @@ class Log < ActiveRecord::Base
             .group("CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)", "sites.display_name")
             .order("sites.display_name", "CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)")
             .count
-            
+      
     days = data.keys.collect{|x| x[0]}.uniq
     sites = data.keys.collect{|x| x[1]}.uniq
     f_data = Array.new
@@ -189,7 +189,7 @@ class Log < ActiveRecord::Base
     {:categories => days, :sites => f_data}
   end
   
-  def self.total_logins_per_hour(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_hour(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -203,7 +203,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_logins_per_hour_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_hour_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -224,5 +224,100 @@ class Log < ActiveRecord::Base
     end
     hours.collect!{|h| Utilities::DateFormatters.hour(h)}
     {:categories => hours, :sites => f_data}
+  end
+
+  def self.average_daily(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    time_to_day = "CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)"
+    filtered = includes(:client => :site)
+                  .with_sites(site_ids)
+                  .with_client_types(client_types)
+                  .by_date(start_date, end_date)
+                  
+    data = filtered
+            .group(time_to_day, "sites.display_name")
+            .order("sites.display_name", time_to_day)
+            .count
+    
+    first_days = filtered
+                  .group("sites.display_name")
+                  .minimum(time_to_day)
+                    
+    last_days = filtered
+                  .group("sites.display_name")
+                  .maximum(time_to_day)
+                          
+    days = data.keys.collect{|x| x[0]}.uniq
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Hash.new
+    sites.each do |s|
+      total = 0
+      days.each_with_index do |day, i|
+        total += data[[day, s]] if data.has_key?([day, s])
+      end
+      f_data[s] = (total / Utilities::DateCalculations.days_between(first_days[s], last_days[s]))
+    end
+    f_data
+  end
+  
+  def self.average_weekly(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    time_to_day = "CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)"
+    time_to_week = "DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))"
+    filtered = includes(:client => :site)
+                  .with_sites(site_ids)
+                  .with_client_types(client_types)
+                  .by_date(start_date, end_date)
+                  
+    data = filtered
+            .group(time_to_week, "sites.display_name")
+            .order("sites.display_name", time_to_week)
+            .count
+    
+    first_days = filtered
+                  .group("sites.display_name")
+                  .minimum(time_to_day)
+                    
+    last_days = filtered
+                  .group("sites.display_name")
+                  .maximum(time_to_day)
+                          
+    weeks = data.keys.collect{|x| x[0]}.uniq
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Hash.new
+    sites.each do |s|
+      total = 0
+      weeks.each_with_index do |week, i|
+        total += data[[week, s]] if data.has_key?([week, s])
+      end
+      week_count = (Utilities::DateCalculations.days_between(first_days[s], last_days[s]) / 7.0).ceil
+      f_data[s] = (total / week_count)
+    end
+    f_data
+  end
+  
+  def self.average_monthly(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+    time_to_month = "CONVERT(VARCHAR(7), DATEADD(hour, -6, login_time), 120)"
+    data = includes(:client => :site)
+              .with_sites(site_ids)
+              .with_client_types(client_types)
+              .by_date(start_date, end_date)
+              .group(time_to_month, "sites.display_name")
+              .order("sites.display_name", time_to_month)
+              .count
+               
+    months = data.keys.collect{|x| x[0]}.uniq
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Hash.new
+    sites.each do |s|
+      total = 0
+      month_count = 0
+      months.each_with_index do |month, i|
+        if data.has_key?([month, s])
+          total += data[[month, s]] 
+          month_count += 1
+        end
+      end
+      f_data[s] = (total / month_count)
+    end
+    f_data
   end
 end

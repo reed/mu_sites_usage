@@ -7,6 +7,7 @@ class SitesController < ApplicationController
     @title = "Sites"
     @page_heading = current_user.administrator? ? "All Sites" : "#{current_user.department.display_name} | Sites"
     @sites = @sites.unscoped.includes(:department).order(sort_column + " " + sort_direction).page(params[:page])
+    @device_counts = Client.where(:site_id => @sites).group(:site_id).count
   end
 
   def show

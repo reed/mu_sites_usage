@@ -5,7 +5,7 @@
   <td><%= best_in_place site, :enabled, :type => :checkbox %></td>
   <td><%= best_in_place site, :site_type, :type => :select, :collection => Site::TYPES.map {|t| [t, t.titleize]} %></td>
   <td><%= site.department.display_name %></td>
-  <td><%= site.clients.count %></td>
+  <td><%= @device_counts[site.id] %></td>
   <td><%= link_to "edit", edit_site_path(site) %></td>
   <td><%= link_to "delete", site, :method => :delete, :confirm => "You sure?",
                                   :title => "Delete #{site.display_name}" %></td>

@@ -25,4 +25,12 @@ module Utilities
       DateTime.strptime(h, '%H').strftime('%-l %p') + " - " + DateTime.strptime(n, '%k').strftime('%-l %p')
     end
   end
+  
+  class DateCalculations
+    def self.days_between(s, e)
+      s = Date.strptime(s, '%Y-%m-%d')
+      e = Date.strptime(e, '%Y-%m-%d')
+      e.mjd - s.mjd + 1
+    end
+  end
 end
