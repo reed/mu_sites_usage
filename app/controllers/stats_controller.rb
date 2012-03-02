@@ -15,7 +15,7 @@ class StatsController < ApplicationController
       average(params)
       subselect = params[:average_subselect]
     end
-    tmpl = "#{params[:chart_select]}_#{subselect.tr('-', '_')}"
+    tmpl = "stats/charts/#{params[:chart_select]}_#{subselect.tr('-', '_')}"
     render tmpl, :formats => [:js]
   end
   
