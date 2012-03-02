@@ -98,7 +98,7 @@ class SitesController < ApplicationController
     else
       @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
     end
-    render 'show', :formats => [:json]
+    render 'api', :formats => [:json]
   end
   
   private
