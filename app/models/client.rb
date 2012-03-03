@@ -25,6 +25,7 @@ class Client < ActiveRecord::Base
   scope :pcs, where(:client_type => "pc")
   scope :thinclients, where(:client_type => ["tc", "zc"]) 
   scope :stale, lambda { where(:client_type => ["mac", "pc", "tc"]).where('name NOT LIKE ?', '%LT-%').where('last_checkin < ?', 10.minutes.ago) }
+  scope :stalelaptops, lambda { where('name LIKE ?', '%LT-%').where('last_checkin < ?', 10.minutes.ago) }
   scope :orphaned, where(:site_id => nil)
   
   before_update :maintain_site
@@ -63,8 +64,15 @@ class Client < ActiveRecord::Base
   def self.check_statuses
     scoped_by_enabled(true).stale.each do |c|
       unless c.current_status == "offline"
-        c.update_column(:current_status, 'offline')
         c.offline_log_out if c.current_status == "unavailable"
+        c.update_column(:current_status, 'offline')
+      end
+    end
+    scoped_by_enabled(true).stalelaptops.each do |l|
+      if l.current_status == "unavailable"
+        #puts l.name
+        l.send('offline_log_out')
+        l.update_column(:current_status, 'available')
       end
     end
   end
@@ -136,8 +144,8 @@ class Client < ActiveRecord::Base
   
   def offline_log_out
     logs.order('login_time desc').first.update_attributes!({ :operation => "logout", :logout_time => Time.now })
-    update_column(:current_user => nil)
-    update_column(:current_vm => nil)
+    update_column(:current_user, nil)
+    update_column(:current_vm, nil)
   end
   
   def maintain_site
