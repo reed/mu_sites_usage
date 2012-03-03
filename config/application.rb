@@ -9,16 +9,16 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-# module ActionView
-#   class Template
-#     module Handlers
-#       def register_template_handler(extension, klass)
-#         @@template_handlers[extension.to_sym] = klass
-#         @@template_extensions = nil
-#       end
-#     end
-#   end
-# end
+module ActionView
+  class Template
+    module Handlers
+      def register_template_handler(extension, klass)
+        @@template_handlers[extension.to_sym] = klass
+        @@template_extensions = nil
+      end
+    end
+  end
+end
 
 module SitesUsage
   class Application < Rails::Application
