@@ -26,8 +26,8 @@ gem 'cancan'
 gem 'best_in_place'
 gem 'will_paginate'
 gem 'exception_notification'
-gem 'rabl'
 gem 'coffeebeans'
+gem 'jbuilder'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

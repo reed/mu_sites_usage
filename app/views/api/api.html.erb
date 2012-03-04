@@ -1,0 +1,23 @@
+<p id="api_explanation">
+  Use our API to incorporate current device data into your site!<br /><br />
+  To gather a JSON representation of our data, just use this link format:
+  <span class="sample_link">http://sitesusage.doit.missouri.edu/api/<span>&lt;abbreviated_site_name&gt;</span></span>
+  Or get multiple sites at once by chaining the site names:
+  <span class="sample_link">http://sitesusage.doit.missouri.edu/api/<span>&lt;abbreviated_site_name_1&gt;</span>/<span>&lt;abbreviated_site_name_2&gt;</span></span>
+</p>
+<section id="api_reference">
+  <h2>Site Abbreviations</h2>
+  <% @departments.each do |department| %>
+    <% if department.sites.any? %>
+      <h3><%= department.display_name %></h3>
+      <div class="department_block">
+        <% department.sites.each do |site| %>
+          <div class="site_block">
+            <span class="site_name"><%= site.display_name %></span>
+            <span class="site_link"><%= link_to site.short_name, api_site_path(site) %></span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</section>

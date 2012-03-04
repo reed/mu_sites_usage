@@ -304,4 +304,38 @@ $darkest_gold: #A67D12;
 		width: 80%;
 		margin-bottom: 20px;
 	}
+	#api_explanation {
+		font-size: 12px;
+		.sample_link {
+			display: block;
+			margin: 25px;
+			color: $light_blue;
+			span {
+				font-style: italic;
+				color: $main_gold;
+			}
+		}
+	}
+	#api_reference {
+		margin-top: 50px;
+		margin-bottom: 50px;
+		h2 {
+			font-variant: small-caps;
+			text-decoration: underline;
+			margin-bottom: 30px;
+		}
+		.department_block {
+			margin-bottom: 20px;
+			.site_block {
+				display: inline-block;
+				padding: 10px;
+				width: 150px;
+				border: 1px solid $light_blue;
+				span {
+					display: block;
+					text-align: center;
+				}
+			}
+		}
+	}
 }
