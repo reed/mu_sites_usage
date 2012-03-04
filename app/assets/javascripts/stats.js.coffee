@@ -4,12 +4,16 @@
 jQuery ->
 	initFilters()
 	$('#toggle_filters_btn').click(toggleFilters)
-	$('#throbbler_div').hide()
+	$('#throbbler_div, #ajax_error').hide()
 	$('#throbbler_div').ajaxStart ->
 		$('#chart').empty()
+		$('#ajax_error').hide()
 		$(this).show()
 	$('#throbbler_div').ajaxSuccess ->
 		$(this).hide()
+	$('#throbbler_div').ajaxError ->
+		$(this).hide()
+		$('#ajax_error').show()
 	$('#filter_form').submit ->
 		toggleFilters()
 	#	$.get this.action, $('#filter_form').serialize(), "script"

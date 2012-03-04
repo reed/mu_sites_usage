@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120224154413) do
+ActiveRecord::Schema.define(:version => 20120304211741) do
 
   create_table "clients", :force => true do |t|
     t.string   "name"
@@ -61,6 +61,19 @@ ActiveRecord::Schema.define(:version => 20120224154413) do
     t.boolean  "enabled",       :default => true
     t.string   "site_type",     :default => "general_access"
   end
+
+  create_table "snapshots", :force => true do |t|
+    t.integer  "site_id"
+    t.date     "day"
+    t.string   "time_increment"
+    t.integer  "available"
+    t.integer  "unavailable"
+    t.integer  "offline"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "snapshots", ["site_id"], :name => "index_snapshots_on_site_id"
 
   create_table "users", :force => true do |t|
     t.string   "username"
