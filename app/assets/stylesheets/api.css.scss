@@ -1,0 +1,52 @@
+// Place all the styles related to the api controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+$main_blue: #3399CC;
+$light_blue: #A6D3FD;
+$lightest_blue: #87C7E6;
+$dark_blue: #437D99;
+$darkest_blue: #115F85;
+$page_bg: #0F2835;
+$page_bg2: #001621;
+
+$main_gold: #FFC736;
+$light_gold: #FFD568;
+$lightest_gold: #FFE090;
+$dark_gold: #BFA04E;
+$darkest_gold: #A67D12;
+.api {
+	#api_explanation {
+		font-size: 12px;
+		.sample_link {
+			display: block;
+			margin: 25px;
+			color: $light_blue;
+			span {
+				font-style: italic;
+				color: $main_gold;
+			}
+		}
+	}
+	#api_reference {
+		margin-top: 50px;
+		margin-bottom: 50px;
+		h2 {
+			font-variant: small-caps;
+			text-decoration: underline;
+			margin-bottom: 30px;
+		}
+		.department_block {
+			margin-bottom: 20px;
+			.site_block {
+				display: inline-block;
+				padding: 10px;
+				width: 150px;
+				border: 1px solid $light_blue;
+				span {
+					display: block;
+					text-align: center;
+				}
+			}
+		}
+	}
+}

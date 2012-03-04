@@ -17,7 +17,8 @@ SitesUsage::Application.routes.draw do
   
   match '/departments/:department_id/sites/*sites', :to => 'sites#show'
   match '/sites/refresh/*sites', :to => 'sites#refresh'
-  match '/api/:department_id/*sites', :to => 'sites#api'
+  match '/api', :to => 'api#index'
+  match '/api/*sites', :to => 'api#sites', :as => 'api_site'
   
   match '/login', :to => 'sessions#new'
   match '/logout', :to => 'sessions#destroy'

@@ -20,6 +20,7 @@
     <% if can? :manage, Site %>
       <li <%= "class=active" if submenu_link_active? "sites" %>><%= link_to "Site Management", sites_path %></li>
     <% end %>
+    <li <%= "class=active" if submenu_link_active? "api" %>><%= link_to "API", api_path %></li>
     <% if signed_in? %>
       <li><%= link_to "Log Out", logout_path, :method => :delete %></li>
     <% else %>

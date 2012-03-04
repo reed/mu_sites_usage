@@ -1,5 +1,6 @@
 <section id="department_list">
   <% @departments.each do |dept| %>
+    <% if dept.sites.any? %>
     <div class="department_summary" <%= dept.status_data %>>
       <div id="<%= dept.short_name %>_chart" class="status_chart">
       </div>
@@ -30,6 +31,7 @@
       </div>
       <div class="tooltip">&nbsp;</div>
     </div>
+    <% end %>
   <% end %>
 </section>
 <%= link_to "New Department", new_department_path, :class => "button" if can? :create, Department %>
