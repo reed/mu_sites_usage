@@ -33,4 +33,5 @@ module Utilities
       e.mjd - s.mjd + 1
     end
   end
+  
 end

@@ -22,6 +22,7 @@ class Site < ActiveRecord::Base
   
   belongs_to :department
   has_many :clients, :dependent => :nullify
+  has_many :snapshots, :dependent => :destroy
   
   def self.match_name_with_site(name)
     name.upcase!
@@ -31,6 +32,10 @@ class Site < ActiveRecord::Base
   
   def self.refilter_clients
     Client.recheck_sites
+  end
+  
+  def self.take_snapshots
+    enabled.each{ |s| s.take_snapshot }
   end
   
   def client_count(type)
@@ -63,6 +68,13 @@ class Site < ActiveRecord::Base
     end
   end
   
+  def status_counts
+    counts = { available: 0, unavailable: 0, offline: 0 }
+    retrieved_counts = clients.enabled.group(:current_status).count
+    retrieved_counts.each_pair {|k,v| counts[k.to_sym] = v }
+    counts
+  end
+  
   def status_counts_by_type
     init_counts = {
       :total => 0,
@@ -83,4 +95,7 @@ class Site < ActiveRecord::Base
     init_type_counts.each_pair{|k,v| init_type_counts[k][:total] = v.values.inject(0){|sum, i| sum + i}}
   end
   
+  def take_snapshot
+    snapshots.create!(status_counts)   
+  end
 end

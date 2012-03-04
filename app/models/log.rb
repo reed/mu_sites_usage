@@ -320,4 +320,5 @@ class Log < ActiveRecord::Base
     end
     f_data
   end
+  
 end
