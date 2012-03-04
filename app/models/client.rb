@@ -64,13 +64,12 @@ class Client < ActiveRecord::Base
   def self.check_statuses
     scoped_by_enabled(true).stale.each do |c|
       unless c.current_status == "offline"
-        c.offline_log_out if c.current_status == "unavailable"
+        c.send('offline_log_out') if c.current_status == "unavailable"
         c.update_column(:current_status, 'offline')
       end
     end
     scoped_by_enabled(true).stalelaptops.each do |l|
       if l.current_status == "unavailable"
-        #puts l.name
         l.send('offline_log_out')
         l.update_column(:current_status, 'available')
       end
