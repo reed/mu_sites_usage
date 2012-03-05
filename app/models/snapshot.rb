@@ -141,7 +141,8 @@ class Snapshot < ActiveRecord::Base
   
   def generate_day_and_time_increment
     now = Time.now
-    hour = now.hour.to_s
+    hour = now.hour
+    hour = hour < 10 ? "0#{hour}" : hour.to_s
     min_interval = (now.min / 5) * 5
     min_interval = min_interval < 10 ? "0#{min_interval}" : min_interval.to_s
     self.day = now.to_date

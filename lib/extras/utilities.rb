@@ -26,8 +26,7 @@ module Utilities
     end
     
     def self.snapshot_time(day, time)
-      pad = time.length == 3 ? '0' : ''
-      DateTime.strptime(day + pad + time, '%Y-%m-%d%H%M')
+      DateTime.strptime(day + time, '%Y-%m-%d%H%M')
     end
   end
   
@@ -42,7 +41,7 @@ module Utilities
       increments = Hash.new
       return increments if inc == 0
       return increments if 60 % inc != 0
-      ("0".."23").each do |h|
+      ("00".."23").each do |h|
         ("00".."59").step(inc) do |m|
           increments[h + m] = 0
         end
