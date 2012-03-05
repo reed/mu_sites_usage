@@ -8,14 +8,20 @@ class StatsController < ApplicationController
 
   def show
     case params[:chart_select]
-    when "total" 
-      total(params)
-      subselect = params[:total_subselect]
-    when "average"
-      average(params)
-      subselect = params[:average_subselect]
+      when "total" 
+        total(params)
+        subselect = "_#{params[:total_subselect].tr('-', '_')}"
+      when "average"
+        average(params)
+        subselect = "_#{params[:average_subselect].tr('-', '_')}"
+      when "concurrent"
+        concurrent(params)
+        subselect = "_#{params[:concurrent_subselect].tr('-', '_')}"
+      when "historical_snapshots"
+        historical_snapshots(params)
+        subselect = ""
     end
-    tmpl = "stats/charts/#{params[:chart_select]}_#{subselect.tr('-', '_')}"
+    tmpl = "stats/charts/#{params[:chart_select]}#{subselect}"
     render tmpl, :formats => [:js]
   end
   
@@ -192,6 +198,45 @@ class StatsController < ApplicationController
       @data.each{|k,v| percentages[k] = ((v.to_f/@total) * 100).round(1)}
       @data = percentages.to_a
     end
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+  end
+  
+  def concurrent(options)
+    send("concurrent_#{options[:concurrent_subselect].tr('-', '_')}", options)
+  end
+  
+  def concurrent_average_overall(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Snapshot.concurrent_average_overall(sites, options[:start_date], options[:end_date])
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+  end
+  
+  def concurrent_average_per_site(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Snapshot.concurrent_average_per_site(sites, options[:start_date], options[:end_date])
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+  end
+  
+  def concurrent_maximum_overall(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Snapshot.concurrent_maximum_overall(sites, options[:start_date], options[:end_date])
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+  end
+  
+  def concurrent_maximum_per_site(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Snapshot.concurrent_maximum_per_site(sites, options[:start_date], options[:end_date])
+    @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
+  end
+  
+  def historical_snapshots(options)
+    department = current_user.department
+    sites = options[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => options[:site_select]).pluck(:id)
+    @data = Snapshot.historical_snapshots(sites, options[:start_date], options[:end_date])
     @subtitle = format_date_subtitle(options[:start_date], options[:end_date])
   end
   

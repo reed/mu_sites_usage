@@ -16,13 +16,6 @@ jQuery ->
 		$('#ajax_error').show()
 	$('#filter_form').submit ->
 		toggleFilters()
-	#	$.get this.action, $('#filter_form').serialize(), "script"
-	#	false
-		# $.getJSON this.action, $('#filter_form').serialize(), (data) ->
-		# 	chart = new Highcharts.Chart data
-		# 	$('.stats').append('<pre id="return_json"></pre>')
-		# 	$('#return_json').text(JSON.stringify(data, undefined, 3))
-		# false
 	
 initFilters = ->
 	dates = $('#start_date, #end_date', '#filters_list').datepicker({
@@ -34,7 +27,6 @@ initFilters = ->
 			date = $.datepicker.parseDate(instance.settings.dateFormat or $.datepicker._defaults.dateFormat, selectedDate, instance.settings)
 			dates.not(this).datepicker("option", option, date)
 	})
-	#$('#end_date', '#filters_list').datepicker()
 	$('#start_date, #end_date', '#filters_list').change( ->
 		$(this).val("").removeClass('date_input_selected').datepicker("setDate", null)
 		dates.not(this).datepicker("option", "minDate", null) if this.id is "start_date" 
@@ -62,10 +54,12 @@ chartSelected = ->
 		when 'total_logins' then showFilters('chart_selection', ['total_subselection'])
 		when 'average_logins' then showFilters('chart_selection', ['average_subselection'])
 		when 'concurrent_logins' then showFilters('chart_selection', ['concurrent_subselection'])
+		when 'historical_snapshots' then showFilters('chart_selection', ['date_range_selection', 'site_selection'])
 
 subSelected = ->
 	g1 = ['date_range_selection', 'client_type_selection', 'site_selection']
 	g2 = ['date_range_selection', 'client_type_selection', 'type_selection']
+	g3 = ['date_range_selection', 'site_selection']
 	switch this.id
 		when 'per_site', 'per_month_and_site', 'per_week_and_site', 'per_day_and_site', 'per_hour_and_site'
 			showFilters('total_subselection', g1)
@@ -74,7 +68,7 @@ subSelected = ->
 		when 'daily', 'weekly', 'monthly'
 			showFilters('average_subselection', g1)
 		when 'average_per_site', 'average_overall', 'maximum_per_site', 'maximum_overall'
-			showFilters('concurrent_subselection', g1)
+			showFilters('concurrent_subselection', g3)
 
 clientTypeSelected = ->
 	if this.id is "client_type_all"
@@ -155,6 +149,8 @@ resetFilters = (filters) ->
 				restrictTypeOptions('pie')
 			when "per-day-and-site", "per-hour-and-site", "average-per-site", "average-overall", "maximum-per-site", "maximum-overall"
 				restrictTypeOptions(["pie", "column"])
+	else if chartSelect.length > 0 and chartSelect.val() is "historical_snapshots"
+		restrictTypeOptions(["pie", "column"])
 				
 restrictTypeOptions = (types) ->
 	if $.isArray(types)

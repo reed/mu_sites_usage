@@ -24,6 +24,11 @@ module Utilities
       n = h == "23" ? "00" : (h.to_i + 1).to_s
       DateTime.strptime(h, '%H').strftime('%-l %p') + " - " + DateTime.strptime(n, '%k').strftime('%-l %p')
     end
+    
+    def self.snapshot_time(day, time)
+      pad = time.length == 3 ? '0' : ''
+      DateTime.strptime(day + pad + time, '%Y-%m-%d%H%M')
+    end
   end
   
   class DateCalculations
@@ -31,6 +36,18 @@ module Utilities
       s = Date.strptime(s, '%Y-%m-%d')
       e = Date.strptime(e, '%Y-%m-%d')
       e.mjd - s.mjd + 1
+    end
+    
+    def self.minute_increments(inc)
+      increments = Hash.new
+      return increments if inc == 0
+      return increments if 60 % inc != 0
+      ("0".."23").each do |h|
+        ("00".."59").step(inc) do |m|
+          increments[h + m] = 0
+        end
+      end
+      increments
     end
   end
   
