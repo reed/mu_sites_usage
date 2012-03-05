@@ -12,6 +12,7 @@ class SitesController < ApplicationController
 
   def show
     @department = Department.find(params[:department_id])
+    @title = @department.display_name
     if params[:sites].present?
       @sites = SiteDecorator.decorate(@department.sites.enabled.where(:short_name => params[:sites].split('/')).order(:display_name))
     else
