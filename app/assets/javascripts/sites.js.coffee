@@ -15,6 +15,15 @@ jQuery ->
 		history.pushState(null, document.title, this.href) if pstateAvailable
 		false
 	)
+	# New
+	$('#name_filter_explanation').dialog({
+		autoOpen: false
+		title: "Name Filters"
+		minWidth: 600
+	})
+	$('.name_filter_explanation_button_inline').live("click", ->
+		$('#name_filter_explanation').dialog('open')
+	)
 	# Show
 	$('.throbbler_container', '.sites').hide()
 	$('.throbbler_container', '.sites').ajaxError ->
