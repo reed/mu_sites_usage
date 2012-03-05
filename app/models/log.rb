@@ -7,8 +7,6 @@ class Log < ActiveRecord::Base
                       
   belongs_to :client
   
-  #default_scope order('updated_at DESC')
-  
   def self.by_date(s, e)
     f_s = DateTime.strptime(s + " CST", "%m/%d/%Y %Z").utc.strftime("%F %T") if s.present?
     f_e = (DateTime.strptime(e + " CST", "%m/%d/%Y %Z").utc + 1.day).strftime("%F %T") if e.present?

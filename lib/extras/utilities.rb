@@ -28,6 +28,28 @@ module Utilities
     def self.snapshot_time(day, time)
       DateTime.strptime(day + time, '%Y-%m-%d%H%M')
     end
+    
+    def self.format_date_for_subtitle(start_date = nil, end_date = nil)
+      f_start = DateTime.strptime(start_date, "%m/%d/%Y") if start_date.present?
+      f_end = DateTime.strptime(end_date, "%m/%d/%Y") if end_date.present?
+      if start_date.present? && end_date.present?
+        if start_date == end_date
+          f_start.strftime("%b %e, %Y")
+        elsif f_start.month == f_end.month && f_start.year == f_end.year
+          f_start.strftime("%b %e - ") + f_end.strftime("%e, %Y")
+        elsif f_start.year == f_end.year
+          f_start.strftime("%b %e - ") + f_end.strftime("%b %e, %Y")
+        else
+          f_start.strftime("%b %e, %Y - ") + f_end.strftime("%b %e, %Y")
+        end
+      elsif start_date.present?
+        f_start.strftime("Since %b %e, %Y")
+      elsif end_date.present?
+        f_end.strftime("Before %b %e, %Y")
+      else
+        ""
+      end
+    end
   end
   
   class DateCalculations
