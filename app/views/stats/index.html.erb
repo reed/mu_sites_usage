@@ -7,6 +7,7 @@
       </div>
       <div class="selection_options">
         <div id="chart_selection" class="buttonset">
+          <input type="radio" id="historical_snapshots" name="chart_select" value="historical_snapshots" /><label for="historical_snapshots">Historical Snapshots</label>
           <% %w[total average concurrent].each do |option| %>
             <input type="radio" id="<%= option %>_logins" name="chart_select" value="<%= option %>" /><label for="<%= option %>_logins"><%= option.titleize %> Logins</label>
           <% end %>
