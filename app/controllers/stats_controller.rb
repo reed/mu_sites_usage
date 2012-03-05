@@ -1,8 +1,10 @@
 class StatsController < ApplicationController
   authorize_resource :class => StatsController
+  
   def index
     @department = current_user.department
     @sites = @department.sites
+    @title = "Statistics"
     @client_types = Hash["mac", "Macs", "pc", "PCs", "tc", "Thin Clients", "zc", "Zero Clients"]
   end
 
