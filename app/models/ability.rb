@@ -15,7 +15,6 @@ class Ability
         end
       end
       if user.site_manager?
-        can :manage, StatsController
         can :manage, Log
         can :create, User
         can :manage, User, User.beneath_me(user) do |other_user|
@@ -24,6 +23,7 @@ class Ability
         end 
       end
       if user.authenticated_user?
+        can :manage, StatsController
         can :view_client_status_details, Site do |site|
           site.try(:department) == user.department
         end
