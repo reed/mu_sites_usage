@@ -7,7 +7,8 @@ popped = false
 reset = false
 
 jQuery ->
-	$('#logs .device_info_toggler').live('click', cycleDeviceInfo)
+	$('#logs .device_info_toggler').live('click', cycleInfo)
+	$('#logs .user_toggler').live('click', cycleInfo)
 
 	$('.logs #start_date, .logs #end_date').each ->
 		$(this).datepicker({ maxDate: '+0d' })
@@ -43,7 +44,7 @@ jQuery ->
 		else
 			$('.logs #reset_form').show()
 
-cycleDeviceInfo = ->
+cycleInfo = ->
 	entry = $(this)
 	current = $('span:visible', entry)
 	if current.next('span').length == 0

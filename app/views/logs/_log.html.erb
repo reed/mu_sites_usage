@@ -2,7 +2,7 @@
   <td><%= log.device_info_toggler %></td>
   <td><%= log.client.site.display_name if log.client.site.present? %></td>
   <td><%= log.vm %></td>
-  <td><%= log.user_id %></td>
+  <td><%= log.user %></td>
   <td><%= log.login_time.strftime("%a, %-m/%-d/%y at %-l:%M %p") if log.login_time.present? %></td>
   <td><%= log.logout_time.strftime("%a, %-m/%-d/%y at %-l:%M %p") if log.logout_time.present? %></td>
   <td><%= log.duration %></td>

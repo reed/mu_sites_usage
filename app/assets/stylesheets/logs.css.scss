@@ -9,7 +9,6 @@
 		border-bottom: 1px dotted;
 		#filter_row {
 			margin-bottom: 15px;
-			//width: 60%;
 			line-height: 27px;
 			text-align: center;
 			p {
@@ -24,7 +23,6 @@
 			}
 		}
 		#button_row {
-			//line-height: 27px;
 			text-align: center;
 			p {
 				display: inline-block;
@@ -32,19 +30,15 @@
 			}
 		}
 	}
-	//#reset_form {
-	//	display: block;
-//		margin-bottom: 30px;
-//	}
+
 	.no_logs {
 		font-size: 16px;
 	}
 	#logs_table {
 		width: 90%;
 		margin-bottom: 20px;
-		//table-layout: fixed;
 		
-		.device_info_toggler {
+		.device_info_toggler, .user_toggler {
 			cursor: pointer;
 			span:first-child {
 				display: inline;

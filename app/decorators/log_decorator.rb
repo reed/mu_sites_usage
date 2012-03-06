@@ -8,6 +8,22 @@ class LogDecorator < ApplicationDecorator
     h.content_tag :span, name + mac + ip, :class => "device_info_toggler"
   end
 
+  def user
+    if model.user_id.present?
+      uid = h.content_tag :span, model.user_id, :class => "uid"
+      ldap = Ldap.new
+      display_name = ldap.get_display_name(model.user_id)
+      if display_name.empty? 
+        uid
+      else
+        u_name = h.content_tag :span, display_name, :class => "display-name"
+        h.content_tag :span, uid + u_name, :class => "user_toggler"
+      end
+    else
+      ""
+    end
+  end
+  
   def duration
     if model.login_time.present? && model.logout_time.present?
       h.distance_of_time_in_words(model.login_time, model.logout_time).capitalize
@@ -17,4 +33,5 @@ class LogDecorator < ApplicationDecorator
       ""
     end
   end
+  
 end
