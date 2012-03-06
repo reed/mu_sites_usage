@@ -1,0 +1,26 @@
+<li id="<%= name %>_selection_li" class="selection_li">
+  <div class="selection_label">
+    <%= title %>
+    <% if (defined?(optional)).present? %>
+      <span class="sublabel">Optional</span>
+    <% end %>
+  </div>
+  <% if name == "date_range" %>
+   <div id="date_range_selection" class="selection_options">
+      <div id="start_date_box" class="date_range_row">
+        <span class="sublabel">Start</span>
+        <input type="text" id="start_date" name="start_date" />
+      </div>
+      <div id="end_date_box" class="date_range_row">
+        <span class="sublabel">End</span>
+        <input type="text" id="end_date" name="end_date" />
+      </div>
+    </div>
+  <% else %>
+  <div class="selection_options">
+    <div id="<%= name %>_selection" class="buttonset">
+      <%= yield if block_given? %>
+    </div>
+  </div>
+  <% end %>
+</li>

@@ -17,13 +17,13 @@ class StatsController < ApplicationController
     case params[:chart_select]
       when "total" 
         total(params)
-        subselect = "_#{params[:total_subselect].tr('-', '_')}"
+        subselect = "_#{params[:total_select].tr('-', '_')}"
       when "average"
         average(params)
-        subselect = "_#{params[:average_subselect].tr('-', '_')}"
+        subselect = "_#{params[:average_select].tr('-', '_')}"
       when "concurrent"
         concurrent(params)
-        subselect = "_#{params[:concurrent_subselect].tr('-', '_')}"
+        subselect = "_#{params[:concurrent_select].tr('-', '_')}"
       when "historical_snapshots"
         historical_snapshots(params)
         subselect = ""
@@ -40,18 +40,18 @@ class StatsController < ApplicationController
   private
   
   def total(options)
-    @data = Log.send("total_#{options[:total_subselect].tr('-', '_')}", @sites, options[:start_date], options[:end_date], options[:client_type_select])
-    if options[:total_subselect].include? "and-site"
+    @data = Log.send("total_#{options[:total_select].tr('-', '_')}", @sites, options[:start_date], options[:end_date], options[:client_type_select])
+    if options[:total_select].include? "and-site"
       @subtitle = @subtitle.empty? ? "Per Site" : "Per Site, #{@subtitle}"
     end
   end
   
   def average(options)
-    @data = Log.send("average_#{options[:average_subselect]}", @sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @data = Log.send("average_#{options[:average_select]}", @sites, options[:start_date], options[:end_date], options[:client_type_select])
   end
   
   def concurrent(options)
-    @data = Snapshot.send("concurrent_#{options[:concurrent_subselect].tr('-', '_')}", @sites, options[:start_date], options[:end_date])
+    @data = Snapshot.send("concurrent_#{options[:concurrent_select].tr('-', '_')}", @sites, options[:start_date], options[:end_date])
   end
   
   def historical_snapshots(options)
