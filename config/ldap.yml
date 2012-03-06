@@ -1,5 +1,0 @@
-host: ldap.missouri.edu
-port: 3268
-username: mudoitsitesimage@col.missouri.edu
-password: J0inM3!!
-base: DC=edu
