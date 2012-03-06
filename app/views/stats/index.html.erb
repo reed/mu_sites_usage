@@ -1,7 +1,6 @@
 <section id="filters">
   <%= form_tag({:controller => "stats", :action => "show"}, :method => "get", :id => "filter_form", :remote => true) do %>
   <ul id="filters_list">
-<<<<<<< HEAD
     <%= render :layout => 'filter', :locals => {:name => 'chart', :title => 'Chart'} do %>
       <input type="radio" id="historical_snapshots" name="chart_select" value="historical_snapshots" />
       <label for="historical_snapshots">Historical Snapshots</label>
@@ -51,110 +50,6 @@
         <label for="type_<%= option %>"><%= option.titleize %></label>
       <% end %>
     <% end %>
-=======
-    <li id="chart_selection_li" class="selection_li">
-      <div class="selection_label">
-        Chart
-      </div>
-      <div class="selection_options">
-        <div id="chart_selection" class="buttonset">
-          <input type="radio" id="historical_snapshots" name="chart_select" value="historical_snapshots" /><label for="historical_snapshots">Historical Snapshots</label>
-          <% %w[total average concurrent].each do |option| %>
-            <input type="radio" id="<%= option %>_logins" name="chart_select" value="<%= option %>" /><label for="<%= option %>_logins"><%= option.titleize %> Logins</label>
-          <% end %>
-        </div>
-      </div>
-    </li>
-    <li id="total_subselection_li" class="selection_li">
-      <div class="selection_label">
-        Per
-      </div>
-      <div class="selection_options">
-        <div id="total_subselection" class="buttonset">
-          <% %w[site year month month_and_site week week_and_site day day_and_site hour hour_and_site].each do |option| %>
-            <input type="radio" id="per_<%= option %>" name="total_subselect" value="per-<%= option.dasherize %>" /><label for="per_<%= option %>"><%= option.titleize.sub(/And/, "&") %></label>
-          <% end %>
-        </div>
-      </div>
-    </li>
-    <li id="average_subselection_li" class="selection_li">
-      <div class="selection_label">
-        Scope
-      </div>
-      <div class="selection_options">
-        <div id="average_subselection" class="buttonset">
-          <% %w[daily weekly monthly].each do |option| %>
-            <input type="radio" id="<%= option %>" name="average_subselect" value="<%= option %>" /><label for="<%= option %>"><%= option.titleize %></label>
-          <% end %>
-        </div>
-      </div>
-    </li>
-    <li id="concurrent_subselection_li" class="selection_li">
-      <div class="selection_label">
-        Grouping
-      </div>
-      <div class="selection_options">
-        <div id="concurrent_subselection" class="buttonset">
-          <% %w[average_overall average_per_site maximum_overall maximum_per_site].each do |option| %>
-            <input type="radio" id="<%= option %>" name="concurrent_subselect" value="<%= option.dasherize %>" /><label for="<%= option %>"><%= option.titleize %></label>
-          <% end %>
-        </div>
-      </div>
-    </li>
-    <li id="date_range_selection_li" class="selection_li">
-      <div class="selection_label">
-        Date Range <span class="sublabel">(optional)</span>
-      </div>
-      <div id="date_range_selection" class="selection_options">
-        <div id="start_date_box" class="date_range_row">
-          <span class="sublabel">Start</span>
-          <input type="text" id="start_date" name="start_date" />
-        </div>
-        <div id="end_date_box" class="date_range_row">
-          <span class="sublabel">End</span>
-          <input type="text" id="end_date" name="end_date" />
-        </div>
-      </div>
-    </li>
-    <li id="client_type_selection_li" class="selection_li">
-      <div class="selection_label">
-        Device Types
-      </div>
-      <div class="selection_options">
-        <div id="client_type_selection" class="buttonset">
-          <input type="checkbox" id="client_type_all" name="client_type_select[]" value="all" checked="checked" /><label for="client_type_all">All</label>
-          <% @client_types.each do |type, disp| %>
-            <input type="checkbox" id="client_type_<%= type %>" name="client_type_select[]" value="<%= type %>" /><label for="client_type_<%= type %>"><%= disp %></label>
-          <% end %>
-        </div>
-      </div>
-    </li>
-    <li id="site_selection_li" class="selection_li">
-      <div class="selection_label">
-        Sites
-      </div>
-      <div class="selection_options">
-        <div id="site_selection" class="buttonset">
-          <input type="checkbox" id="site_all" name="site_select[]" value="all" /><label for="site_all">All Sites</label>
-          <% @sites.each do |site| %>
-            <input type="checkbox" id="site_<%= site.id %>" name="site_select[]" value="<%= site.short_name %>" /><label for="site_<%= site.id %>"><%= site.display_name %></label>
-          <% end %>
-        </div>
-      </div>
-    </li>
-    <li id="type_selection_li" class="selection_li">
-      <div class="selection_label">
-        Chart Type
-      </div>
-      <div class="selection_options">
-        <div id="type_selection" class="buttonset">
-          <% %w[column pie line].each do |option| %>
-            <input type="radio" id="type_<%= option %>" name="type_select" value="<%= option %>" /><label for="type_<%= option %>"><%= option.titleize %></label>
-          <% end %>
-        </div>
-      </div>
-    </li>
->>>>>>> b8ba233ec10bdd19cc1758ddb9e33f674b807e2c
   </ul>
   <div id="filter_btn_dv">
     <%= submit_tag "Submit", :name => nil, :id => "filter_btn" %>
@@ -166,10 +61,6 @@
   <%= image_tag "ajax-loader2.gif", :alt => "Loading..." %>
 </div>
 <div id="ajax_error">
-<<<<<<< HEAD
   Unfortunately, something went wrong while retrieving your request.  Please try again, or contact the site administrator if the problem persists. <br /><a id="reload">Try again</a>
-=======
-  Unfortunately, something went wrong while retrieving your request.  Please try again, or contact the site administrator if the problem persists.
->>>>>>> b8ba233ec10bdd19cc1758ddb9e33f674b807e2c
 </div>
 <div id="chart"></div>

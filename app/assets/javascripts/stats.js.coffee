@@ -15,13 +15,9 @@ jQuery ->
 		$(this).hide()
 		$('#ajax_error').show()
 	$('#filter_form').submit ->
-<<<<<<< HEAD
 		toggleFilters() if $('#toggle_filters_btn').text() is "Hide Filters"
 	$('#reload').click ->
 		$('#filter_form').submit()
-=======
-		toggleFilters()
->>>>>>> b8ba233ec10bdd19cc1758ddb9e33f674b807e2c
 	
 initFilters = ->
 	dates = $('#start_date, #end_date', '#filters_list').datepicker({
@@ -41,11 +37,7 @@ initFilters = ->
 	$('#filter_btn_dv', '#filters').hide()
 	$('.selection_li:gt(0)', '#filters_list').hide()
 	$('input[name="chart_select"]').click(chartSelected)
-<<<<<<< HEAD
 	$('input[name="total_select"], input[name="average_select"], input[name="concurrent_select"]').click(subSelected)
-=======
-	$('input[name="total_subselect"], input[name="average_subselect"], input[name="concurrent_subselect"]').click(subSelected)
->>>>>>> b8ba233ec10bdd19cc1758ddb9e33f674b807e2c
 	$('input[name="client_type_select[]"]').click(clientTypeSelected)
 	$('input[name="site_select[]"]').click(siteSelected)
 	$('input[name="type_select"]').click(typeSelected)
@@ -61,15 +53,9 @@ toggleFilters = ->
 
 chartSelected = ->
 	switch this.id
-<<<<<<< HEAD
 		when 'total_logins' then showFilters('chart_selection', ['total_selection'])
 		when 'average_logins' then showFilters('chart_selection', ['average_selection'])
 		when 'concurrent_logins' then showFilters('chart_selection', ['concurrent_selection'])
-=======
-		when 'total_logins' then showFilters('chart_selection', ['total_subselection'])
-		when 'average_logins' then showFilters('chart_selection', ['average_subselection'])
-		when 'concurrent_logins' then showFilters('chart_selection', ['concurrent_subselection'])
->>>>>>> b8ba233ec10bdd19cc1758ddb9e33f674b807e2c
 		when 'historical_snapshots' then showFilters('chart_selection', ['date_range_selection', 'site_selection'])
 
 subSelected = ->
@@ -78,7 +64,6 @@ subSelected = ->
 	g3 = ['date_range_selection', 'site_selection']
 	switch this.id
 		when 'per_site', 'per_month_and_site', 'per_week_and_site', 'per_day_and_site', 'per_hour_and_site'
-<<<<<<< HEAD
 			showFilters('total_selection', g1)
 		when 'per_year', 'per_month', 'per_week', 'per_day', 'per_hour'
 			showFilters('total_selection', g2)
@@ -86,15 +71,6 @@ subSelected = ->
 			showFilters('average_selection', g1)
 		when 'average_per_site', 'average_overall', 'maximum_per_site', 'maximum_overall'
 			showFilters('concurrent_selection', g3)
-=======
-			showFilters('total_subselection', g1)
-		when 'per_year', 'per_month', 'per_week', 'per_day', 'per_hour'
-			showFilters('total_subselection', g2)
-		when 'daily', 'weekly', 'monthly'
-			showFilters('average_subselection', g1)
-		when 'average_per_site', 'average_overall', 'maximum_per_site', 'maximum_overall'
-			showFilters('concurrent_subselection', g3)
->>>>>>> b8ba233ec10bdd19cc1758ddb9e33f674b807e2c
 
 clientTypeSelected = ->
 	if this.id is "client_type_all"
@@ -166,11 +142,7 @@ resetFilters = (filters) ->
 				.button({disabled: false})
 			$('#' + filterName).buttonset('refresh')
 	chartSelect = $('input[name="chart_select"]:checked')
-<<<<<<< HEAD
 	chartSubselect = $('input[name="total_select"]:checked, input[name="average_select"]:checked, input[name="concurrent_select"]:checked')
-=======
-	chartSubselect = $('input[name="total_subselect"]:checked, input[name="average_subselect"]:checked, input[name="concurrent_subselect"]:checked')
->>>>>>> b8ba233ec10bdd19cc1758ddb9e33f674b807e2c
 	if chartSubselect.length > 0
 		switch chartSubselect.val()
 			when "per-site", "per-year", "daily", "weekly", "monthly"
