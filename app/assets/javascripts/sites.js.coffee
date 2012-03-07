@@ -140,7 +140,6 @@ refreshSite = ->
 				$(this).click(cycleInfo)
 			newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
 			newHeight = newHeight + "px"
-			#sitePane.css('height', newHeight)
 			sitePane.html(newClients)
 			$('.available_count', siteHeader).text($('.available', sitePane).length)
 			$('.unavailable_count', siteHeader).text($('.unavailable', sitePane).length)

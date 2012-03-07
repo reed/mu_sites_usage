@@ -1,16 +1,4 @@
-$main_blue: #3399CC;
-$light_blue: #64BBE6;
-$lightest_blue: #87C7E6;
-$dark_blue: #437D99;
-$darkest_blue: #115F85;
-$page_bg: #0F2835;
-$page_bg2: #001621;
-
-$main_gold: #FFC736;
-$light_gold: #FFD568;
-$lightest_gold: #FFE090;
-$dark_gold: #BFA04E;
-$darkest_gold: #A67D12;
+@import "colors";
 
 @mixin rounded-corners($radius) {
   border-radius: $radius;
@@ -43,9 +31,9 @@ body {
 			position: absolute;
 			top: 50px;
 			left: 50px;
-		}
-		a:hover {
-			background: image_url("logo.jpg") no-repeat scroll left bottom transparent;
+			&:hover {
+				background: image_url("logo.jpg") no-repeat scroll left bottom transparent;
+			}
 		}
 		span {
 			display: none;
@@ -108,14 +96,14 @@ body {
 				
 				a {
 					color: #797266 !important;
-				}
-				a:hover, a.selected {
-					background-color: $main_blue;
-					color: #FFFFFF !important;
-					padding: 2px 5px;
-				}
-				a.selected:hover {
-					color: $darkest_blue !important;
+					&:hover, &.selected {
+						background-color: $main_blue;
+						color: #FFFFFF !important;
+						padding: 2px 5px;
+					}
+					&.selected:hover {
+						color: $darkest_blue !important;
+					}
 				}
 			}
 		}
@@ -141,9 +129,9 @@ body {
 			
 			a {
 				color: #545959;
-			}
-			a:hover {
-				color: #FFFFFF;
+				&:hover {
+					color: #FFFFFF;
+				}
 			}
 		}
 		li.parent, li.active, #current.active {
@@ -206,9 +194,9 @@ a {
 	color: #A6D3FD;
 	text-decoration: none;
 	cursor: pointer;
-}
-a:hover {
-	text-decoration: underline;
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 ul {
@@ -217,7 +205,7 @@ ul {
 
 th {
 	border-bottom: 1px dotted $main_blue;
-	color: #A6D3FD;
+	color: $light_blue;
 	font-size: 14px;
 	font-variant: small-caps;
 	text-align: center;
@@ -320,6 +308,7 @@ form {
 		font-style: italic;
 	}
 }
+
 #flashes {
 	position: absolute;
 	top: 0px;
@@ -334,10 +323,12 @@ form {
 		@include rounded-corners(10px)
 	}
 }
+
 .clickable:hover {
 	cursor: pointer;
 	text-decoration: underline;
 }
+
 .purr {
 	position: fixed;
 	top: 40px;
@@ -346,6 +337,7 @@ form {
 	padding: 20px;
 	@include rounded-corners(10px)
 }
+
 .pagination {
 	cursor: default;
 	height: 22px;
@@ -371,12 +363,12 @@ form {
 		color: #FFE090;
 		border: 1px solid $main_blue;
 		&:hover, &:focus {
-			background-color: $light_blue;
+			background-color: #64BBE6;
 			color: #001621;
 		}
 	}
 	.page_info {
-	 	background: #2e6ab1;
+	 	background: #2E6AB1;
 		color: white;
 		padding: 0.4em 0.6em;
 		width: 22em;
@@ -384,14 +376,16 @@ form {
 		text-align: center;
 		b {
 			color: #000033;
-			background: #2e6ab1 + 60;
+			background: #2E6AB1 + 60;
 			padding: 0.1em 0.25em;
 		}
 	}
 }
+
 .debug_dump {
 	margin-top: 50px;
 }
+
 * {
 	border: medium none;
 	margin: 0;

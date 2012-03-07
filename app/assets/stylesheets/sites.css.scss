@@ -1,26 +1,8 @@
 // Place all the styles related to the sites controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-$main_blue: #3399CC;
-//$light_blue: #64BBE6;
-$light_blue: #A6D3FD;
-$lightest_blue: #87C7E6;
-$dark_blue: #437D99;
-$darkest_blue: #115F85;
-$page_bg: #0F2835;
-$page_bg2: #001621;
-
-$main_gold: #FFC736;
-$light_gold: #FFD568;
-$lightest_gold: #FFE090;
-$dark_gold: #BFA04E;
-$darkest_gold: #A67D12;
-
-@mixin rounded-corners($radius) {
-  border-radius: $radius;
-  -moz-border-radius: $radius;
-  -webkit-border-radius: $radius;
-}
+@import "colors";
+@import "rounded_corners";
 
 @mixin site-header-button() {
 	font-size: 11px;
@@ -272,7 +254,7 @@ $darkest_gold: #A67D12;
 			.auto_update {
 				padding: 2px 4px;
 				cursor: pointer;
-				@include rounded-corners(10px)
+				@include rounded-corners(10px);
 			}
 			.selected_interval, .auto_update:hover {
 				background-color: $main_gold;
