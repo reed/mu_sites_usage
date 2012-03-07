@@ -2,6 +2,7 @@ options =
 	chart:
 		renderTo: "chart"
 		zoomType: "x"
+		backgroundColor: null
 	credits:
 		enabled: false
 	title:

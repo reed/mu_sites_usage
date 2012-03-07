@@ -3,6 +3,7 @@ options =
 		renderTo: "chart"
 		zoomType: "x"
 		marginRight: 200
+		backgroundColor: null
 	credits:
 		enabled: false
 	title:

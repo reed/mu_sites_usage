@@ -3,6 +3,7 @@
 		chart:
 			renderTo: "chart"
 			defaultSeriesType: "column"
+			backgroundColor: null
 		credits:
 			enabled: false
 		title:
@@ -39,6 +40,7 @@
 			renderTo: "chart"
 			defaultSeriesType: "line"
 			marginRight: 200
+			backgroundColor: null
 		credits:
 			enabled: false
 		title:

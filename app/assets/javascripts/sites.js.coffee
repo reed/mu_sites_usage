@@ -47,7 +47,7 @@ jQuery ->
 	$('.toggle_button').one('click', showDetails)
 	$('#refresh_image').click(refreshSite)
 	
-	loadSites()
+	loadSites() if $('#site_list').size() > 0
 	
 	$('.auto_update').click ->
 		if $(this).data('interval') is "off"
@@ -154,8 +154,6 @@ refreshSite = ->
 			newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
 			newHeight = newHeight + "px"
 			sitePane.html(newClients)
-			sitePane.animate({height: newHeight}, 500)
-			newClients.animate({opacity: 1}, 500)
 			$('.available_count', siteHeader).text($('.available', sitePane).length)
 			$('.unavailable_count', siteHeader).text($('.unavailable', sitePane).length)
 			$('.offline_count', siteHeader).text($('.offline', sitePane).length)
@@ -163,6 +161,9 @@ refreshSite = ->
 			$('.summary', siteHeader).show()
 			if $('.toggle_button', siteHeader).text() == "Basic"
 				$('.toggle_button', siteHeader).unbind('click').one('click', showDetails).click()
+			else
+				sitePane.animate({height: newHeight}, 500)
+				newClients.animate({opacity: 1}, 500)
 			if initialLoad
 				initialLoad = false if $('#site_list').data('sites').length is 0
 		)
@@ -180,15 +181,12 @@ showDetails = ->
 	detailsTable = $('<table class="details_table"></table>')
 	devices = $('.device', pane)
 	detailsTable.append(detailsHeader).append(columnizeDetails(devices)).css('opacity', '0')
-	
 	pane.html(detailsTable)
 	
 	newHeight = pane.height()
 	newHeight = newHeight + "px"
 	rowCount = $('.device_row', pane).length
 	
-	#$('.details_table', pane).hide()
-	#$('.details_table', pane).show('blind', rowCount * 20)
 	$('.user:contains("Unknown User")', pane).text("").addClass('empty_details')
 	$('.device_detail span', pane).not('.user_toggler').show()
 	$('.device_row', pane).each ->
@@ -199,7 +197,6 @@ showDetails = ->
 	h = $('.details_table', pane).height()
 	pane.animate({height: h}, rowCount * 15)
 	$('.details_table', pane).animate({opacity: 1}, 1500)
-	
 	$('.vm', pane).hide()
 	$('.name_toggler span', pane).click(toggleName)
 	$(this).text('Basic').one('click', ->

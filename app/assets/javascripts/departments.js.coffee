@@ -44,6 +44,7 @@ renderDepartmentCharts = ->
 				plotBackgroundColor: null
 				plotBorderWidth: null
 				plotShadow: false
+				backgroundColor: null 
 			title:
 				text: ''
 			credits:
@@ -192,6 +193,7 @@ renderSiteCharts = ->
 				plotBackgroundColor: null
 				plotBorderWidth: null
 				plotShadow: false
+				backgroundColor: null
 			title:
 				text: ''
 			credits:

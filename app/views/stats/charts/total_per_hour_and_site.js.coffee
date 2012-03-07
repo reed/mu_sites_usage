@@ -3,6 +3,7 @@ options =
 		renderTo: "chart"
 		defaultSeriesType: "line"
 		marginRight: 200
+		backgroundColor: null
 	credits:
 		enabled: false
 	title:
