@@ -23,7 +23,11 @@
       <% end %>
     </div>
   </header>
-  <section class="site_pane" data-site="<%= site_pane.id %>" data-site-name="<%= site_pane.short_name %>">
+  <section class="site_pane" data-site="<%= site_pane.id %>" data-site-name="<%= site_pane.short_name %>" class="clearfix">
+    <% if (defined?(initial_load)).present? %>
+      <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "initial_throbbler" %>
+    <% else %>
       <%= site_pane.client_pane(can? :view_client_status_details, site_pane) %>
+    <% end %>
   </section>
 </li>

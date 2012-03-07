@@ -4,8 +4,8 @@
     Last Update: <span id="last_updated"><%= Time.now.strftime("%a, %-m/%-d/%y at %-l:%M %p") %></span> <%= image_tag "refresh.png", :id => "refresh_image", :height => "18", :width => "18", :alt => "Refresh", :title => "Refresh" %>
   </div>
 </div>
-<ul id="site_list">
-    <%= render :partial => 'site_pane', :collection => @sites %>
+<ul id="site_list" data-sites="<%= @site_ids %>">
+    <%= render :partial => 'site_pane', :collection => @sites, :locals => {:initial_load => :true} %>
 </ul>
 <div id="main_throbbler">
   <%= image_tag "ajax-loader2.gif", :alt => "Loading..." %>

@@ -15,8 +15,10 @@ class SitesController < ApplicationController
     @title = @department.display_name
     if params[:sites].present?
       @sites = SiteDecorator.decorate(@department.sites.enabled.where(:short_name => params[:sites].split('/')).order(:display_name))
+      @site_ids = @sites.map{|s| s.id }
     else
       @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
+      @site_ids = @sites.map{|s| s.id }
       if params.has_key? :partial
         render :partial => 'site_pane', :collection => @sites
       else

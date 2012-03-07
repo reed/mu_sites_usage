@@ -81,11 +81,10 @@
 				color: #001621;
 			}
 			.site_pane {
-				//width: 1150px; //920px;
 				display: block;
 				border: 2px solid $light_blue;
 				font-size: 0px;
-		
+				width: 100%;
 				table {
 					width: 100%;
 					.details_table_header {
@@ -219,6 +218,10 @@
 				}
 				.centered {
 					text-align: center;
+				}
+				.initial_throbbler {
+					padding: 10px;
+					margin: 0px auto;
 				}
 			}
 		}

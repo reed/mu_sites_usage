@@ -5,6 +5,7 @@ pstateAvailable = (history && history.pushState)
 initialURL = location.href
 popped = false
 t = ""
+initialLoad = true
 
 jQuery -> 
 	# Index
@@ -45,6 +46,9 @@ jQuery ->
 	$('.show').one('click', buildSite)
 	$('.toggle_button').one('click', showDetails)
 	$('#refresh_image').click(refreshSite)
+	
+	loadSites()
+	
 	$('.auto_update').click ->
 		if $(this).data('interval') is "off"
 			clearInterval(t)
@@ -75,6 +79,15 @@ cycleInfo = ->
 	else
 		current.hide()
 		current.next('span.cycle').show()
+
+loadSites = ->
+	ids = $('#site_list').data('sites')
+	unless ids.length is 0
+		first_id = ids.shift()
+		$('#site_list').data('sites', ids)
+		header = $('.site_header[data-site="' + first_id + '"]')
+		$('.refresh_button', header).click()
+		loadSites()
 	
 hideSite = ->
 	if $(this).hasClass('hide_button')
@@ -126,14 +139,14 @@ refreshSite = ->
 	else
 		header = $(this).parent()
 		$('.summary', header).hide()
-		$('.throbbler_container', header).show()
+		$('.throbbler_container', header).show() unless initialLoad
 		pane = $(this).parent().next('.site_pane')
 		siteName = pane.data('site-name')
 	$.getJSON('/sites/refresh/' + siteName, (data) ->
 		$.each(data, (id, clients) -> 
 			siteHeader = $('.site_header[data-site=' + id + ']')
 			sitePane = $('.site_pane[data-site=' + id + ']')
-			newClients = $(clients)
+			newClients = $(clients).css('opacity', '0')
 			$('.device', newClients).each ->
 				$('span:gt(0)', this).not('.user_toggler').hide()
 				$('.uid', this).hide()
@@ -141,6 +154,8 @@ refreshSite = ->
 			newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
 			newHeight = newHeight + "px"
 			sitePane.html(newClients)
+			sitePane.animate({height: newHeight}, 500)
+			newClients.animate({opacity: 1}, 500)
 			$('.available_count', siteHeader).text($('.available', sitePane).length)
 			$('.unavailable_count', siteHeader).text($('.unavailable', sitePane).length)
 			$('.offline_count', siteHeader).text($('.offline', sitePane).length)
@@ -148,6 +163,8 @@ refreshSite = ->
 			$('.summary', siteHeader).show()
 			if $('.toggle_button', siteHeader).text() == "Basic"
 				$('.toggle_button', siteHeader).unbind('click').one('click', showDetails).click()
+			if initialLoad
+				initialLoad = false if $('#site_list').data('sites').length is 0
 		)
 		updateTime()
 	)
@@ -162,12 +179,16 @@ showDetails = ->
 	$('<th>Status</th>').appendTo(detailsHeader)
 	detailsTable = $('<table class="details_table"></table>')
 	devices = $('.device', pane)
-	detailsTable.append(detailsHeader).append(columnizeDetails(devices))
+	detailsTable.append(detailsHeader).append(columnizeDetails(devices)).css('opacity', '0')
+	
 	pane.html(detailsTable)
+	
 	newHeight = pane.height()
 	newHeight = newHeight + "px"
-	$('.details_table', pane).hide()
-	$('.details_table', pane).show('blind', 500)
+	rowCount = $('.device_row', pane).length
+	
+	#$('.details_table', pane).hide()
+	#$('.details_table', pane).show('blind', rowCount * 20)
 	$('.user:contains("Unknown User")', pane).text("").addClass('empty_details')
 	$('.device_detail span', pane).not('.user_toggler').show()
 	$('.device_row', pane).each ->
@@ -175,6 +196,10 @@ showDetails = ->
 			$(this).addClass('centered')
 			$('span:not(".user_toggler")', this).addClass('details')
 	$('.user_toggler', pane).click(toggleUser)
+	h = $('.details_table', pane).height()
+	pane.animate({height: h}, rowCount * 15)
+	$('.details_table', pane).animate({opacity: 1}, 1500)
+	
 	$('.vm', pane).hide()
 	$('.name_toggler span', pane).click(toggleName)
 	$(this).text('Basic').one('click', ->
@@ -182,6 +207,7 @@ showDetails = ->
 		pane = $(this).parent().next('.site_pane')
 		$('.refresh_button', $(this).parent()).click()
 	)
+	
 
 columnizeDetails = (devices) ->
 	rows = []
