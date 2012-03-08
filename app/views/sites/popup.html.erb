@@ -1,5 +1,5 @@
 <ul id="site_list" data-sites="<%= @site_ids %>">
-    <%= render :partial => 'site_pane', :collection => @sites %>
+    <%= render :partial => 'site_pane', :collection => @sites, :locals => {:popup => :true} %>
 </ul>
 <div id="type_icon_reserve">
   <%= image_tag "mac.png", :title => "Mac", :height => "16", :class => "type-icon mac" %>

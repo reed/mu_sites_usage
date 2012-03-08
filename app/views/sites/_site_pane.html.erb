@@ -5,11 +5,13 @@
     <div class="refresh_button">
       <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
     </div>
-    <% if can? :view_client_status_details, site_pane %>
-       <div class="toggle_button">Details</div>
-    <% end %>
-    <% if can? :edit, site_pane %>
-     <%= link_to "Edit Site", edit_site_path(site_pane), :class => "edit_button" %>
+    <% unless (defined?(popup)).present? %>
+      <% if can? :view_client_status_details, site_pane %>
+         <div class="toggle_button">Details</div>
+      <% end %>
+      <% if can? :edit, site_pane %>
+        <%= link_to "Edit Site", edit_site_path(site_pane), :class => "edit_button" %>
+      <% end %>
     <% end %>
     <div class="throbbler_container">
       <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "throbbler" %>
