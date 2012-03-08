@@ -24,6 +24,9 @@ body.popup {
 		padding-left: 0px;
 	}
 
+	.site_block, .device {
+		cursor: default !important;
+	}
 	a {
 		color: #A6D3FD;
 		text-decoration: none;
