@@ -15,7 +15,8 @@
 //= require table2CSV
 //= require highcharts/highcharts
 //= require highcharts/themes/dark-green
-//= require_tree .
+//= require_directory .
+
 $(function(){
 	resize_menu();
 	$(window).resize(resize_menu);

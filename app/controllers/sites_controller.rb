@@ -1,6 +1,7 @@
 class SitesController < ApplicationController
   load_and_authorize_resource
-  skip_authorize_resource :only => [:show, :refresh]
+  skip_authorize_resource :only => [:show, :refresh, :popup]
+  layout "popup", :only => :popup
   helper_method :sort_column, :sort_direction
   
   def index
@@ -25,6 +26,11 @@ class SitesController < ApplicationController
         render 'show'
       end
     end
+  end
+  
+  def popup
+    @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
+    @site_ids = @sites.map{|s| s.id }
   end
   
   def new

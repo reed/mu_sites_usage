@@ -1,0 +1,7 @@
+<ul id="site_list" data-sites="<%= @site_ids %>">
+    <%= render :partial => 'site_pane', :collection => @sites %>
+</ul>
+<div id="type_icon_reserve">
+  <%= image_tag "mac.png", :title => "Mac", :height => "16", :class => "type-icon mac" %>
+  <%= image_tag "windows.png", :title => "Windows", :height => "16", :class => "type-icon windows" %>
+</div>

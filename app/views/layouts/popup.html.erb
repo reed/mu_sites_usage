@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <%= stylesheet_link_tag    "popup", "sites" %>
+  <%= javascript_include_tag "jquery", "popup/sites" %>
+  <%= csrf_meta_tags %>
+  <%= favicon_link_tag 'favicon.png', :type => 'image/png' %>
+</head>
+<body class="popup">
+  <section id="content">
+    <section id="container" class="<%= controller.controller_name %>">
+      <%= yield %>
+    </section>
+  </section>
+</body>
+</html>
