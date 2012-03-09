@@ -18,6 +18,7 @@ SitesUsage::Application.routes.draw do
   match '/departments/:department_id/sites/*sites', :to => 'sites#show'
   match '/sites/refresh/*sites', :to => 'sites#refresh'
   match '/sites/popup/:id', :to => 'sites#popup'
+  match '/sites/counts/:id', :to => 'sites#counts'
   match '/api', :to => 'api#index'
   match '/api/*sites', :to => 'api#sites', :as => 'api_site'
   
