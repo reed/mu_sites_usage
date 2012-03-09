@@ -14,8 +14,8 @@ class ApiController < ApplicationController
   end
   
   def counts
-    site = Site.enabled.find(params[:id])
-    if site
+    if Site.enabled.exists?(params[:id])
+      site = Site.enabled.find(params[:id])
       render :json => site.status_counts
     else
       render :text => "error"
