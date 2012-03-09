@@ -20,8 +20,8 @@ SitesUsage::Application.routes.draw do
   match '/sites/popup/:id', :to => 'sites#popup'
   
   match '/api', :to => 'api#index'
-  match '/api/*sites', :to => 'api#sites', :as => 'api_site'
   match '/sites/counts/:id', :to => 'api#counts'
+  match '/api/*sites', :to => 'api#sites', :as => 'api_site'
   
   match '/login', :to => 'sessions#new'
   match '/logout', :to => 'sessions#destroy'
