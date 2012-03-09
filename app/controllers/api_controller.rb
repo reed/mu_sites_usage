@@ -18,7 +18,7 @@ class ApiController < ApplicationController
     if site
       render :json => site.status_counts
     else
-      render :status => 400
+      render :text => "error"
     end
   end
   
