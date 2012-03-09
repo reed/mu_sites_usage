@@ -13,4 +13,13 @@ class ApiController < ApplicationController
     render 'sites', :formats => [:json]
   end
   
+  def counts
+    site = Site.enabled.find(params[:id])
+    if site
+      render :json => site.status_counts
+    else
+      render :status => 400
+    end
+  end
+  
 end

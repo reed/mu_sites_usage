@@ -1,6 +1,6 @@
 class SitesController < ApplicationController
   load_and_authorize_resource
-  skip_authorize_resource :only => [:show, :refresh, :popup, :counts]
+  skip_authorize_resource :only => [:show, :refresh, :popup]
   layout "popup", :only => :popup
   helper_method :sort_column, :sort_direction
   
@@ -31,15 +31,6 @@ class SitesController < ApplicationController
   def popup
     @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
     @site_ids = @sites.map{|s| s.id }
-  end
-  
-  def counts
-    site = Site.enabled.find(params[:id])
-    if site
-      render :json => site.status_counts
-    else
-      render :status => 400
-    end
   end
   
   def new
