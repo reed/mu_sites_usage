@@ -1,17 +1,24 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+t = ""
+
 jQuery ->
 	initFilters()
 	$('#toggle_filters_btn').click(toggleFilters)
-	$('#throbbler_div, #ajax_error').hide()
+	$('#throbbler_div, #ajax_error, #ajax_long').hide()
 	$('#throbbler_div').ajaxStart ->
+		t = setTimeout("$('#ajax_long').show()", 3000)
 		$('#chart').empty()
 		$('#ajax_error').hide()
 		$(this).show()
 	$('#throbbler_div').ajaxSuccess ->
+		clearTimeout(t)
+		$('#ajax_long').hide()
 		$(this).hide()
 	$('#throbbler_div').ajaxError ->
+		clearTimeout(t)
+		$('#ajax_long').hide()
 		$(this).hide()
 		$('#ajax_error').show()
 	$('#filter_form').submit ->

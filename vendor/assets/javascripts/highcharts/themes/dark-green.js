@@ -41,7 +41,7 @@ Highcharts.theme = {
 		gridLineWidth: 1,
 		labels: {
 			style: {
-				color: '#A0A0A0'
+				color: '#A6D3FD'
 			}
 		},
 		lineColor: '#A0A0A0',
@@ -60,7 +60,7 @@ Highcharts.theme = {
 		gridLineColor: '#333333',
 		labels: {
 			style: {
-				color: '#A0A0A0'
+				color: '#A6D3FD'
 			}
 		},
 		lineColor: '#A0A0A0',
@@ -69,7 +69,7 @@ Highcharts.theme = {
 		tickWidth: 1,
 		title: {
 			style: {
-				color: '#CCC',
+				color: '#FFD568',
 				fontWeight: 'bold',
 				fontSize: '12px',
 				fontFamily: 'Trebuchet MS, Verdana, sans-serif'
@@ -113,7 +113,7 @@ Highcharts.theme = {
 	legend: {
 		itemStyle: {
 			font: '9pt Trebuchet MS, Verdana, sans-serif',
-			color: '#A0A0A0'
+			color: '#A6D3FD'
 		},
 		itemHoverStyle: {
 			color: '#FFF'

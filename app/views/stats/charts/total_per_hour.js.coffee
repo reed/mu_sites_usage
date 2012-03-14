@@ -54,7 +54,7 @@
 				cursor: "pointer"
 				dataLabels: 
 					enabled: true
-					color: "#C0C0C0"
+					color: "#A6D3FD"
 					connectorColor: "#C0C0C0"
 		series: 
 			[

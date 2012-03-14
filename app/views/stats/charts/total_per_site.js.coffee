@@ -1,4 +1,4 @@
-<% if @chart_type == "column" %>
+<% if @chart_type == "column" %> 
 	options = 
 		chart:
 			renderTo: "chart"
@@ -10,11 +10,10 @@
 			text: "Total Logins Per Site"
 		xAxis:
 			categories: <%= raw @data.keys.as_json %>
-		series:
-			[
-				data: <%= raw @data.values.as_json %>
-				name: "Logins"
-			]
+		series: [
+			name: "Logins"
+			data: <%= raw @data.values.as_json %>
+		]
 		tooltip: 
 			formatter: ->
 				'<b>' + this.series.name.replace("<br/>", " ") + '</b>(' + this.x.replace("<br/>", " ") + '): ' + this.y
@@ -60,7 +59,7 @@
 				cursor: "pointer"
 				dataLabels: 
 					enabled: true
-					color: "#C0C0C0"
+					color: "#A6D3FD"
 					connectorColor: "#C0C0C0"
 		series: 
 			[
@@ -76,9 +75,3 @@
 	
 	chart = new Highcharts.Chart options
 <% end %>
-#$('#filters').hide("clip", "slow", ->
-
-#)
-#$('.stats').append('<pre id="return_json"></pre>')
-#$('#return_json').text(JSON.stringify(options, undefined, 3))	
-		
