@@ -6,6 +6,12 @@
 .api {
 	#api_explanation {
 		font-size: 12px;
+		.subheader {
+			font-size: 14px;
+			display: block;
+			margin-bottom: 10px;
+			text-decoration: underline;
+		}
 		.sample_link {
 			display: block;
 			margin: 25px;
@@ -14,6 +20,18 @@
 				font-style: italic;
 				color: $main_gold;
 			}
+		}
+		code {
+			display: block;
+			margin: 25px;
+			color: $light_blue;
+		}
+		textarea {
+			display: block;
+			width: 100%;
+			background-color: transparent;
+			color: $light_blue;
+			margin: 25px;
 		}
 	}
 	#api_reference {

@@ -1,10 +1,17 @@
-<p id="api_explanation">
+<div id="api_explanation">
   Use our API to incorporate current device data into your site!<br /><br />
+  <span class="subheader">JSON</span>
   To gather a JSON representation of our data, just use this link format:
   <span class="sample_link">http://sitesusage.doit.missouri.edu/api/<span>&lt;abbreviated_site_name&gt;</span></span>
   Or get multiple sites at once by chaining the site names:
   <span class="sample_link">http://sitesusage.doit.missouri.edu/api/<span>&lt;abbreviated_site_name_1&gt;</span>/<span>&lt;abbreviated_site_name_2&gt;</span></span>
-</p>
+  <span class="subheader">Popup Window</span>
+  Retrieve a complete site block in the form of a popup window:
+  <textarea rows="4">
+<a href="http://sitesusage.doit.missouri.edu/sites/popup/<abbreviated_site_name>" onClick="window.open(this.href, 'Window Title', 'height=300, width=300, location=no, toolbar=no, directories=no, status=no, resizable=no, scrollbars=no'); return false;">Link Text</a></textarea>
+  Example: <a href="http://sitesusage.doit.missouri.edu/sites/popup/aas10" 
+              onClick="window.open(this.href, 'Arts and Science 10', 'height=300, width=300,location=no,toolbar=no,directories=no,status=no,resizable=no,scrollbars=no'); return false;">Arts & Science 10</a>
+</div>
 <section id="api_reference">
   <h2>Site Abbreviations</h2>
   <% @departments.each do |department| %>
