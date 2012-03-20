@@ -47,7 +47,7 @@ jQuery ->
 	$('.toggle_button').one('click', showDetails)
 	$('#refresh_image').click(refreshSite)
 	
-	loadSites() if $('#site_list').size() > 0
+	loadSites() if $('#site_list', '.sites').size() > 0
 	
 	$('.auto_update').click ->
 		if $(this).data('interval') is "off"

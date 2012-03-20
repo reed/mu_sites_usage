@@ -23,7 +23,6 @@ $(function(){
 	$('a.button, input[type="button"], input[type="submit"]').each(function(){
 		$(this).button();
 	});
-	
 	setTimeout(hide_flashes, 4000);
 });
 

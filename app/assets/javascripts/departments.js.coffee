@@ -10,6 +10,8 @@ jQuery ->
 				$('.tooltip', deptDiv).toggleClass('visible')
 	if $('.site_summary').length > 0
 		renderSiteCharts()
+	#$('.button').each ->
+	#	$(this).button()
 	
 renderDepartmentCharts = ->
 	$('.department_summary').each ->
