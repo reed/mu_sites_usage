@@ -18,6 +18,10 @@
        <%= label_tag :search_site, "Site" %>
        <%= select_tag :search_site, options_from_collection_for_select(Site.all, :id, :display_name, params[:search_site]), :include_blank => true, :id => "site" %>
     </p>
+    <p>
+      <%= label_tag :search_type, "Device Type" %>
+      <%= select_tag :search_type, options_for_select([["Mac", "mac"], ["PC", "pc"], ["Thin Client", "tc"], ["Zero Client", "zc"]]), :include_blank => true, :id => "type" %>
+    </p>
   </div>
   <div id="button_row">
     <p>

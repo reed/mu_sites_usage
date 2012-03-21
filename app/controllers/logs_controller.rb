@@ -26,6 +26,9 @@ class LogsController < ApplicationController
     if data[:search_site] && data[:search_site].to_i > 0
       filters[:site] = data[:search_site]
     end
+    if data[:search_type] && !data[:search_type].empty?
+      filters[:client_type] = data[:search_type]
+    end
     filters
   end
   

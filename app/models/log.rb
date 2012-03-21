@@ -47,6 +47,9 @@ class Log < ActiveRecord::Base
       if filters[:site]
          s = s.where("clients.site_id" => filters[:site])
       end
+      if filters[:client_type]
+        s = s.where("clients.client_type" => filters[:client_type])
+      end
       s
     else
       includes(:client => :site)

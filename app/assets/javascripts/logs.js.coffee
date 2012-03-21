@@ -27,7 +27,7 @@ jQuery ->
 		false
 		
 	$('.logs #search_form input').keyup(submitForm)
-	$('.logs #search_form #start_date, .logs #search_form #end_date, .logs #search_form #site').change(submitForm)
+	$('.logs #search_form #start_date, .logs #search_form #end_date, .logs #search_form #site, .logs #search_form #type').change(submitForm)
 	
 	if pstateAvailable
 		$(window).bind("popstate", ->
