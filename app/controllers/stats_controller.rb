@@ -55,6 +55,10 @@ class StatsController < ApplicationController
   end
   
   def historical_snapshots(options)
+    unless options[:start_date].present? || options[:end_date].present?
+      options[:start_date] = 7.days.ago.strftime("%m/%d/%Y")
+      @subtitle = "For the past week"
+    end
     @data = Snapshot.historical_snapshots(@sites, options[:start_date], options[:end_date])
   end
   
