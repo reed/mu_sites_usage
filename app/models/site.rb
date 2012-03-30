@@ -90,7 +90,7 @@ class Site < ActiveRecord::Base
     counts = Client.enabled.where(:site_id => id).group(:client_type, :current_status).count
     counts.each_pair do |k,v|
       t = k[0] == "zc" ? :tc : k[0].to_sym
-      init_type_counts[t][k[1].to_sym] = v
+      init_type_counts[t][k[1].to_sym] += v
     end
     init_type_counts.each_pair{|k,v| init_type_counts[k][:total] = v.values.inject(0){|sum, i| sum + i}}
   end
