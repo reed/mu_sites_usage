@@ -33,15 +33,18 @@ class Log < ActiveRecord::Base
     if filters
       s = includes(:client => :site)
       if filters[:text]
-        s = s.where("clients.name LIKE ? 
-                      OR clients.mac_address LIKE ? 
-                      OR clients.ip_address LIKE ? 
-                      OR user_id LIKE ? 
-                      OR vm LIKE ?", "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%")
+        s = s.where("user_id LIKE ? 
+                      OR vm LIKE ?", "#{filters[:text]}%",
+                                      "#{filters[:text]}%")
+        # s = s.where("clients.name LIKE ? 
+        #               OR clients.mac_address LIKE ? 
+        #               OR clients.ip_address LIKE ? 
+        #               OR user_id LIKE ? 
+        #               OR vm LIKE ?", "#{filters[:text]}%",
+        #                               "#{filters[:text]}%",
+        #                               "#{filters[:text]}%",
+        #                               "#{filters[:text]}%",
+        #                               "#{filters[:text]}%")
       end
       s = s.by_date(filters[:start_date], filters[:end_date])
       if filters[:site]

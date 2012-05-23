@@ -22,4 +22,28 @@ class ApiController < ApplicationController
     end
   end
   
+  def info
+    if params[:ip].present?
+      @client = Client.enabled.order(:last_checkin).find_by_ip_address(params[:ip])
+      if @client
+        if @client.logged_in?
+          ldap = Ldap.new
+          @username = ldap.get_display_name(@client.current_user)
+        else
+          last_log = @client.logs.last
+          if last_log
+            @user_id = last_log[:user_id]
+            ldap = Ldap.new
+            @username = ldap.get_display_name(@user_id)
+            @last_logout = last_log[:logout_time]
+          end
+        end
+        render 'info', :formats => [:json] 
+      else
+        render :text => "Device not found"
+      end
+    else
+      render :text => "error"
+    end
+  end
 end
