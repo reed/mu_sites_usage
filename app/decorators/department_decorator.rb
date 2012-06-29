@@ -25,7 +25,7 @@ class DepartmentDecorator < ApplicationDecorator
   
   def site_type_link(type, current = false)
     klass = current ? "current" : ""
-    link = h.link_to type.titleize + " Sites", h.department_path(@department) + "?type=" + type.to_param
+    link = h.link_to type.titleize + " Sites", h.department_path(self) + "?type=" + type.to_param
     h.content_tag(:li, link, :class => klass, "data-type" => type)
   end
 end

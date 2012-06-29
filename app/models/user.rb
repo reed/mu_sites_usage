@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   end
   
   def self.beneath_me(me)
-    eq_op = ENV['RAILS_ENV'] == "production" ? "=" : "=="
+    eq_op = ["production", "staging"].include?(ENV['RAILS_ENV']) ? "=" : "=="
     case me.role
     when "administrator" 
       where("role #{eq_op} ? OR role #{eq_op} ? OR role #{eq_op} ? OR id #{eq_op} ?", "authenticated_user", "site_manager", "department_manager", me.id)

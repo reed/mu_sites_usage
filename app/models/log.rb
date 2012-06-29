@@ -29,27 +29,22 @@ class Log < ActiveRecord::Base
     types.include?("all") ? scoped : where('clients.client_type' => types)
   end
   
+  def self.tokens(query)
+    vms = where("vm LIKE ?", "#{query}%").pluck(:vm).uniq.sort
+    users = where("user_id LIKE ?", "#{query}%").pluck(:user_id).uniq.sort
+    tokens = vms.collect { |vm| {:id => vm, :category => 'vm' }}
+    tokens += users.collect { |user| {:id => user, :category => 'user' }}
+  end
+  
   def self.search(filters)
     if filters
       s = includes(:client => :site)
-      if filters[:text]
-        s = s.where("clients.name LIKE ? 
-                      OR clients.mac_address LIKE ? 
-                      OR clients.ip_address LIKE ? 
-                      OR user_id LIKE ? 
-                      OR vm LIKE ?", "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%",
-                                      "%#{filters[:text]}%")
-      end
+      s = s.where(:client_id => filters[:client]) if filters[:client]
+      s = s.where(:vm => filters[:vm]) if filters[:vm]
+      s = s.where(:user_id => filters[:user]) if filters[:user]
       s = s.by_date(filters[:start_date], filters[:end_date])
-      if filters[:site]
-         s = s.where("clients.site_id" => filters[:site])
-      end
-      if filters[:client_type]
-        s = s.where("clients.client_type" => filters[:client_type])
-      end
+      s = s.where("clients.site_id" => filters[:site]) if filters[:site]
+      s = s.where("clients.client_type" => filters[:client_type]) if filters[:client_type]
       s
     else
       includes(:client => :site)

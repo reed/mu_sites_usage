@@ -30,6 +30,10 @@ class Client < ActiveRecord::Base
   
   before_update :maintain_site
   
+  def as_json(opts={})
+    super opts.merge!({:except => [:__rn, :__rt]})
+  end
+  
   def department
     site.department if site
   end
@@ -103,6 +107,14 @@ class Client < ActiveRecord::Base
     else
       includes(:site)
     end
+  end
+  
+  def self.search_tokens(query)
+    select("id, name").where("name LIKE ? 
+              OR mac_address LIKE ? 
+              OR ip_address LIKE ?", "#{query}%",
+                                      "#{query}%",
+                                      "#{query}%")
   end
   
   def record_action(operation, user_id = nil, vm = nil)

@@ -1,10 +1,22 @@
 <%= form_tag logs_path, :method => 'get', :id => 'search_form' do %>
   <%= hidden_field_tag :direction, params[:direction] %>
   <%= hidden_field_tag :sort, params[:sort] %>
-  <div id="filter_row">
+  <div class="filter_row">
     <p>
-      <%= label_tag :search_text, "Name/MAC/IP/VM/User" %>
-      <%= text_field_tag :search_text, params[:search_text] %>
+      <%= label_tag :search_client, "Device Name, MAC, or IP" %>
+      <%= hidden_field_tag :search_client, @client, :data => { :placeholder => "Name/MAC/IP" }, :id => "client" %>
+    </p>
+    <p>
+      <%= label_tag :search_vm_or_user, "Virtual Machine or User" %>
+      <%= hidden_field_tag :search_vm_or_user, params[:search_vm_or_user], :data => { :placeholder => "VM/User" }, :id => "vm_or_user" %>
+    </p>
+    <p>
+       <%= label_tag :search_site, "Site" %>
+       <%= select_tag :search_site, options_from_collection_for_select(@sites, :id, :display_name, params[:search_site]), :multiple => true, :id => "site" %>
+    </p>
+    <p>
+      <%= label_tag :search_type, "Device Type" %>
+      <%= select_tag :search_type, options_for_select([["Mac", "mac"], ["PC", "pc"], ["Thin Client", "tc"], ["Zero Client", "zc"]], params[:search_type]), :multiple => true, :id => "type" %>
     </p>
     <p>
       <%= label_tag :search_start_date, "Starting Date" %>
@@ -13,14 +25,6 @@
     <p>
       <%= label_tag :search_end_date, "Ending Date" %>
       <%= text_field_tag :search_end_date, params[:search_end_date], :id => "end_date" %>
-    </p>
-    <p>
-       <%= label_tag :search_site, "Site" %>
-       <%= select_tag :search_site, options_from_collection_for_select(Site.all, :id, :display_name, params[:search_site]), :include_blank => true, :id => "site" %>
-    </p>
-    <p>
-      <%= label_tag :search_type, "Device Type" %>
-      <%= select_tag :search_type, options_for_select([["Mac", "mac"], ["PC", "pc"], ["Thin Client", "tc"], ["Zero Client", "zc"]]), :include_blank => true, :id => "type" %>
     </p>
   </div>
   <div id="button_row">
@@ -32,6 +36,12 @@
     </p>
   </div>
 <% end %>
-
+<div id="searching">
+  <%= image_tag "searching.gif", :title => "Searching" %>
+</div>
 <div id="logs"><%= render 'logs' %></div>
 
+<div id="icons">
+  <%= image_tag "user.png", :title => "User", :class => "user_icon" %>
+  <%= image_tag "vm.png", :title => "VM", :class => "vm_icon" %>
+</div>

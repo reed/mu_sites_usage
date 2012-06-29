@@ -4,16 +4,19 @@ class ClientsController < ApplicationController
   
   skip_before_filter :verify_authenticity_token, :only => :upload
   before_filter :validate_data, :only => :upload
+  before_filter :scope_clients, :only => :index
   
   def index
     @title = "Device Management"
-    search_filters = build_search_filters(params)
-    if current_user.administrator?
-      @clients = Client.search(search_filters).order(sort_column + " " + sort_direction).page(params[:page])
-    else
-      c_ids = current_user.department.sites.map { |c| c.id } << nil
-      puts c_ids
-      @clients = Client.where(:site_id => c_ids).search(search_filters).order(sort_column + " " + sort_direction).page(params[:page])
+    respond_to do |format|
+      format.json { 
+        @clients = @client_scope.search_tokens(params[:q]).order(:name)
+        render json: { :total => @clients.count, :clients => @clients.paginate(page: params[:page], per_page: 10) }
+      }
+      format.any(:html, :js) {
+        search_filters = build_search_filters(params)
+        @clients = @client_scope.search(search_filters).order(sort_column + " " + sort_direction).page(params[:page])
+      }
     end
   end
   
@@ -95,6 +98,17 @@ class ClientsController < ApplicationController
       filters[:site] = data[:search_site]
     end
     filters
+  end
+  
+  def scope_clients
+    if current_user.administrator?
+      @client_scope = Client.scoped
+      @sites = Site.all
+    else
+      c_ids = current_user.department.sites.map { |c| c.id } << nil
+      @client_scope = Client.where(:site_id => c_ids)
+      @sites = Site.where(:id => c_ids)
+    end
   end
   
   def sort_column

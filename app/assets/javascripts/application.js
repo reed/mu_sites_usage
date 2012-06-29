@@ -15,6 +15,7 @@
 //= require table2CSV
 //= require highcharts/highcharts
 //= require highcharts/themes/dark-green
+//= require select2
 //= require_directory .
 
 $(function(){

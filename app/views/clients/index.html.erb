@@ -12,7 +12,7 @@
     </p>
     <p>
        <%= label_tag :search_site, "Site" %>
-       <%= select_tag :search_site, options_from_collection_for_select(Site.all, :id, :display_name, params[:search_site]), :include_blank => true, :id => "site" %>
+       <%= select_tag :search_site, options_from_collection_for_select(@sites, :id, :display_name, params[:search_site]), :include_blank => true, :id => "site" %>
     </p>
   </div>
   <div id="button_row">
