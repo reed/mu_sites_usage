@@ -33,7 +33,8 @@ class Department < ActiveRecord::Base
   end
   
   def status_count
+    counts = { available: 0, unavailable: 0, offline: 0 }
     statuses = Client.enabled.includes(:site).where("sites.department_id" => id).group('current_status').count
-    statuses = Hash[statuses.map{|k,v| [k.to_sym, v]}]
+    statuses = counts.merge(Hash[statuses.map{|k,v| [k.to_sym, v]}])
   end
 end
