@@ -17,7 +17,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '2.0.0'
 gem 'therubyracer', require: "v8"
 gem 'whenever', :require => false
 gem 'draper' 
