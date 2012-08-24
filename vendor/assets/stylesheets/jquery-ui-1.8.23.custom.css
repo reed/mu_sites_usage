@@ -53,9 +53,9 @@
 
 /* Component containers
 ----------------------------------*/
-.ui-widget { font-family: Lucida Sans Unicode; font-size: 1.1em; }
+.ui-widget { font-family: "Lucida Sans Unicode","Lucida Grande","Trebuchet MS",Arial,Helvetica,sans-serif; font-size: 1.1em; }
 .ui-widget .ui-widget { font-size: 1em; }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Lucida Sans Unicode; font-size: 1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: "Lucida Sans Unicode","Lucida Grande","Trebuchet MS",Arial,Helvetica,sans-serif; font-size: 1em; }
 .ui-widget-content { border: 1px solid #222222; background: #1d2d44 url(images/ui-bg_hexagon_20_1d2d44_12x10.png) 50% 50% repeat; color: #ffd568; }
 .ui-widget-content a { color: #ffd568; }
 .ui-widget-header { border: 1px solid #0b3e6f; background: #0b3e6f url(images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat; color: #f1f1f1; font-weight: bold; }
