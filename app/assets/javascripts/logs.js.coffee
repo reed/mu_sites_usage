@@ -28,6 +28,7 @@ jQuery ->
 	
 	$('.logs #search_form #client').select2(
 		minimumInputLength: 3
+		width: 'resolve'
 		allowClear: true
 		ajax:
 			url: '/clients.json'
@@ -57,6 +58,7 @@ jQuery ->
 	
 	$('.logs #search_form #vm_or_user').select2(
 		minimumInputLength: 3
+		width: 'resolve'
 		allowClear: true
 		ajax:
 			url: '/logs.json'
@@ -75,9 +77,13 @@ jQuery ->
 		initSelection: initialSelect
 	)
 	
-	$('.logs #search_form #site').select2()
+	$('.logs #search_form #site').select2(
+		width: 'resolve'
+	)
 	
-	$('.logs #search_form #type').select2()
+	$('.logs #search_form #type').select2(
+		width: 'resolve'
+	)
 		
 	$('#start_date, #end_date, #site, #type, #client, #vm_or_user', '.logs #search_form').change(submitForm)
 	
