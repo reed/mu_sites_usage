@@ -23,7 +23,6 @@
 		margin-top: 40px;
 		.site_block {
 			margin-bottom: 20px;
-			cursor: move;
 			.site_header, .site_title {
 				font-family: Tahoma;
 				font-size: 18px;
@@ -35,6 +34,7 @@
 				//width: 1148px;
 				text-decoration: none;
 				height: 25px;
+				cursor: move;
 			}
 			.summary {
 				float: right;

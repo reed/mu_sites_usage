@@ -33,7 +33,7 @@ jQuery ->
 		$('.summary', header).show()
 	$('#main_throbbler').ajaxError ->
 		$(this).hide()
-	$('#site_list').sortable({ placeholder: "ui-state-active", forcePlaceholderSize: true })
+	$('#site_list').sortable({ placeholder: "ui-state-active", forcePlaceholderSize: true, handle: '.site_header' })
 	$('.device').each ->
 		$('span:gt(0)', this).not('.user_toggler').hide()
 		$('.uid', this).hide()
