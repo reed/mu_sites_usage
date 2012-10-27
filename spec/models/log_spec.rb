@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Log do
   describe "validations" do
     before(:each) do
-      @client = Factory(:client)
+      @client = FactoryGirl.create(:client)
       @attr = {
         :operation => "login",
         :login_time => 5.minutes.ago

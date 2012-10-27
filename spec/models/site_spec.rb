@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Site do
   describe "Site Creation" do
     before(:each) do
-      @dept = Factory(:department)
+      @dept = FactoryGirl.create(:department)
       @attr = {
         :display_name => "Site",
         :short_name => "site",
@@ -53,7 +53,7 @@ describe Site do
   describe "Site Filtering" do
     
     before(:each) do
-      @site = Factory(:site)
+      @site = FactoryGirl.create(:site)
     end
     
     it "should match a name to the correct site" do

@@ -81,7 +81,7 @@ describe ClientsController do
     
     describe "recording" do
       before(:each) do
-        @site = Factory(:site)
+        @site = FactoryGirl.create(:site)
         @tc_post = {
           :client_type => "tc",
           :operation => "startup",

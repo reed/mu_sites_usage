@@ -79,8 +79,8 @@ describe Client do
   describe "client matching" do
       
     before(:each) do 
-      @site = Factory(:site)
-      @client = Factory(:client)
+      @site = FactoryGirl.create(:site)
+      @client = FactoryGirl.create(:client)
       @attr = {
         :name => "SITE-TC-00",
         :mac_address => "aa:aa:aa:aa:aa:aa",
@@ -122,7 +122,7 @@ describe Client do
   
   describe "client actions" do
     before(:each) do
-      @client = Factory(:client)
+      @client = FactoryGirl.create(:client)
     end
     
     it "should update the last_checkin field" do
@@ -190,9 +190,9 @@ describe Client do
   
   describe "scopes" do
     before(:each) do
-        Factory(:client, :client_type => 'tc')
-        Factory(:client, :client_type => 'pc')
-        Factory(:client, :client_type => 'mac')
+        FactoryGirl.create(:client, :client_type => 'tc')
+        FactoryGirl.create(:client, :client_type => 'pc')
+        FactoryGirl.create(:client, :client_type => 'mac')
     end
     
     it "should only count windows clients" do

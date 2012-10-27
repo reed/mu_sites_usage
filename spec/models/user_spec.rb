@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
   describe "validations" do
     before(:each) do 
-      @dept = Factory(:department)
+      @dept = FactoryGirl.create(:department)
       @attr = {
         :username => "testuser",
         :name => "Test User",
@@ -84,7 +84,7 @@ describe User do
 
   describe "roles" do
     before(:each) do
-      @department = Factory(:department)
+      @department = FactoryGirl.create(:department)
       @attr = {
         :username => "testuser",
         :name => "Test User",
