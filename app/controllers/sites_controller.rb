@@ -1,13 +1,17 @@
 class SitesController < ApplicationController
-  load_and_authorize_resource
-  skip_authorize_resource :only => [:show, :refresh, :popup]
   layout "popup", :only => :popup
   helper_method :sort_column, :sort_direction
   
   def index
     @title = "Sites"
-    @page_heading = current_user.administrator? ? "All Sites" : "#{current_user.department.display_name} | Sites"
-    @sites = @sites.unscoped.includes(:department).order(sort_column + " " + sort_direction).page(params[:page])
+    if current_user.administrator?
+      @page_heading = "All Sites"
+      @sites = Site.unscoped.includes(:department)
+    else
+      @page_heading = "#{current_user.department.display_name} | Sites"
+      @sites = Site.unscoped.scoped_by_department_id(current_user.department_id)
+    end
+    @sites = @sites.order(sort_column + " " + sort_direction).page(params[:page])
     @device_counts = Client.where(:site_id => @sites).group(:site_id).count
   end
 
@@ -40,7 +44,7 @@ class SitesController < ApplicationController
 
   def edit
     @title = "Edit Site"
-    @site = Site.find(params[:id])
+    @site = current_resource
   end
   
   def create
@@ -60,7 +64,7 @@ class SitesController < ApplicationController
   end
    
   def update
-    @site = Site.find(params[:id])
+    @site = current_resource
     new_filter = params[:site][:name_filter].present? && params[:site][:name_filter] != @site.name_filter
     respond_to do |format|
       if @site.update_attributes(params[:site])
@@ -81,7 +85,7 @@ class SitesController < ApplicationController
   end
 
   def destroy
-    @site = Site.find(params[:id])
+    @site = current_resource
     @site.destroy
     flash[:success] = "Site removed."
     redirect_to sites_path
@@ -92,7 +96,7 @@ class SitesController < ApplicationController
       @sites = SiteDecorator.decorate(Site.enabled.where(:short_name => params[:sites].split('/')))
       site_hash = Hash.new
       @sites.each do |site|
-        site_hash[site.id] = site.client_pane(can? :view_client_status_details, site)
+        site_hash[site.id] = site.client_pane(allow? :sites, :view_client_status_details, site)
       end
       render :json => site_hash
     else
@@ -100,9 +104,11 @@ class SitesController < ApplicationController
     end
   end
   
-
-  
   private
+  
+  def current_resource
+    @current_resource ||= Site.find(params[:id]) if params[:id]
+  end
   
   def sort_column
     (Site.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "sites.display_name"

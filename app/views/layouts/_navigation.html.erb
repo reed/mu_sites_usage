@@ -5,19 +5,19 @@
     <%= department_links %>
   </ul>
   <ul id="submenu">
-    <% if can? :read, Log %>
+    <% if allow? :logs, :index %>
       <li <%= "class=active" if submenu_link_active? "logs" %>><%= link_to "Logs", logs_path %></li>
     <% end %>
-    <% if can? :read, StatsController %>
+    <% if allow? :stats, :index %>
       <li <%= "class=active" if submenu_link_active? "stats" %>><%= link_to "Statistics", stats_path %></li>
     <% end %>
-    <% if can? :read, User %>
+    <% if allow? :users, :index %>
       <li <%= "class=active" if submenu_link_active? "users" %>><%= link_to "Users", users_path %></li>
     <% end %>
-    <% if can? :read, Client %>
+    <% if allow? :clients, :index %>
       <li <%= "class=active" if submenu_link_active? "clients" %>><%= link_to "Device Management", clients_path %></li>
     <% end %>
-    <% if can? :manage, Site %>
+    <% if allow? :sites, :index %>
       <li <%= "class=active" if submenu_link_active? "sites" %>><%= link_to "Site Management", sites_path %></li>
     <% end %>
     <li <%= "class=active" if submenu_link_active? "api" %>><%= link_to "API", api_path %></li>

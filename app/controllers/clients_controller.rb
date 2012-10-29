@@ -1,5 +1,4 @@
 class ClientsController < ApplicationController
-  load_and_authorize_resource :only => [:index, :destroy]
   helper_method :sort_column, :sort_direction
   
   skip_before_filter :verify_authenticity_token, :only => :upload
@@ -21,7 +20,7 @@ class ClientsController < ApplicationController
   end
   
   def update
-    @client = Client.find(params[:id])
+    @client = current_resource
     respond_to do |format|
       @client.update_attributes(params[:client])
       format.json { respond_with_bip(@client) }
@@ -29,7 +28,7 @@ class ClientsController < ApplicationController
   end
 
   def destroy
-    @client = Client.find(params[:id])
+    @client = current_resource
     @client.destroy
     flash[:success] = "Client removed."
     redirect_to clients_path
@@ -49,7 +48,7 @@ class ClientsController < ApplicationController
       operation = params[:operation]
       user_id = params[:user_id]
       vm = params[:vm]
-      @client = Client.find_or_create(params)
+      @client = Client.find_or_create(params.permit!)
       if operation == "login" && params[:client_type] != "tc"
         @client.record_action(operation, user_id, vm)
       else
@@ -60,6 +59,10 @@ class ClientsController < ApplicationController
   end
   
   private
+  
+  def current_resource
+    @current_resource ||= Client.find(params[:id]) if params[:id]
+  end
   
   def validate_data
     return fail if params[:client_type].nil?

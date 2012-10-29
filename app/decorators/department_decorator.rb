@@ -2,7 +2,7 @@ class DepartmentDecorator < ApplicationDecorator
   decorates :department
   
   def status_data
-    counts = model.status_count
+    counts = model.status_counts
     "data-available=""#{counts[:available]}"" data-unavailable=""#{counts[:unavailable]}"" data-offline=""#{counts[:offline]}"""
   end
   

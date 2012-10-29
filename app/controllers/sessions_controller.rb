@@ -4,7 +4,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if ENV['RAILS_ENV'] == "development" #&& params[:session][:username] == "reednj" && params[:session][:password].present?
+    #if ENV['RAILS_ENV'] == "development" #&& params[:session][:username] == "reednj" && params[:session][:password].present?
+    if Rails.env.development? || Rails.env.test?
       user = User.find_by_username(params[:session][:username])
     else
       user = User.authenticate(params[:session][:username], params[:session][:password])

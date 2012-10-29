@@ -1,5 +1,5 @@
 class DepartmentsController < ApplicationController
-  load_and_authorize_resource
+  #load_and_authorize_resource
   
   def index
     @title = "Departments"
@@ -30,7 +30,7 @@ class DepartmentsController < ApplicationController
 
   def edit
     @title = "Edit Department"
-    @department = Department.find(params[:id])
+    @department = current_resource
   end
   
   def create
@@ -45,7 +45,7 @@ class DepartmentsController < ApplicationController
   end
 
   def update
-    @department = Department.find(params[:id])
+    @department = current_resource
     if @department.update_attributes(params[:department])
       flash[:success] = "Department updated."
       redirect_to @department
@@ -56,10 +56,15 @@ class DepartmentsController < ApplicationController
   end
 
   def destroy
-    @department = Department.find(params[:id])
+    @department = current_resource
     @department.destroy
     flash[:success] = "Department removed."
     redirect_to departments_path
   end
 
+  private
+  
+  def current_resource
+    @current_resource ||= Department.find(params[:id]) if params[:id]
+  end
 end

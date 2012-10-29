@@ -20,7 +20,7 @@
         <div class="data_row">
           <div><%= dept.client_count("windows") %></div><div><%= dept.sites.count %></div><div><%= dept.client_count("macs") %></div>
         </div>
-        <% if can? :manage, dept %>
+        <% if allow? :departments, :edit, dept %>
           <div class="admin_row">
             <%= link_to "edit", edit_department_path(dept), :title => "Edit #{dept.display_name}" %>
             <%= link_to "delete", dept, :method => :delete, 
@@ -34,4 +34,4 @@
     <% end %>
   <% end %>
 </section>
-<%= link_to "New Department", new_department_path, :class => "button" if can? :create, Department %>
+<%= link_to "New Department", new_department_path, :class => "button" if allow? :departments, :create %>

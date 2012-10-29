@@ -1,5 +1,4 @@
 class StatsController < ApplicationController
-  authorize_resource :class => StatsController
   
   def index
     @department = current_user.department

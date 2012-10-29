@@ -23,7 +23,7 @@
     <%= f.text_field :email %>
   </div>
 </div>
-<% if current_user.administrator? %>
+<% if allow_param? :users, :department_id %>
 <div class="form_row">
   <div class="form_label">
     <%= f.label :department %>

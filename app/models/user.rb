@@ -1,8 +1,6 @@
 require 'net/ldap'
 
 class User < ActiveRecord::Base
-  attr_accessible :username, :name, :email, :role, :department_id
-  
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
   ROLES = %w[authenticated_user site_manager department_manager administrator]

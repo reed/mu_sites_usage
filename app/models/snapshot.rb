@@ -1,5 +1,4 @@
 class Snapshot < ActiveRecord::Base
-  attr_accessible :site_id, :day, :time_increment, :available, :unavailable, :offline
   
   INCREMENTS = Utilities::DateCalculations.minute_increments(5)
   validates :site_id, :presence => :true

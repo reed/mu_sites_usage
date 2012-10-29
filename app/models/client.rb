@@ -1,6 +1,4 @@
 class Client < ActiveRecord::Base
-  attr_accessible :name, :mac_address, :client_type, :ip_address, :last_checkin, :last_login, 
-                    :current_status, :current_user, :current_vm, :enabled, :site_id
   
   mac_regex = /\A[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}\z/
   ip_regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/

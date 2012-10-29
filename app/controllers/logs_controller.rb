@@ -1,5 +1,4 @@
 class LogsController < ApplicationController
-  load_and_authorize_resource
   helper_method :sort_column, :sort_direction
   before_filter :client_map, :only => :index
   before_filter :scope_site_options, :only => :index
@@ -63,7 +62,7 @@ class LogsController < ApplicationController
   end
   
   def scope_site_options
-    if current_user.administrator?
+    if current_user.try(:administrator?)
       @sites = Site.all
     else
       c_ids = current_user.department.sites.map { |c| c.id } << nil

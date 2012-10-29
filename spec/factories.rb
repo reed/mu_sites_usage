@@ -16,6 +16,10 @@ FactoryGirl.define do
     client_type "tc"
     ip_address "100.200.300.400"
     association :site
+    
+    trait :orphan do
+      site nil
+    end
   end
   factory :user do
     sequence(:username) { |n| "user#{n}" }
@@ -23,6 +27,18 @@ FactoryGirl.define do
     sequence(:email) { |n| "user#{n}@missouri.edu" }
     role "authenticated_user"
     association :department
+    
+    trait :administrator do
+      role "administrator"
+    end
+    
+    trait :department_manager do
+      role "department_manager"
+    end
+    
+    trait :site_manager do 
+      role "site_manager"
+    end
   end
 #  Factory.define :site do |f|
 #    f.sequence(:display_name) { |n| "Test Site #{n}" }

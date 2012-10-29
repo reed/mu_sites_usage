@@ -6,7 +6,11 @@
       <th><%= sortable "name_filter" %></th>
       <th><%= sortable "enabled" %></th>
       <th><%= sortable 'site_type' %>
+        
+      <% if current_user.administrator? %>
       <th><%= sortable "departments.display_name", "Department" %></th>
+      <% end %>
+      
       <th># Devices</th>
       <th></th>
       <th></th>

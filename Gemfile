@@ -23,12 +23,12 @@ gem 'whenever', :require => false
 gem 'draper' 
 gem 'net-ldap'
 gem 'friendly_id'
-gem 'cancan'
 gem 'best_in_place'
 gem 'will_paginate'
 gem 'exception_notification'
 gem 'coffeebeans'
 gem 'jbuilder'
+gem 'strong_parameters'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

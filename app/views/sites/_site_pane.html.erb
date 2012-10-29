@@ -6,10 +6,10 @@
       <%= image_tag "refresh.png", :alt => "Refresh", :title => "Refresh", :width => "15" %>
     </div>
     <% unless (defined?(popup)).present? %>
-      <% if can? :view_client_status_details, site_pane %>
+      <% if allow? :sites, :view_client_status_details, site_pane %>
          <div class="toggle_button">Details</div>
       <% end %>
-      <% if can? :edit, site_pane %>
+      <% if allow? :sites, :edit, site_pane %>
         <%= link_to "Edit Site", edit_site_path(site_pane), :class => "edit_button" %>
       <% end %>
     <% end %>
@@ -29,7 +29,7 @@
     <% if (defined?(initial_load)).present? %>
       <%= image_tag "ajax-loader.gif", :alt => "Loading...", :class => "initial_throbbler" %>
     <% else %>
-      <%= site_pane.client_pane(can? :view_client_status_details, site_pane) %>
+      <%= site_pane.client_pane(allow? :sites, :view_client_status_details, site_pane) %>
     <% end %>
   </section>
 </li>

@@ -7,5 +7,5 @@
   <td><%= client.ip_address %></td>
   <td><%= time_ago_in_words(client.last_checkin) + " ago" if client.last_checkin %></td>
   <td><%= link_to "delete", client, :method => :delete, :data => { :confirm => "You sure?" },
-                                  :title => "Delete #{client.name}" if can? :destroy, client %></td>
+                                  :title => "Delete #{client.name}" if allow? :clients, :destroy, client %></td>
 </tr>

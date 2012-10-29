@@ -1,14 +1,14 @@
 class UsersController < ApplicationController
-  load_and_authorize_resource
   helper_method :sort_column, :sort_direction
   
   def index
     @title = "#{current_user.department.display_name} Users"
-    @users = @users.order(sort_column + " " + sort_direction).page(params[:page])
+    @users = User.beneath_me(current_user).order(sort_column + " " + sort_direction).page(params[:page])
   end
 
   def new
     @title = "New User"
+    @user = User.new
   end
 
   def create
@@ -28,9 +28,11 @@ class UsersController < ApplicationController
     
   def edit
     @title = "Edit user"
+    @user = current_resource
   end
   
   def update
+    @user = current_resource
     respond_to do |format|
       if @user.update_attributes(params[:user])
         format.html { 
@@ -49,7 +51,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
+    @user = current_resource
     if !current_user?(@user)
       @user.destroy
       flash[:success] = "User remove."
@@ -60,6 +62,14 @@ class UsersController < ApplicationController
   end
 
   private
+  
+  def current_resource
+    if params[:action] == 'create'
+      @current_resource ||= params[:user] if params[:user]
+    else
+      @current_resource ||= User.find(params[:id]) if params[:id]
+    end
+  end
   
   def sort_column
     (User.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "name"

@@ -14,4 +14,4 @@
 <% else %>
   <p class="no_sites">There are no sites in this department.</p>
 <% end %>
-<%= link_to "Manage Sites", sites_path, :class => "button" if can? :manage, Site %>
+<%= link_to "Manage Sites", sites_path, :class => "button" if allow? :sites, :index %>
