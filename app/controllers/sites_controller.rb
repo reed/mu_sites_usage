@@ -1,6 +1,5 @@
 class SitesController < ApplicationController
   layout "popup", :only => :popup
-  helper_method :sort_column, :sort_direction
   
   def index
     @title = "Sites"
@@ -111,11 +110,7 @@ class SitesController < ApplicationController
   end
   
   def sort_column
-    (Site.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "sites.display_name"
-  end
-  
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    super(Site.column_names + ['departments.display_name'], 'sites.display_name')
   end
   
 end

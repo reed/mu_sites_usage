@@ -1,6 +1,4 @@
 class ClientsController < ApplicationController
-  helper_method :sort_column, :sort_direction
-  
   skip_before_filter :verify_authenticity_token, :only => :upload
   before_filter :validate_data, :only => :upload
   before_filter :scope_clients, :only => :index
@@ -115,10 +113,7 @@ class ClientsController < ApplicationController
   end
   
   def sort_column
-    (Client.column_names + ["sites.display_name"]).include?(params[:sort]) ? params[:sort] : "name"
+    super(Client.column_names + ['sites.display_name'], 'name')
   end
   
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
 end

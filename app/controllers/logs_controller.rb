@@ -1,5 +1,4 @@
 class LogsController < ApplicationController
-  helper_method :sort_column, :sort_direction
   before_filter :client_map, :only => :index
   before_filter :scope_site_options, :only => :index
   
@@ -45,11 +44,11 @@ class LogsController < ApplicationController
   end
   
   def sort_column
-    (Log.column_names + ["clients.name", "sites.display_name"]).include?(params[:sort]) ? params[:sort] : "logs.updated_at"
+    super(Log.column_names + ['clients.name', 'sites.display_name'], 'logs.updated_at')
   end
   
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    super('desc')
   end
   
   def client_map

@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  helper_method :sort_column, :sort_direction
   
   def index
     @title = "#{current_user.department.display_name} Users"
@@ -72,10 +71,7 @@ class UsersController < ApplicationController
   end
   
   def sort_column
-    (User.column_names + ["departments.display_name"]).include?(params[:sort]) ? params[:sort] : "name"
+    super(User.column_names + ['departments.display_name'], 'name')
   end
   
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
 end

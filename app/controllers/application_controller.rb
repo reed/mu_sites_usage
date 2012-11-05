@@ -37,4 +37,14 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+  
+  def sort_column(columns, default)
+    columns.include?(params[:sort]) ? params[:sort] : default
+  end
+  helper_method :sort_column
+  
+  def sort_direction(default = 'asc')
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : default
+  end
+  helper_method :sort_direction
 end
