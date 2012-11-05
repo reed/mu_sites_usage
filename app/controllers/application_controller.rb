@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   
   def authorize
     if current_permission.allow?(params[:controller], params[:action], current_resource)
-      current_permission.permit_params! params #(params[params[:controller].singularize] || params)
+      current_permission.permit_params! params
     else
       if signed_in?
         redirect_to root_url, :flash => { :error => 'Not Authorized' }
