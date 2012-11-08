@@ -1,10 +1,10 @@
 <% if @sites.any? %>
   <ul id="type_select">
-    <%= @department.site_type_links(@site_type) %>
+    <%= @department.site_type_links(@types, @site_type) %>
   </ul>
   <section id="site_list">
     <% @sites.each do |site| %>
-      <div class="site_summary" <%= SiteDecorator.find(site).status_data %>>
+      <div class="site_summary" <%= SiteDecorator.find(site).status_data(@status_counts[site.id]) %>>
         <%= link_to site.display_name, department_site_path(@department, site), :class => "site_title" %>
         <div id="<%= site.short_name %>_chart" class="status_chart">
         </div>

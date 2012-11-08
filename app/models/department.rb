@@ -12,21 +12,23 @@ class Department < ActiveRecord::Base
   has_many :sites, :dependent => :destroy
   has_many :users, :dependent => :destroy
   
+  after_save :expire_department_list_cache
+  
   def client_count(type)
-    c = Client.enabled
-    case type
-    when "windows"
-      c = c.windows
-    when "macs", "mac"
-      c = c.macs
-    when "thinclients", "tc"
-      c = c.thinclients
-    when "pcs", "pc"
-      c = c.pcs
-    else
-      return 0
-    end
-    c.includes(:site).where("sites.department_id" => id).count
+    c = Client.enabled.includes(:site).where('sites.department_id' => id).group(:client_type).count
+    types = case type
+            when "windows"
+              Client::WINDOWS_TYPES
+            when "macs", "mac"
+              Client::MAC_TYPES
+            when "thinclients", "tc"
+              Client::THINCLIENT_TYPES
+            when "pcs", "pc"
+              Client::PC_TYPES
+            else
+              []
+            end
+    c.slice(*types).values.reduce(:+) || 0
   end
   
   def status_counts
@@ -37,5 +39,11 @@ class Department < ActiveRecord::Base
   
   def site_type_counts
     sites.unscoped.enabled.group(:site_type).count
+  end
+  
+  private
+  
+  def expire_department_list_cache
+    Rails.cache.delete 'department_list'
   end
 end

@@ -3,13 +3,16 @@ class StatsController < ApplicationController
   def index
     @department = current_user.department
     @sites = @department.sites
+    @sites = @sites.external unless allow? :sites, :view_internal_sites
     @title = "Statistics"
     @client_types = Hash["mac", "Macs", "pc", "PCs", "tc", "Thin Clients", "zc", "Zero Clients"]
   end
 
   def show
     department = current_user.department
-    @sites = params[:site_select].nil? || params[:site_select].include?("all") ? department.sites.pluck(:id) : department.sites.where(:short_name => params[:site_select]).pluck(:id)
+    @sites = department.sites
+    @sites = @sites.external unless allow? :sites, :view_internal_sites
+    @sites = params[:site_select].nil? || params[:site_select].include?("all") ? @sites.pluck(:id) : @sites.where(:short_name => params[:site_select]).pluck(:id)
     @chart_type = params[:type_select]
     @subtitle = Utilities::DateFormatters.format_date_for_subtitle(params[:start_date], params[:end_date])
     

@@ -22,12 +22,15 @@ module ApplicationHelper
   end
   
   def department_links
-    depts = Department.order("display_name")
+    depts = Rails.cache.fetch 'department_list' do
+      Department.order("display_name").all
+    end
     render :partial => 'department_link', :collection => depts
   end
   
   def site_links(dept_id)
-    sites = Department.find(dept_id).sites.enabled.order("display_name")
+    sites = Department.find(dept_id).sites.enabled.includes(:department)
+    sites = sites.external unless allow? :sites, :view_internal_sites
     render :partial => 'site_link', :collection => sites
   end
   

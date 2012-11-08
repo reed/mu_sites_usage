@@ -33,7 +33,11 @@ module Permissions
         @allowed_params[resource].include? attribute
       end
     end
-
+    
+    def filter_resources(controller, action, resources)
+      resources.select{ |resource| allow? controller, action, resource }
+    end
+    
     def permit_params!(params)
       if @allow_all
         if params[params[:controller].singularize] then params[params[:controller].singularize].permit! else params.permit! end

@@ -2,6 +2,13 @@ class Client < ActiveRecord::Base
   
   mac_regex = /\A[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}:[a-z0-9]{2}\z/
   ip_regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/
+  
+  WINDOWS_TYPES = %w[pc tc zc]
+  MAC_TYPES = %w[mac]
+  THINCLIENT_TYPES = %w[tc zc]
+  PC_TYPES = %w[pc]
+  
+  TYPES = WINDOWS_TYPES + MAC_TYPES
    
   validates :name, :presence => true,
                     :length => { :maximum => 25 },
@@ -11,17 +18,17 @@ class Client < ActiveRecord::Base
                           :format => { :with => mac_regex }
   validates :ip_address, :format => { :with => ip_regex }
   validates :client_type, :presence => true,
-                          :inclusion => { :in => ["tc", "zc", "pc", "mac"] }
+                          :inclusion => { :in => TYPES }
   validates :current_status, :inclusion => { :in => ["available", "unavailable", "offline"] }
   
   belongs_to :site  
   has_many :logs
   
   scope :enabled, where(:enabled => true)
-  scope :windows, where(:client_type => ["tc", "zc", "pc"])
-  scope :macs, where(:client_type => "mac")
-  scope :pcs, where(:client_type => "pc")
-  scope :thinclients, where(:client_type => ["tc", "zc"]) 
+  scope :windows, where(:client_type => WINDOWS_TYPES)
+  scope :macs, where(:client_type => MAC_TYPES)
+  scope :pcs, where(:client_type => PC_TYPES)
+  scope :thinclients, where(:client_type => THINCLIENT_TYPES) 
   scope :stale, lambda { where(:client_type => ["mac", "pc", "tc"]).where('name NOT LIKE ?', '%LT-%').where('last_checkin < ?', 10.minutes.ago) }
   scope :stalelaptops, lambda { where('name LIKE ?', '%LT-%').where('last_checkin < ?', 10.minutes.ago) }
   scope :orphaned, where(:site_id => nil)

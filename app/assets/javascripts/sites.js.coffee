@@ -135,7 +135,7 @@ refreshSite = ->
 		siteNames = []
 		$('.site_block').each ->
 			siteNames.push $(this).data('site-name')
-		siteName = siteNames.join('/')	
+		siteName = siteNames.join('/')
 	else
 		header = $(this).parent()
 		$('.summary', header).hide()
@@ -151,8 +151,11 @@ refreshSite = ->
 				$('span:gt(0)', this).not('.user_toggler').hide()
 				$('.uid', this).hide()
 				$(this).click(cycleInfo)
-			newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
-			newHeight = newHeight + "px"
+			if $('.device', newClients).length > 0
+				newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
+				newHeight = newHeight + "px"
+			else
+				$('.toggle_button, .refresh_button', siteHeader).hide()
 			sitePane.html(newClients)
 			$('.available_count', siteHeader).text($('.available', sitePane).length)
 			$('.unavailable_count', siteHeader).text($('.unavailable', sitePane).length)
@@ -162,7 +165,7 @@ refreshSite = ->
 			if $('.toggle_button', siteHeader).text() == "Basic"
 				$('.toggle_button', siteHeader).unbind('click').one('click', showDetails).click()
 			else
-				sitePane.animate({height: newHeight}, 500)
+				sitePane.animate({height: newHeight}, 500) if newHeight?
 				newClients.animate({opacity: 1}, 500)
 			if initialLoad
 				initialLoad = false if $('#site_list').data('sites').length is 0

@@ -14,9 +14,9 @@ class DepartmentDecorator < ApplicationDecorator
     sites.count > 0 ? model.client_count("macs") : 0
   end
 
-  def site_type_links(current)
+  def site_type_links(types, current)
     links = ""
-    model.sites.pluck(:site_type).uniq.each do |t|
+    types.each do |t|
       is_current = t == current
       links += site_type_link(t, is_current).html_safe
     end

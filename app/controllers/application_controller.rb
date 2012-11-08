@@ -25,8 +25,16 @@ class ApplicationController < ActionController::Base
     nil
   end
   
+  def filter_resources
+    if current_resource.kind_of? ActiveRecord::Relation 
+      filtered_resources = current_permission.filter_resources(params[:controller], params[:action], current_resource)
+      @current_resource = filtered_resources if filtered_resources.any?
+    end
+    filtered_resources.present?
+  end
+  
   def authorize
-    if current_permission.allow?(params[:controller], params[:action], current_resource)
+    if filter_resources || current_permission.allow?(params[:controller], params[:action], current_resource)
       current_permission.permit_params! params
     else
       if signed_in?

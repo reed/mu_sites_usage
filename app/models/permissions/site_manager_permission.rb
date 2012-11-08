@@ -3,6 +3,7 @@ module Permissions
     def initialize(user)
       super(user)
       allow :logs, [:index]
+      allow :sites, [:show, :refresh, :popup, :view_internal_sites]
       allow :users, [:index, :new]
       allow :users, [:create]  do |other_user|
         user.assignable_roles.include? other_user[:role]

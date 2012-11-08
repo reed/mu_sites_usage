@@ -8,16 +8,19 @@ class DepartmentsController < ApplicationController
 
   def show
     @department = DepartmentDecorator.find(params[:id])
-    @sites = @department.sites.enabled
+    @sites = @department.sites.enabled.joins(:clients).uniq
+    @sites = @sites.external unless allow? :sites, :view_internal_sites
     if @sites.any?
+      @types = @sites.collect{|s| s.site_type}.uniq
       if params[:type].present?
-        redirect_to Department.find(params[:id]) unless @sites.pluck(:site_type).include?(params[:type])
+        redirect_to @department unless @sites.pluck(:site_type).include?(params[:type])
         @site_type = params[:type]
       else
-        type_counts = @department.sites.unscoped.enabled.group(:site_type).count
+        type_counts = @sites.reorder('').group(:site_type).count
         @site_type = type_counts.has_key?("general_access") ? "general_access" : type_counts.max_by{|k,v| v}[0]
       end
       @sites = @sites.where(:site_type => @site_type)
+      @status_counts = Site.status_counts_by_type(@sites)
     end
     @title = @department.display_name
   end

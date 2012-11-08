@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Permissions::GuestPermission do
+  let(:external_site){ create(:site, site_type: 'general_access' )}
+  let(:internal_site){ create(:site, site_type: 'internal' )}
   subject { Permissions.permission_for(nil) }
     
   it 'allows departments' do
@@ -17,9 +19,12 @@ describe Permissions::GuestPermission do
     
   it 'allows sites' do
     should_not allow(:sites, :index) 
-    should allow(:sites, :show) 
-    should allow(:sites, :popup) 
-    should allow(:sites, :refresh) 
+    should allow(:sites, :show, external_site) 
+    should allow(:sites, :popup, external_site) 
+    should allow(:sites, :refresh, external_site) 
+    should_not allow(:sites, :show, internal_site) 
+    should_not allow(:sites, :popup, internal_site) 
+    should_not allow(:sites, :refresh, internal_site) 
     should_not allow(:sites, :new) 
     should_not allow(:sites, :create) 
     should_not allow(:sites, :edit) 

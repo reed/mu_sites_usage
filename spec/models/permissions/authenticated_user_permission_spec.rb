@@ -6,6 +6,8 @@ describe Permissions::AuthenticatedUserPermission do
   let(:user){ create(:user, department: department) }
   let(:department_site){ create(:site, department: department )}
   let(:other_department_site){ create(:site, department: other_department)}
+  let(:external_site){ create(:site, site_type: 'general_access' )}
+  let(:internal_site){ create(:site, site_type: 'internal' )}
   subject { Permissions.permission_for(user) }
     
   it 'allows departments' do
@@ -22,9 +24,12 @@ describe Permissions::AuthenticatedUserPermission do
     
   it 'allows sites' do
     should_not allow(:sites, :index) 
-    should allow(:sites, :show) 
-    should allow(:sites, :popup) 
-    should allow(:sites, :refresh) 
+    should allow(:sites, :show, external_site) 
+    should allow(:sites, :popup, external_site) 
+    should allow(:sites, :refresh, external_site) 
+    should_not allow(:sites, :show, internal_site) 
+    should_not allow(:sites, :popup, internal_site) 
+    should_not allow(:sites, :refresh, internal_site) 
     should_not allow(:sites, :new) 
     should_not allow(:sites, :create) 
     should_not allow(:sites, :edit) 

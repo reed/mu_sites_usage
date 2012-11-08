@@ -15,24 +15,21 @@ class SitesController < ApplicationController
   end
 
   def show
-    @department = Department.find(params[:department_id])
     @title = @department.display_name
     if params[:sites].present?
-      @sites = SiteDecorator.decorate(@department.sites.enabled.where(:short_name => params[:sites].split('/')).order(:display_name))
-      @site_ids = @sites.map{|s| s.id }
+      @sites = SiteDecorator.decorate(current_resource)
+      @site_ids = @sites.map{ |s| s.id }
     else
-      @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
-      @site_ids = @sites.map{|s| s.id }
+      @sites = [SiteDecorator.new(current_resource)]
+      @site_ids = @sites.map{ |s| s.id }
       if params.has_key? :partial
         render :partial => 'site_pane', :collection => @sites
-      else
-        render 'show'
       end
     end
   end
   
   def popup
-    @sites = [SiteDecorator.new(Site.enabled.find(params[:id]))]
+    @sites = [SiteDecorator.new(current_resource)]
     @site_ids = @sites.map{|s| s.id }
   end
   
@@ -92,7 +89,7 @@ class SitesController < ApplicationController
   
   def refresh
     if params[:sites].present?
-      @sites = SiteDecorator.decorate(Site.enabled.where(:short_name => params[:sites].split('/')))
+      @sites = SiteDecorator.decorate(current_resource)
       site_hash = Hash.new
       @sites.each do |site|
         site_hash[site.id] = site.client_pane(allow? :sites, :view_client_status_details, site)
@@ -106,7 +103,19 @@ class SitesController < ApplicationController
   private
   
   def current_resource
-    @current_resource ||= Site.find(params[:id]) if params[:id]
+    @department ||= Department.find(params[:department_id]) if params[:department_id]
+    @current_resource ||= case params[:action]
+                          when 'show'
+                            if params[:sites]
+                              @department.sites.enabled.where(:short_name => params[:sites].split('/')).order(:display_name)
+                            elsif params[:id]
+                              Site.enabled.find(params[:id])
+                            end
+                          when 'refresh'
+                            Site.enabled.where(:short_name => params[:sites].split('/')) if params[:sites]
+                          else
+                            Site.find(params[:id]) if params[:id]
+                          end
   end
   
   def sort_column

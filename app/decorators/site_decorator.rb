@@ -1,8 +1,7 @@
 class SiteDecorator < ApplicationDecorator
   decorates :site
 
-  def status_data
-    counts = model.status_counts_by_type
+  def status_data(counts)
     formatted_counts = Hash.new
     counts.each do |type, type_count|
       formatted_counts[type] = [type_count[:total], type_count[:available], type_count[:unavailable], type_count[:offline]].join('-')

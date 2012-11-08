@@ -20,7 +20,7 @@
       <% ["available", "unavailable", "offline"].each do |status| %>
         <div class="<%= status %>_summary">
           <%= site_pane.light status %>
-          <span class="<%= status %>_count"><%= site_pane.status_count status %></span>
+          <span class="<%= status %>_count"><%= site_pane.status_counts[status.to_sym] %></span>
         </div>
       <% end %>
     </div>
