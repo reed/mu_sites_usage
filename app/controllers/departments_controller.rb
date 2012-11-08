@@ -13,7 +13,7 @@ class DepartmentsController < ApplicationController
     if @sites.any?
       @types = @sites.collect{|s| s.site_type}.uniq
       if params[:type].present?
-        redirect_to @department unless @sites.pluck(:site_type).include?(params[:type])
+        redirect_to @department unless @types.include?(params[:type])
         @site_type = params[:type]
       else
         type_counts = @sites.reorder('').group(:site_type).count
