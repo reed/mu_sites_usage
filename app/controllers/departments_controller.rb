@@ -11,7 +11,7 @@ class DepartmentsController < ApplicationController
     @sites = @department.sites.enabled.joins(:clients).uniq
     @sites = @sites.external unless allow? :sites, :view_internal_sites
     if @sites.any?
-      @types = @sites.collect{|s| s.site_type}.uniq
+      @types = @sites.collect{|s| s.site_type}.uniq.sort
       if params[:type].present?
         redirect_to @department unless @types.include?(params[:type])
         @site_type = params[:type]
