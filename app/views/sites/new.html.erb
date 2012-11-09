@@ -6,11 +6,18 @@
   </div>
 <% end %>
 <aside id="name_filter_explanation">
-  A string representing the beginning characters shared between all the device hostnames in the site.<br /><br />
+  A regular expression that matches all the device hostnames in the site.  
+  <br /><br />
+  Omit the opening and closing slashes (/). When used, the name filter will be wrapped like this:
+  <br /><br />
+  /^name_filter$/i
+  <br /><br />
   Examples:
   <ul>
-    <li>AAS-</li>
-    <li>BCC-</li>
-    <li>ELLIS114-</li>
+    <li>AAS-\S+</li>
+    <li>BCC-(TC|PC|ZC|MAC)-\d{2}</li>
+    <li>ELLIS(114)?-(TC|ZC|MAC)-\d+</li>
   </ul>
+  <br />
+  For help with determining the correct regular expression, check out <a href="http://rubular.com" target="_blank">rubular.com</a>.
 </aside>

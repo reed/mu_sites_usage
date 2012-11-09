@@ -24,9 +24,7 @@ class Site < ActiveRecord::Base
   has_many :snapshots, :dependent => :destroy
   
   def self.match_name_with_site(name)
-    name.upcase!
-    concat_operator = ENV['RAILS_ENV'] == "production" ? "+" : "||"
-    where(["? LIKE (name_filter #{concat_operator} '%')", name]).first
+    select('id, name_filter').to_a.select{ |site| name =~ Regexp.new("^#{site.name_filter}$", true) }.first
   end
   
   def self.refilter_clients

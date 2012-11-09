@@ -10,7 +10,7 @@ initialLoad = true
 jQuery -> 
 	# Index
 	$('.best_in_place').best_in_place()
-	$('#sites th a, #sites .pagination a').live("click", ->
+	$('#sites th a:not(.dialog_open), #sites .pagination a').live("click", ->
 		$.getScript(this.href)
 		$('.best_in_place').best_in_place()
 		history.pushState(null, document.title, this.href) if pstateAvailable

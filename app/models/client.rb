@@ -86,7 +86,7 @@ class Client < ActiveRecord::Base
   end
   
   def self.recheck_sites
-    all.each do |c|
+    find_each do |c|
       c.send :maintain_site
       c.save
     end
@@ -165,7 +165,6 @@ class Client < ActiveRecord::Base
   end
   
   def maintain_site
-    site = Site.match_name_with_site(self.name)
-    self.site_id = if site.instance_of? Site then site.id else nil end
+    self.site_id = Site.match_name_with_site(self.name).try(:id)
   end
 end
