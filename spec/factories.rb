@@ -6,7 +6,7 @@ FactoryGirl.define do
   factory :site do
     sequence(:display_name) { |n| "Test Site #{n}" }
     sequence(:short_name) { |n| "testsite#{n}" }
-    sequence(:name_filter) { |n| "TEST-TC-#{n}" }
+    sequence(:name_filter) { |n| "TEST-TC-#{n}\\S+" }
     site_type "general_access"
     association :department
   end

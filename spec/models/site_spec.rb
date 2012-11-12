@@ -7,7 +7,7 @@ describe Site do
       @attr = {
         :display_name => "Site",
         :short_name => "site",
-        :name_filter => "SITE-TC-"
+        :name_filter => "SITE-TC-\\S+"
       }
     end
     

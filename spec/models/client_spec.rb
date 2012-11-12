@@ -114,7 +114,7 @@ describe Client do
     it "should update the site if the site name filter has changed" do
       client = Client.find_or_create(@attr.merge(:name => "#{@site.name_filter}10"))
       client.site.should == @site
-      @site.update_attributes({:name_filter => "AAS-TC-"})
+      @site.update_attributes({:name_filter => "AAS-TC-\\S+"})
       client = Client.find_or_create(@attr.merge(:name => client.name))
       client.site.should be_nil
     end
