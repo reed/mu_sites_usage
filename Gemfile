@@ -1,15 +1,11 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.9'
 
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
+gem 'sqlite3', group: [:development, :testing]
+gem 'tiny_tds'
+gem 'activerecord-sqlserver-adapter'
 
-gem 'sqlite3'
-
-
-# Gems used only for assets and not required
-# in production environments by default.
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
   gem 'coffee-rails', '~> 3.2.2'
@@ -17,6 +13,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem 'thin', group: [:development, :staging]
 gem 'jquery-rails'
 gem 'therubyracer', require: "v8"
 gem 'whenever', :require => false
@@ -29,39 +26,21 @@ gem 'exception_notification'
 gem 'coffeebeans'
 gem 'jbuilder'
 gem 'strong_parameters'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
 gem 'debugger', group: [:development, :test, :staging]
 
 group :development do
-	gem 'rspec-rails', '~> 2.8.1'
-	gem 'annotate', '~> 2.4.0'
+	gem 'rspec-rails', '~> 2.11.4'
+	gem 'annotate', '~> 2.5.0'
 end
 
-#group :staging do
-  gem 'tiny_tds'
-  gem 'activerecord-sqlserver-adapter'
-#end
-
 group :test do
-  gem 'rspec', '~> 2.8.0'
+  gem 'rspec', '~> 2.11.0'
   gem "factory_girl_rails"
   gem "capybara"
-  gem "guard-rspec", '~> 0.6.0'
-  gem 'guard-spork', '~> 0.5.2'
-  gem 'spork', '~> 1.0.0rc0'
+  gem "guard-rspec", '~> 2.1.1'
+  gem 'guard-spork', '~> 1.2.3'
+  gem 'spork', '~> 1.0.0rc3'
   gem 'rb-fsevent'
   gem 'growl'
-  # Pretty printed test output
   gem 'turn', :require => false
 end
