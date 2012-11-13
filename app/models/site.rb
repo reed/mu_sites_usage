@@ -24,7 +24,7 @@ class Site < ActiveRecord::Base
   has_many :snapshots, :dependent => :destroy
   
   def self.match_name_with_site(name)
-    select('id, name_filter').to_a.select{ |site| name =~ Regexp.new("^#{site.name_filter}$", true) }.first
+    select('id, name_filter').to_a.select{ |site| name =~ Regexp.new("^#{site.name_filter}$", true) }.sort_by{|site| -site.name_filter.length }.first
   end
   
   def self.refilter_clients
