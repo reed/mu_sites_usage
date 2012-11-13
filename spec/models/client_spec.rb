@@ -188,6 +188,19 @@ describe Client do
     end
   end
   
+  describe "destroy" do
+    before(:each) do
+      @client = FactoryGirl.create(:client)
+    end
+    
+    it "should destroy associated logs" do
+      @client.record_action('login')
+      lambda do
+        @client.destroy
+      end.should change(Log, :count).by(-1)
+    end
+  end
+  
   describe "scopes" do
     before(:each) do
         FactoryGirl.create(:client, :client_type => 'tc')

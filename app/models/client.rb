@@ -22,7 +22,7 @@ class Client < ActiveRecord::Base
   validates :current_status, :inclusion => { :in => ["available", "unavailable", "offline"] }
   
   belongs_to :site  
-  has_many :logs
+  has_many :logs, dependent: :destroy
   
   scope :enabled, where(:enabled => true)
   scope :windows, where(:client_type => WINDOWS_TYPES)
