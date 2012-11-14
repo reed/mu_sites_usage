@@ -1,0 +1,12 @@
+<% if @matches.any? %>
+  <h4>
+    <div><span class="count"><%= @matches.length %></span> matches</div>
+  </h4>
+  <% @matches.in_groups(4, false) do |matches| %>
+    <ul class="matches_list">
+      <%= render :partial => 'match', :collection => matches %>
+    </ul>
+  <% end %>
+<% else %>
+  <p class="no_clients">There are no devices that match your filter.</p>
+<% end %>

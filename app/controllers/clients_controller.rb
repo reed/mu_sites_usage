@@ -56,6 +56,13 @@ class ClientsController < ApplicationController
     success
   end
   
+  def match
+    @matches = Client.where_name_matches(params[:filter])
+    respond_to do |format|
+      format.js
+    end
+  end
+  
   private
   
   def current_resource

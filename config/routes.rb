@@ -6,7 +6,11 @@ SitesUsage::Application.routes.draw do
   
   resources :sites, :except => [:show]
   
-  resources :clients, :only => [:index, :update, :destroy]
+  resources :clients, :only => [:index, :update, :destroy] do
+    collection do
+      get 'match'
+    end
+  end
   
   resources :departments do 
     resources :sites, :only => [:show]

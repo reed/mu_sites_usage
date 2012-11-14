@@ -25,6 +25,10 @@ jQuery ->
 	$('.name_filter_explanation_button_inline').live("click", ->
 		$('#name_filter_explanation').dialog('open')
 	)
+	$('#searching', '#client_matches').hide()
+	$('#client_matches').hide()
+	$('#site_name_filter').live("change", checkForFilterMatches)
+	checkForFilterMatches() if $('#site_name_filter').val()?.length isnt 0
 	# Show
 	$('.throbbler_container', '.sites').hide()
 	$('.throbbler_container', '.sites').ajaxError ->
@@ -69,6 +73,14 @@ jQuery ->
 			popped = true
 			$.getScript(location.href)
 		)
+
+checkForFilterMatches = ->
+	$('#client_matches').show()
+	$('#searching', '#client_matches').show()
+	$('#matches', '#client_matches').empty()
+	params = {filter: $('#site_name_filter').val()}
+	url = $('#client_matches').data('url') + '?' + $.param(params)
+	$.getScript(url)
 
 cycleInfo = ->
 	device = $(this)

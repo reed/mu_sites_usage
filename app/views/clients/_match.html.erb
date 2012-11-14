@@ -1,0 +1,6 @@
+<li data-id="<%= match[:id] %>">
+  <%= match[:name] %>
+  <% if match[:site] %>
+    <span class="match_site"><%= " / #{match[:site]}" %></span>
+  <% end %>
+</li>

@@ -24,6 +24,16 @@
     <%= f.text_field :name_filter %>
   </div>
 </div>
+<div class="form_row" id="client_matches" data-url="<%= match_clients_path %>">
+  <div class="form_label">
+  </div>
+  <div class="form_field">
+    <div id="searching">
+      <%= image_tag "searching.gif", :title => "Searching" %>
+    </div>
+    <div id="matches"></div>
+  </div>
+</div>
 <div class="form_row">
   <div class="form_label">
     <%= f.label :site_type %>

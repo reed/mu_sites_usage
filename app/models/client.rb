@@ -122,6 +122,14 @@ class Client < ActiveRecord::Base
                                       "#{query}%")
   end
   
+  def self.where_name_matches(filter)
+    includes(:site)
+      .order(:name)
+      .to_a
+      .select{|c| c.name =~ Regexp.new("^#{filter}$", true)}
+      .collect{|c| {id: c.id, name: c.name, site: c.try(:site).try(:display_name)} }
+  end
+  
   def record_action(operation, user_id = nil, vm = nil)
     case operation.downcase
     when "check-in"
