@@ -2,5 +2,8 @@
   <%= match[:name] %>
   <% if match[:site] %>
     <span class="match_site"><%= " / #{match[:site]}" %></span>
+    <% if match[:new_site] %>
+      &nbsp;-&gt;<span class="match_site"><%= " #{match[:new_site]}" %></span>
+    <% end %>
   <% end %>
 </li>

@@ -22,9 +22,10 @@
   </div>
   <div class="form_field">
     <%= f.text_field :name_filter %>
+    <a id="reset_name_filter">reset</a>
   </div>
 </div>
-<div class="form_row" id="client_matches" data-url="<%= match_clients_path %>">
+<div class="form_row" id="client_matches" data-url="<%= match_clients_path(@site.valid? ? @site : nil) %>">
   <div class="form_label">
   </div>
   <div class="form_field">

@@ -54,7 +54,7 @@ class Client < ActiveRecord::Base
     client = find_by_name(properties[:name])
     if client.nil?
       update_all({:enabled => false}, :mac_address => properties[:mac_address])
-      site = Site.match_name_with_site(properties[:name])
+      site = SiteClientMatcher.site_matches_for_client_name(properties[:name]).first
       if site.nil?
         Client.create!(properties)
       else
@@ -122,14 +122,6 @@ class Client < ActiveRecord::Base
                                       "#{query}%")
   end
   
-  def self.where_name_matches(filter)
-    includes(:site)
-      .order(:name)
-      .to_a
-      .select{|c| c.name =~ Regexp.new("^#{filter}$", true)}
-      .collect{|c| {id: c.id, name: c.name, site: c.try(:site).try(:display_name)} }
-  end
-  
   def record_action(operation, user_id = nil, vm = nil)
     case operation.downcase
     when "check-in"
@@ -173,6 +165,6 @@ class Client < ActiveRecord::Base
   end
   
   def maintain_site
-    self.site_id = Site.match_name_with_site(self.name).try(:id)
+    self.site_id = SiteClientMatcher.site_matches_for_client_name(self.name).first.try(:id)
   end
 end

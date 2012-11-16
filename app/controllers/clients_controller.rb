@@ -2,6 +2,7 @@ class ClientsController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => :upload
   before_filter :validate_data, :only => :upload
   before_filter :scope_clients, :only => :index
+  before_filter :validate_filter, :only => :match
   
   def index
     @title = "Device Management"
@@ -57,7 +58,10 @@ class ClientsController < ApplicationController
   end
   
   def match
-    @matches = Client.where_name_matches(params[:filter])
+    if @filter
+      site = Site.find(params[:site_id]) if params[:site_id]
+      @matches = SiteClientMatcher.new(site).effect_of_new_name_filter(params[:filter])
+    end
     respond_to do |format|
       format.js
     end
@@ -117,6 +121,13 @@ class ClientsController < ApplicationController
       @client_scope = Client.where(:site_id => c_ids)
       @sites = Site.where(:id => c_ids)
     end
+  end
+  
+  def validate_filter
+    Regexp.new("^#{params[:filter]}$", true)
+    @filter = params[:filter]
+  rescue
+    false
   end
   
   def sort_column

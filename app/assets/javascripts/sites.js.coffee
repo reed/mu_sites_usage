@@ -27,8 +27,12 @@ jQuery ->
 	)
 	$('#searching', '#client_matches').hide()
 	$('#client_matches').hide()
+	$('#reset_name_filter').hide().live('click', resetNameFilter)
 	$('#site_name_filter').live("change", checkForFilterMatches)
-	checkForFilterMatches() if $('#site_name_filter').val()?.length isnt 0
+	if $('#site_name_filter').size() is 1 and $('#site_name_filter').val()?.length isnt 0
+		orig_filter = $('#site_name_filter').val()
+		checkForFilterMatches() 
+		$('#site_name_filter').data('original_filter', orig_filter)
 	# Show
 	$('.throbbler_container', '.sites').hide()
 	$('.throbbler_container', '.sites').ajaxError ->
@@ -77,10 +81,15 @@ jQuery ->
 checkForFilterMatches = ->
 	$('#client_matches').show()
 	$('#searching', '#client_matches').show()
+	$('#reset_name_filter').show() if $('#site_name_filter').data('original_filter')?
 	$('#matches', '#client_matches').empty()
 	params = {filter: $('#site_name_filter').val()}
 	url = $('#client_matches').data('url') + '?' + $.param(params)
 	$.getScript(url)
+
+resetNameFilter = ->
+	$('#site_name_filter').val($('#site_name_filter').data('original_filter')).change()
+	$('#reset_name_filter').hide()
 
 cycleInfo = ->
 	device = $(this)

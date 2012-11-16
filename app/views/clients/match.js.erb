@@ -1,2 +1,2 @@
 $("#searching", "#client_matches").hide();
-$("#matches", "#client_matches").html("<%= escape_javascript(render("matches")) %>");
+$("#matches", "#client_matches").hide().html("<%= escape_javascript(render("matches")) %>").show('drop', {direction: 'up'});

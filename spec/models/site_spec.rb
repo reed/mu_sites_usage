@@ -45,23 +45,12 @@ describe Site do
       @dept.sites.build(@attr.merge(:name_filter => "")).should_not be_valid
     end
     
+    it "should reject name filters with invalid regular expression" do
+      @dept.sites.build(@attr.merge(:name_filter => "(SITE-\\S+")).should_not be_valid
+    end
+    
     it "should require a department" do
       Site.new(@attr).should_not be_valid
-    end
-  end
-
-  describe "Site Filtering" do
-    
-    before(:each) do
-      @site = FactoryGirl.create(:site)
-    end
-    
-    it "should match a name to the correct site" do
-      Site.match_name_with_site("#{@site.name_filter}01").should == @site
-    end
-    
-    it "should return the unkown site when a match is not found" do
-      Site.match_name_with_site("SITE-TC-01").should be_nil
     end
   end
 end

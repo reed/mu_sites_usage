@@ -1,0 +1,18 @@
+<aside id="name_filter_explanation">
+  A regular expression that matches all the device hostnames in the site.  
+  <br /><br />
+  Omit the opening and closing slashes (/). When used, the name filter will be wrapped like this:
+  <br /><br />
+  <pre>/^name_filter$/i</pre>
+  <br />
+  Examples:
+  <ul>
+    <li>AAS-\S+</li>
+    <li>BCC-(TC|PC|ZC|MAC)-\d{2}</li>
+    <li>ELLIS(114)?-(TC|ZC|MAC)-\d+</li>
+  </ul>
+  <br />
+  If a client's name matches multiple site filters, it will be assigned to the one with the longest filter.
+  <br /><br />  
+  For help with determining the correct regular expression, check out <a href="http://rubular.com" target="_blank">rubular.com</a>.
+</aside>

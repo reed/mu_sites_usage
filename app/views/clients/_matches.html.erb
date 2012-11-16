@@ -1,12 +1,23 @@
-<% if @matches.any? %>
-  <h4>
-    <div><span class="count"><%= @matches.length %></span> matches</div>
-  </h4>
-  <% @matches.in_groups(4, false) do |matches| %>
-    <ul class="matches_list">
-      <%= render :partial => 'match', :collection => matches %>
-    </ul>
+<% if @filter %>
+  <% if @matches.values.flatten.any? %>
+    <% @matches.each_pair do |action, clients| %>
+      <% if clients.any? %>
+        <div class="match_group">
+          <h4>
+            <div><span class="count"><%= clients.length %></span> <%= action.to_s.humanize.downcase %></div>
+          </h4>
+          <% clients.in_groups(4, false) do |matches| %>
+            <ul class="matches_list">
+              <%= render :partial => 'match', :collection => matches %>
+            </ul>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <p class="no_clients">There are no devices that match this filter.</p>
   <% end %>
 <% else %>
-  <p class="no_clients">There are no devices that match your filter.</p>
+  <p class="invalid_filter">This filter is not a valid regular expression.</p>
 <% end %>
+  

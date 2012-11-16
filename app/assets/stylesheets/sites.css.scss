@@ -288,6 +288,9 @@
 	#sites_table {
 		width: 80%;
 		margin-bottom: 20px;
+		.name_filter_link {
+			color: $lightest_gold;
+		}
 	}
 	.name_filter_explanation_button_inline, .name_filter_explanation_button_inline a {
 		font-size: 12px;
@@ -301,9 +304,29 @@
 		padding-left: 20px;
 	}
 }
+.new_site, .edit_site {
+	input[type="text"], select {
+		padding: 6px;
+		width: 300px;
+	}
+	#reset_name_filter {
+		margin-left: 10px;
+	}
+	.invalid_filter {
+		color: #FF8181;
+	}
+} 
 #client_matches {
 	font-size: 12px;
 	color: #FFD568;
+	.match_group {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		border-left: 2px solid $light_blue;
+		padding-left: 10px;
+	}
 	h4 {
 		div {
 			display: inline-block;

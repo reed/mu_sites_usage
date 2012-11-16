@@ -6,6 +6,8 @@ class Site < ActiveRecord::Base
   
   TYPES = %w[general_access classroom residence_hall laptop_checkout internal]
   
+  validate :name_filter_is_regex
+  
   validates :display_name, :presence => true
   validates :short_name, :presence => true, 
                          :uniqueness => { :case_sensitive => false },
@@ -22,10 +24,6 @@ class Site < ActiveRecord::Base
   belongs_to :department
   has_many :clients, :dependent => :nullify
   has_many :snapshots, :dependent => :destroy
-  
-  def self.match_name_with_site(name)
-    select('id, name_filter').to_a.select{ |site| name =~ Regexp.new("^#{site.name_filter}$", true) }.sort_by{|site| -site.name_filter.length }.first
-  end
   
   def self.refilter_clients
     Client.recheck_sites
@@ -74,6 +72,12 @@ class Site < ActiveRecord::Base
   end
   
   private
+  
+  def name_filter_is_regex
+    Regexp.new("^#{name_filter}$", true)
+  rescue
+    errors.add(:name_filter, "is not a valid regular expression")
+  end
   
   def calculate_status_counts
     counts = { available: 0, unavailable: 0, offline: 0 }

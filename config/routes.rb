@@ -8,7 +8,7 @@ SitesUsage::Application.routes.draw do
   
   resources :clients, :only => [:index, :update, :destroy] do
     collection do
-      get 'match'
+      get 'match(/:site_id)' => 'clients#match', as: :match
     end
   end
   

@@ -1,7 +1,7 @@
 <tr>
   <td><%= best_in_place site, :display_name %></td>
   <td><%= best_in_place site, :short_name %></td>
-  <td><%= best_in_place site, :name_filter %></td>
+  <td><%= link_to site.name_filter, edit_site_path(site), :class => 'name_filter_link' %></td>
   <td><%= best_in_place site, :enabled, :type => :checkbox %></td>
   <td><%= best_in_place site, :site_type, :type => :select, :collection => Site::TYPES.map {|t| [t, t.titleize]} %></td>
   
