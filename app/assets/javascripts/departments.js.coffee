@@ -12,10 +12,6 @@ jQuery ->
 	
 renderDepartmentCharts = ->
 	if $('.department_summary').length > 0
-		$('.highcharts-container').each ->
-			$(this).hover ->
-				deptDiv = $(this).closest('.department_summary')
-				$('.tooltip', deptDiv).toggleClass('visible')
 		$('.department_summary').each ->
 			chartDiv = $('.status_chart', $(this))
 			deptDiv = $(this)
@@ -76,6 +72,10 @@ renderDepartmentCharts = ->
 					data: data
 				]
 			chart = new Highcharts.Chart options
+		$('.highcharts-container').each ->
+			$(this).hover ->
+				deptDiv = $(this).closest('.department_summary')
+				$('.tooltip', deptDiv).toggleClass('visible')
 		
 renderSiteCharts = ->
 	if $('.site_summary').length > 0
