@@ -4,27 +4,28 @@
 t = ""
 
 jQuery ->
-	initFilters()
-	$('#toggle_filters_btn').click(toggleFilters)
-	$('#throbbler_div, #ajax_error, #ajax_long').hide()
-	$('#throbbler_div').ajaxStart ->
-		t = setTimeout("$('#ajax_long').show()", 3000)
-		$('#chart').empty()
-		$('#ajax_error').hide()
-		$(this).show()
-	$('#throbbler_div').ajaxSuccess ->
-		clearTimeout(t)
-		$('#ajax_long').hide()
-		$(this).hide()
-	$('#throbbler_div').ajaxError ->
-		clearTimeout(t)
-		$('#ajax_long').hide()
-		$(this).hide()
-		$('#ajax_error').show()
-	$('#filter_form').submit ->
-		toggleFilters() if $('#toggle_filters_btn').text() is "Hide Filters"
-	$('#reload').click ->
-		$('#filter_form').submit()
+	if $('body').data('controller') is 'stats'
+		initFilters()
+		$('#toggle_filters_btn').click(toggleFilters)
+		$('#throbbler_div, #ajax_error, #ajax_long').hide()
+		$('#throbbler_div').ajaxStart ->
+			t = setTimeout("$('#ajax_long').show()", 3000)
+			$('#chart').empty()
+			$('#ajax_error').hide()
+			$(this).show()
+		$('#throbbler_div').ajaxSuccess ->
+			clearTimeout(t)
+			$('#ajax_long').hide()
+			$(this).hide()
+		$('#throbbler_div').ajaxError ->
+			clearTimeout(t)
+			$('#ajax_long').hide()
+			$(this).hide()
+			$('#ajax_error').show()
+		$('#filter_form').submit ->
+			toggleFilters() if $('#toggle_filters_btn').text() is "Hide Filters"
+		$('#reload').click ->
+			$('#filter_form').submit()
 	
 initFilters = ->
 	dates = $('#start_date, #end_date', '#filters_list').datepicker({

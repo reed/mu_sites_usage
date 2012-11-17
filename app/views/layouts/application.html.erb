@@ -10,10 +10,10 @@
   <%= csrf_meta_tags %>
   <%= favicon_link_tag 'favicon.png', :type => 'image/png' %>
 </head>
-<body>
+<body data-controller="<%= controller.controller_name %>" data-action="<%= params[:action] %>">
   <%= render 'layouts/navigation' %>
   <section id="content">
-    <section id="container" class="<%= controller.controller_name %>">
+    <section id="container" class="<%= "#{controller.controller_name}" %>">
       <%= render 'current_user_status' %>
       <div id="flashes">
         <% flash.each do |key, value| %>

@@ -2,19 +2,16 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 pstateAvailable = (history && history.pushState)
-initialURL = location.href
-popped = false
 reset = false
 
 jQuery ->
+	if $('body').data('controller') is 'clients'
+		if $('body').data('action') is 'index'
+			initClientsSearchForm()
+			initClientsPagination()
+
+initClientsSearchForm = ->
 	$('.clients #reset_form').hide().click(resetSearchForm)
-		
-	$('#clients th a, #clients .pagination a').live("click", ->
-		$.getScript(this.href)
-		history.pushState(null, document.title, this.href) if pstateAvailable
-		false
-	)
-	
 	$('.clients #search_form').submit ->
 			$.get(this.action, serializeFilter(), null, "script")
 			history.pushState(null, document.title, $('#search_form').attr('action') + "?" + serializeFilter()) if pstateAvailable
@@ -23,20 +20,20 @@ jQuery ->
 	$('.clients #search_form input').keyup(submitForm)
 	$('.clients #search_form #type, .clients #search_form #site').change(submitForm)
 	
-	if pstateAvailable
-		$(window).bind("popstate", ->
-			if location.href == initialURL and not popped
-				return
-			popped = true
-			$.getScript(location.href)
-		)
-		$('.clients #submit_button').hide()
+	$('.clients #submit_button').hide() if pstateAvailable
 		
 	$(document).ajaxComplete ->
 		if reset
 			reset = false
 		else
 			$('.clients #reset_form').show()
+
+initClientsPagination = ->
+	$('#clients th a, #clients .pagination a').live("click", ->
+		$.getScript(this.href)
+		history.pushState(null, document.title, this.href) if pstateAvailable
+		false
+	)
 	
 serializeFilter = ->
 	filteredSerialization = []

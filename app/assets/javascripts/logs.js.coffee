@@ -2,24 +2,23 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 pstateAvailable = (history && history.pushState)
-initialURL = location.href
-popped = false
+#initialURL = location.href
+#popped = false
 reset = false
 
 jQuery ->
-	$('#logs .device_info_toggler').live('click', cycleInfo)
-	$('#logs .user_toggler').live('click', cycleInfo)
+	if $('body').data('controller') is 'logs'
+		initInfoTogglers()
+		initLogSearchForm()
+		initLogsPagination()
 
+initLogSearchForm = ->
 	$('.logs #start_date, .logs #end_date').each ->
 		$(this).datepicker({ maxDate: '+0d' })
 	
+	$('.logs #submit_button').hide() if pstateAvailable
+	
 	$('.logs #reset_form').hide().click(resetSearchForm)
-		
-	$('#logs th a, #logs .pagination a').live("click", ->
-		$.getScript(this.href)
-		history.pushState(null, document.title, this.href) if pstateAvailable
-		false
-	)
 	
 	$('.logs #search_form').submit ->
 		$.get(this.action, serializeFilter(), null, "script")
@@ -87,15 +86,6 @@ jQuery ->
 		
 	$('#start_date, #end_date, #site, #type, #client, #vm_or_user', '.logs #search_form').change(submitForm)
 	
-	if pstateAvailable
-		$(window).bind("popstate", ->
-			if location.href == initialURL and not popped
-				return
-			popped = true
-			$.getScript(location.href)
-		)
-		$('.logs #submit_button').hide()
-	
 	$(document).ajaxSend (e, xhr, settings) ->
 		if settings.dataType is 'script'
 			$('#searching img', '.logs').fadeIn()
@@ -107,6 +97,17 @@ jQuery ->
 				reset = false
 			else
 				$('.logs #reset_form').show()
+	
+initInfoTogglers = ->
+	$('#logs .device_info_toggler').live('click', cycleInfo)
+	$('#logs .user_toggler').live('click', cycleInfo)
+
+initLogsPagination = ->
+	$('#logs th a, #logs .pagination a').live("click", ->
+		$.getScript(this.href)
+		history.pushState(null, document.title, this.href) if pstateAvailable
+		false
+	)
 
 cycleInfo = ->
 	entry = $(this)

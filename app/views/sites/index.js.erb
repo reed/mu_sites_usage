@@ -1,2 +1,3 @@
 $("#sites").html("<%= escape_javascript(render("sites")) %>");
+$('.best_in_place').best_in_place();
 document.title = "<%= escape_javascript("Sites Usage | Sites by #{(params[:sort] || 'display name').sub(".", " ").titleize} - Page #{params[:page] || 1}") %>"

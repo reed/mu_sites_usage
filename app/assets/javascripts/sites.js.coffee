@@ -2,21 +2,30 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 pstateAvailable = (history && history.pushState)
-initialURL = location.href
-popped = false
-t = ""
+refresher = ""
 initialLoad = true
 
-jQuery -> 
-	# Index
-	$('.best_in_place').best_in_place()
+jQuery ->
+	if $('body').data('controller') is 'sites'
+		if $('body').data('action') is 'index'
+			initNameFilterExplanationDialog()
+			initSitesPagination()
+		
+		if $('body').data('action') in ['new', 'edit', 'create', 'update']
+			initNameFilterExplanationDialog()
+			initNameFilterChecker()
+		
+		if $('body').data('action') is 'show'
+			initSitesShow()
+
+initSitesPagination = ->
 	$('#sites th a:not(.dialog_open), #sites .pagination a').live("click", ->
 		$.getScript(this.href)
-		$('.best_in_place').best_in_place()
 		history.pushState(null, document.title, this.href) if pstateAvailable
 		false
 	)
-	# New
+	
+initNameFilterExplanationDialog = ->
 	$('#name_filter_explanation').dialog({
 		autoOpen: false
 		title: "Name Filters"
@@ -25,6 +34,8 @@ jQuery ->
 	$('.name_filter_explanation_button_inline').live("click", ->
 		$('#name_filter_explanation').dialog('open')
 	)
+
+initNameFilterChecker = ->
 	$('#searching', '#client_matches').hide()
 	$('#client_matches').hide()
 	$('#reset_name_filter').hide().live('click', resetNameFilter)
@@ -33,7 +44,21 @@ jQuery ->
 		orig_filter = $('#site_name_filter').val()
 		checkForFilterMatches() 
 		$('#site_name_filter').data('original_filter', orig_filter)
-	# Show
+	
+checkForFilterMatches = ->
+	$('#client_matches').show()
+	$('#searching', '#client_matches').show()
+	$('#reset_name_filter').show() if $('#site_name_filter').data('original_filter')?
+	$('#matches', '#client_matches').empty()
+	params = {filter: $('#site_name_filter').val()}
+	url = $('#client_matches').data('url') + '?' + $.param(params)
+	$.getScript(url)
+
+resetNameFilter = ->
+	$('#site_name_filter').val($('#site_name_filter').data('original_filter')).change()
+	$('#reset_name_filter').hide()
+
+initSitesShow = ->
 	$('.throbbler_container', '.sites').hide()
 	$('.throbbler_container', '.sites').ajaxError ->
 		$(this).hide()
@@ -59,14 +84,14 @@ jQuery ->
 	
 	$('.auto_update').click ->
 		if $(this).data('interval') is "off"
-			clearInterval(t)
+			clearInterval(refresher)
 		else
 			setUpdate($(this).data('interval'))
 		$('.selected_interval').removeClass("selected_interval")
 		$(this).addClass("selected_interval")
 		$.cookie("auto_update", $(this).data('interval'))
 
-	t = setInterval("$('#refresh_image').click()", 300000)
+	refresher = setInterval("$('#refresh_image').click()", 300000)
 	if $.cookie('auto_update') isnt null
 		$('.auto_update[data-interval="' + $.cookie('auto_update') + '"]').click()
 		
@@ -77,19 +102,6 @@ jQuery ->
 			popped = true
 			$.getScript(location.href)
 		)
-
-checkForFilterMatches = ->
-	$('#client_matches').show()
-	$('#searching', '#client_matches').show()
-	$('#reset_name_filter').show() if $('#site_name_filter').data('original_filter')?
-	$('#matches', '#client_matches').empty()
-	params = {filter: $('#site_name_filter').val()}
-	url = $('#client_matches').data('url') + '?' + $.param(params)
-	$.getScript(url)
-
-resetNameFilter = ->
-	$('#site_name_filter').val($('#site_name_filter').data('original_filter')).change()
-	$('#reset_name_filter').hide()
 
 cycleInfo = ->
 	device = $(this)
@@ -268,8 +280,8 @@ toggleName = ->
 
 setUpdate = (min) ->
 	msec = min * 60000
-	clearInterval(t)
-	t = setInterval("$('#refresh_image').click()", msec)
+	clearInterval(refresher)
+	refresher = setInterval("$('#refresh_image').click()", msec)
 		
 updateTime = ->
 	now = new Date
