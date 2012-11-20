@@ -3,6 +3,7 @@
     <% if dept.sites.any? %>
     <div class="department_summary" <%= dept.status_data %>>
       <div id="<%= dept.short_name %>_chart" class="status_chart">
+        <%= high_chart("#{dept.short_name}_chart", dept.chart) %>
       </div>
       <div class="department_data">
         <div class="department_title">

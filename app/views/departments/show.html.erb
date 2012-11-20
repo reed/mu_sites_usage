@@ -4,9 +4,10 @@
   </ul>
   <section id="site_list">
     <% @sites.each do |site| %>
-      <div class="site_summary" <%= SiteDecorator.find(site).status_data(@status_counts[site.id]) %>>
+      <div class="site_summary" <%= site.status_data(@status_counts[site.id]) %>>
         <%= link_to site.display_name, department_site_path(@department, site), :class => "site_title" %>
         <div id="<%= site.short_name %>_chart" class="status_chart">
+          <%= high_chart("#{site.short_name}_chart", site.pie_chart(@status_counts[site.id])) %>
         </div>
       </div>
     <% end %>

@@ -19,7 +19,7 @@ class DepartmentsController < ApplicationController
         type_counts = @sites.reorder('').group(:site_type).count
         @site_type = type_counts.has_key?("general_access") ? "general_access" : type_counts.max_by{|k,v| v}[0]
       end
-      @sites = @sites.where(:site_type => @site_type)
+      @sites = SiteDecorator.decorate(@sites.where(:site_type => @site_type))
       @status_counts = Site.status_counts_by_type(@sites)
     end
     @title = @department.display_name

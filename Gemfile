@@ -26,6 +26,7 @@ gem 'exception_notification'
 gem 'coffeebeans'
 gem 'jbuilder'
 gem 'strong_parameters'
+gem 'lazy_high_charts'
 gem 'debugger', group: [:development, :test, :staging]
 
 group :development do
