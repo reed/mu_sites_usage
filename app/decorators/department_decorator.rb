@@ -33,7 +33,11 @@ class DepartmentDecorator < ApplicationDecorator
     counts = model.status_counts
     total = counts.values.reduce(:+)
     data = []
-    default_colors = {available: '#5BBD5C', unavailable: '#DBC067', offline: '#D66781'}
+    default_colors = {
+      available: radial_gradient([[0,'#5BBD5C'], [0.95, '#42A443'], [1, '#0F7110']]), 
+      unavailable: radial_gradient([[0, '#DBC067'], [0.95, '#C2A74E'], [1, '#8F741B']]), 
+      offline: radial_gradient([[0, '#D66781'], [0.95, '#BD4E68'], [1, '#8A1B35']])
+    }
     colors = []
     counts.each do |status,count|
       if count > 0
@@ -63,7 +67,8 @@ class DepartmentDecorator < ApplicationDecorator
       f.series({
         type: 'pie', 
         name: 'Department Summary', 
-        data: data
+        data: data,
+        startAngle: 180
       })
       f.plot_options({
         pie: {
@@ -72,7 +77,13 @@ class DepartmentDecorator < ApplicationDecorator
           innerSize: '80%', 
           dataLabels: {
             enabled: false
-          }
+          },
+          shadow: {
+              color: '#000000',
+              width: 2,
+              offsetX: 0.5,
+              offsetY: 0.5
+            }
         }
       })
     end

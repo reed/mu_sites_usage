@@ -13,7 +13,8 @@
 //= require best_in_place
 //= require jquery_ujs
 //= require table2CSV
-//= require highcharts/highcharts
+//= require highcharts/highcharts-src
+//= require highcharts/highcharts-more
 //= require highcharts/themes/dark-green
 //= require select2
 //= require_directory .

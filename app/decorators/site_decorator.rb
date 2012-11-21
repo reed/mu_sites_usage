@@ -16,37 +16,38 @@ class SiteDecorator < ApplicationDecorator
       tc: 'Thin Clients'
     }
     type_colors = {
-      pc: '#64BBE6', 
-      mac: '#437D99', 
-      tc: '#87C7E6'
+      pc: radial_gradient([[0, '#64BBE6'], [0.95, '#186F9A'], [1, '#00234E']]), 
+      mac: radial_gradient([[0, '#5C96B2'], [0.95, '#104A66'], [1, '#00001A']]),
+      tc: radial_gradient([[0, '#87C7E6'], [0.95, '#3B7B9A'], [1, '#002F4E']]),
     }
     default_status_colors = {
-      available: '#5BBD5C', 
-      unavailable: '#DBC067', 
-      offline: '#D66781'
+      available: radial_gradient([[0,'#5BBD5C'], [0.95, '#42A443'], [1, '#0F7110']]), 
+      unavailable: radial_gradient([[0, '#DBC067'], [0.95, '#C2A74E'], [1, '#8F741B']]), 
+      offline: radial_gradient([[0, '#D66781'], [0.95, '#BD4E68'], [1, '#8A1B35']])
     }
-    
     total_clients = counts.values.inject(0){|sum, type| sum += type[:total]}
     
     type_series = {
       name: 'Client Types',
-      size: '85%',
-      innerSize: '10%',
+      size: '80%',
+      innerSize: '8%',
       data: [],
       dataLabels: {
         color: '#001621',
         distance: -60,
-        style: { fontSize: '16px' },
+        style: { fontSize: '16px', fontFamily: '"Trebuchet MS",Helvetica,sans-serif'},
         formatter: data_label_formatter(total_clients)
-      }
+      },
+      startAngle: 120
     }
     
     status_series = {
       name: 'Status',
       size: '100%',
-      innerSize: '85%',
+      innerSize: '80%',
       data: [],
-      dataLabels: { enabled: false }
+      dataLabels: { enabled: false },
+      startAngle: 120
     }
     
     data,categories,colors = [],[],[]
@@ -85,7 +86,7 @@ class SiteDecorator < ApplicationDecorator
           name: 'No clients',
           categories: ['No clients'],
           data: [100.0],
-          colors: ['#ACACB5']
+          colors: [radial_gradient([[0,'#ACACB5'],[1,'#606069']])]
         }
       }
     end
@@ -123,7 +124,7 @@ class SiteDecorator < ApplicationDecorator
       f.series(status_series)
       f.plot_options({
         pie: {
-          borderWidth: 1, 
+          borderWidth: 0, 
           borderColor: '#001621',
           size: '100%'
         }
