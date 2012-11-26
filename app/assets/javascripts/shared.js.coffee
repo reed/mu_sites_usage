@@ -12,6 +12,10 @@ jQuery ->
 initMenu = ->
 	resizeMenu()
 	$(window).bind 'resize', resizeMenu
+	$('#main_nav ul.menu ul').hide()
+	$('.site_group').each ->
+		$(this).hover ->
+			$('ul', this).toggle('blind')
 
 resizeMenu = ->
 	if $('#main_nav').height() > ($(window).height() - 20)

@@ -1,0 +1,7 @@
+<% grouped_sites.each do |group, sites| %>
+  <span class="site_group">
+  <% path = sites.collect{|s| s.short_name }.join('/') %>
+  <%= link_to group.humanize + ' SITES', department_path(department) + '/sites/' + path, class: 'type_submenu' %>
+  <ul><%= render :partial => 'site_link', :collection => sites %></ul>
+  </span>
+<% end %>

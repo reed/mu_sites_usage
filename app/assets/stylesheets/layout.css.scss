@@ -55,7 +55,7 @@ body {
 		text-transform: uppercase;
 		border-bottom: 1px solid $main_blue;
 		margin-top: 270px;
-		
+
 		li {
 			display: block;
 			line-height: 30px;
@@ -108,7 +108,23 @@ body {
 			}
 		}
 	}
-
+  .type_submenu {
+    background-color: #A39E92; 
+		border: medium none;
+		color: #333333 !important;
+		margin-bottom: -1px;
+		text-transform: uppercase;
+		font-size: 11px;
+		height: 20px;
+		line-height: 20px;
+		display: block;
+		text-align: center;
+		clear: both;
+    border-bottom: 1px solid #333333;
+    &:hover {
+      color: #FFFFFF !important;
+    }
+  }
 	#submenu {
 		color: #FFFFFF;
 		text-transform: uppercase;

@@ -29,9 +29,11 @@ module ApplicationHelper
   end
   
   def site_links(dept_id)
-    sites = Department.find(dept_id).sites.enabled.includes(:department)
+    dept = Department.find(dept_id)
+    sites = dept.sites.enabled.includes(:department)
     sites = sites.external unless allow? :sites, :view_internal_sites
-    render :partial => 'site_link', :collection => sites
+    grouped_sites = sites.to_a.group_by{|s| s.site_type }
+    render partial: 'site_links', locals: { grouped_sites: grouped_sites, department: dept }
   end
   
   def department_link_active?(id)
