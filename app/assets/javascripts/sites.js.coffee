@@ -64,8 +64,9 @@ initSitesShow = ->
 		$(this).hide()
 		header = $(this).parent()
 		$('.summary', header).show()
+	$('#main_throbbler img').hide()
 	$('#main_throbbler').ajaxError ->
-		$(this).hide()
+		$('img', this).hide('slide', {direction: 'right'})
 	$('#site_list').sortable({ placeholder: "ui-state-active", forcePlaceholderSize: true, handle: '.site_header' })
 	$('.device').each ->
 		$('span:gt(0)', this).not('.user_toggler').hide()
@@ -102,7 +103,7 @@ initSitesShow = ->
 			popped = true
 			$.getScript(location.href)
 		)
-
+	
 cycleInfo = ->
 	device = $(this)
 	current = $('span.cycle:visible', device)
@@ -139,29 +140,33 @@ hideSite = ->
 	history.pushState(null, document.title, location.href.replace("/" + siteName, "")) if pstateAvailable
 
 buildSite = ->
-	$('#main_throbbler').show()
-	link = $(this)
-	url = $(this).data('url')
-	siteID = $(this).data('site')
-	siteName = $(this).data('site-name')
-	$.get(url, (data) ->
-		newSite = $(data)
-		$('.throbbler_container', newSite).hide()
-		$('.device', newSite).each ->
-			$('span:gt(0)', this).not('.user_toggler').hide()
-			$('.uid', this).hide()
-			$(this).click(cycleInfo)
-		$('#main_throbbler').hide()
-		newSite.hide().appendTo('#site_list').slideDown()
-		header = $('.site_header[data-site=' + siteID + ']')
-		$('.hide_button', header).one('click', hideSite)
-		$('.refresh_button', header).click(refreshSite)
-		$('.toggle_button', header).one('click', showDetails)
-		link.removeClass('show').addClass('selected').one('click', hideSite)
-		history.pushState(null, document.title, location.href + '/' + siteName) if pstateAvailable
-	)
+	$('#main_throbbler img').show 'slide', {direction: 'right'}, =>
+		link = $(this)
+		url = $(this).data('url')
+		siteID = $(this).data('site')
+		siteName = $(this).data('site-name')
+		$.get(url, (data) ->
+			newSite = $(data)
+			$('.throbbler_container', newSite).hide()
+			$('.device', newSite).each ->
+				$('span:gt(0)', this).not('.user_toggler').hide()
+				$('.uid', this).hide()
+				$(this).click(cycleInfo)
+			newSite.hide().prependTo('#site_list').slideDown( ->
+				$('#main_throbbler img').hide 'slide', {direction: 'right'}
+			)
+			header = $('.site_header[data-site=' + siteID + ']')
+			$('.hide_button', header).one('click', hideSite)
+			$('.refresh_button', header).click(refreshSite)
+			$('.toggle_button', header).one('click', showDetails)
+			link.removeClass('show').addClass('selected').one('click', hideSite)
+			history.pushState(null, document.title, location.href + '/' + siteName) if pstateAvailable
+		)
 		
 refreshSite = ->
+	unless initialLoad
+		$('#main_throbbler img').show 'slide', {direction: 'right'}
+		showing = true
 	if $(this).attr('id') is "refresh_image"
 		$('.summary').hide()
 		$('.throbbler_container').show()
@@ -203,6 +208,7 @@ refreshSite = ->
 			if initialLoad
 				initialLoad = false if $('#site_list').data('sites').length is 0
 		)
+		$('#main_throbbler img').hide 'slide', {direction: 'right'} if showing?
 		updateTime()
 	)
 
