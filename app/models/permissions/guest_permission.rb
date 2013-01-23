@@ -6,7 +6,7 @@ module Permissions
         site.site_type != 'internal'
       end
       allow :clients, [:upload]
-      allow :api, [:index, :sites, :counts, :info]
+      allow :api, [:index, :sites, :sites_list, :counts, :info]
       allow :sessions, [:new, :create, :destroy]
     end
   end

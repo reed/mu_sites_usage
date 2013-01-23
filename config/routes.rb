@@ -26,6 +26,7 @@ SitesUsage::Application.routes.draw do
   match '/api', :to => 'api#index'
   match '/api/counts/:id', :to => 'api#counts'
   match '/api/info', :to => 'api#info'
+  match '/api/sites', :to => 'api#sites_list'
   match '/api/*sites', :to => 'api#sites', :as => 'api_site'
   
   match '/login', :to => 'sessions#new'

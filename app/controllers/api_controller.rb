@@ -10,15 +10,24 @@ class ApiController < ApplicationController
     if params[:sites].present?
       @sites = SiteDecorator.decorate(Site.enabled.where(:short_name => params[:sites].split('/')).order(:display_name))
     end
-    render 'sites', :formats => [:json]
+    render 'sites', formats: [:json]
+  end
+  
+  def sites_list
+    if params[:department].present? and Department.exists? params[:department]
+      @sites = Department.find(params[:department]).sites.enabled.external.order(:display_name)
+    else
+      @sites = Site.enabled.order(:display_name)
+    end
+    render 'sites_index', formats: [:json]
   end
   
   def counts
     if Site.enabled.exists?(params[:id])
       site = Site.enabled.find(params[:id])
-      render :json => site.status_counts
+      render json: site.status_counts
     else
-      render :text => "error"
+      render text: "error"
     end
   end
   
@@ -38,12 +47,12 @@ class ApiController < ApplicationController
             @last_logout = last_log[:logout_time]
           end
         end
-        render 'info', :formats => [:json] 
+        render 'info', formats: [:json] 
       else
-        render :text => "Device not found"
+        render text: "Device not found"
       end
     else
-      render :text => "error"
+      render text: "error"
     end
   end
 end
