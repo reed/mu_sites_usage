@@ -38,12 +38,14 @@ class ApiController < ApplicationController
         if @client.logged_in?
           ldap = Ldap.new
           @username = ldap.get_display_name(@client.current_user)
+          @email = ldap.get_email(@client.current_user)
         else
           last_log = @client.logs.last
           if last_log
             @user_id = last_log[:user_id]
             ldap = Ldap.new
             @username = ldap.get_display_name(@user_id)
+            @email = ldap.get_email(@user_id)
             @last_logout = last_log[:logout_time]
           end
         end

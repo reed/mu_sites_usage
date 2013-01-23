@@ -62,6 +62,20 @@ class Ldap
     end
   end
   
+  def get_email(username)
+    name_filter = Net::LDAP::Filter.eq( "sAMAccountName", username )
+    object_filter = Net::LDAP::Filter.eq( "objectClass", "*" )
+    email = String.new
+    @ldap_con.search(:base => "DC=edu", :filter => name_filter & object_filter, :attributes => ["mail", "userPrincipalName"]) do |entry|
+      if entry.respond_to? :mail
+        email = entry.mail[0].to_s
+      else
+        email = entry.userprincipalname[0].to_s
+      end
+    end
+    email
+  end
+  
   def get_members(dn)
     group_filter = Net::LDAP::Filter.eq( "distinguishedName", dn)
     object_filter = Net::LDAP::Filter.eq( "objectclass", "group")

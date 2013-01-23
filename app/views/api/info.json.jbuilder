@@ -7,9 +7,11 @@ json.status @client.current_status
 if @client.current_status == "unavailable"
   json.user_id @client.current_user
   json.username @username
+  json.email @email
 else
   json.last_user_id @user_id
   json.last_username @username
+  json.last_user_email @email
   json.last_logout @last_logout.strftime("%a, %-m/%-d at %-l:%M %p")
 end
 json.last_login @client.last_login.strftime("%a, %-m/%-d at %-l:%M %p")
