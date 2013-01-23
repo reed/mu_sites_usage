@@ -17,7 +17,7 @@ class ApiController < ApplicationController
     if params[:department].present? and Department.exists? params[:department]
       @sites = Department.find(params[:department]).sites.enabled.external.order(:display_name)
     else
-      @sites = Site.enabled.order(:display_name)
+      @sites = Site.enabled.external.order(:display_name)
     end
     render 'sites_index', formats: [:json]
   end
