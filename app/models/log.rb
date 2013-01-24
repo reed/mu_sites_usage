@@ -1,7 +1,11 @@
 class Log < ActiveRecord::Base
+  
+  ip_regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/
+  
   validates :client_id, :presence => :true
   validates :operation, :presence => :true,
                       :inclusion => { :in => ["login", "logout"] }
+  validates :vm_ip_address, :format => { :with => ip_regex }
                       
   belongs_to :client
   

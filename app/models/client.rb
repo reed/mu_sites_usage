@@ -122,14 +122,14 @@ class Client < ActiveRecord::Base
                                       "#{query}%")
   end
   
-  def record_action(operation, user_id = nil, vm = nil)
+  def record_action(operation, user_id = nil, vm = nil, vm_ip_address = nil)
     case operation.downcase
     when "check-in"
       check_in
     when "startup"
       logged_in? ? record_action("logout") : check_in
     when "login"
-      log_in(user_id, vm)
+      log_in(user_id, vm, vm_ip_address)
     when "logout"
       log_out if logged_in?
     end
@@ -146,10 +146,10 @@ class Client < ActiveRecord::Base
     update_column(:current_status, "available") if current_status == "offline"
   end
  
-  def log_in(user_id = nil, vm = nil)
+  def log_in(user_id = nil, vm = nil, vm_ip_address = nil)
     record_action("logout") if logged_in?
     login_time = Time.now
-    logs.create!({ :operation => "login", :login_time => login_time, :user_id => user_id, :vm => vm })
+    logs.create!({ :operation => "login", :login_time => login_time, :user_id => user_id, :vm => vm, :vm_ip_address => vm_ip_address })
     update_attributes!({ :last_login => login_time, :current_status => "unavailable", :current_user => user_id, :current_vm => vm, :last_checkin => login_time })
   end
   

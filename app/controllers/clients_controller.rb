@@ -40,16 +40,17 @@ class ClientsController < ApplicationController
         @client.update_attributes!({:current_user => params[:user_id], :current_vm => params[:vm]})
         @target_log_entry = @client.logs.find_by_operation_and_login_time("login", @client.last_login)
         if @target_log_entry
-          @target_log_entry.update_attributes!({:user_id => params[:user_id], :vm => params[:vm]})
+          @target_log_entry.update_attributes!({:user_id => params[:user_id], :vm => params[:vm], :vm_ip_address => params[:vm_ip_address]})
         end
       end
     else
       operation = params[:operation]
       user_id = params[:user_id]
       vm = params[:vm]
+      vm_ip_address = params[:vm_ip_address]
       @client = Client.find_or_create(params.permit!)
       if operation == "login" && params[:client_type] != "tc"
-        @client.record_action(operation, user_id, vm)
+        @client.record_action(operation, user_id, vm, vm_ip_address)
       else
         @client.record_action(operation)
       end

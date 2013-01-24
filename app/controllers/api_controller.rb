@@ -34,6 +34,7 @@ class ApiController < ApplicationController
   def info
     if params[:ip].present?
       @client = Client.enabled.order(:last_checkin).find_by_ip_address(params[:ip])
+      @client ||= Log.where(vm_ip_address: params[:ip]).last.try(:client)
       if @client
         if @client.logged_in?
           ldap = Ldap.new

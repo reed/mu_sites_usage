@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120304211741) do
+ActiveRecord::Schema.define(:version => 20130124002341) do
 
   create_table "clients", :force => true do |t|
     t.string   "name"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20120304211741) do
     t.string   "vm"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "vm_ip_address"
   end
 
   add_index "logs", ["client_id"], :name => "index_logs_on_client_id"
