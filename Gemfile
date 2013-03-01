@@ -10,6 +10,8 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.5'
   gem 'coffee-rails', '~> 3.2.2'
   gem 'select2-rails'
+  gem 'turbolinks', :path => '~/code/turbolinks'
+  gem 'jquery-turbolinks'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -26,7 +28,7 @@ gem 'exception_notification'
 gem 'coffeebeans'
 gem 'jbuilder'
 gem 'strong_parameters'
-gem 'lazy_high_charts'
+gem 'lazy_high_charts', :path => '~/code/lazy_high_charts'
 gem 'debugger', group: [:development, :test, :staging]
 
 group :development do

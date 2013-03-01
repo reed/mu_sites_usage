@@ -9,6 +9,12 @@ jQuery ->
 	initPopstate()
 	setTimeout(hideFlashes, 4000)
 
+$(document).on 'page:load', ->
+	initMenu()
+	initBestInPlace()
+	initButtons()
+	setTimeout(hideFlashes, 4000)
+
 initMenu = ->
 	resizeMenu()
 	$(window).bind 'resize', resizeMenu
@@ -45,8 +51,11 @@ initButtons = ->
 	
 initPopstate = ->
 	if pstateAvailable
-		$(window).bind("popstate", ->
+		$(window).bind("popstate", (e) ->
+			e.preventDefault()
+			console.log window.history.state
 			if location.href == initialURL and not popped
+				console.log 'returning'
 				return
 			popped = true
 			$.getScript(location.href)
@@ -57,3 +66,17 @@ hideFlashes = ->
 		$(this).fadeOut 'slow', ->
 			$(this).remove()
 
+jQuery ->
+  console.log "dom ready"
+
+$(document).bind 'page:change', ->
+  console.log "page changed"
+
+$(document).bind 'page:fetch', ->
+  console.log "page fetched"
+
+$(document).bind 'page:load', ->
+  console.log "page loaded"
+
+$(document).bind 'page:restore', ->
+  console.log "page restored"

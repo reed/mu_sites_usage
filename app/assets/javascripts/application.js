@@ -17,4 +17,5 @@
 //= require highcharts/highcharts-more
 //= require highcharts/themes/dark-green
 //= require select2
+//= require turbolinks
 //= require_directory .

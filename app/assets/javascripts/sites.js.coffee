@@ -6,6 +6,12 @@ refresher = ""
 initialLoad = true
 
 jQuery ->
+	initPage()
+	
+	$(document).on 'page:load', initPage
+	
+
+initPage = ->
 	if $('body').data('controller') is 'sites'
 		if $('body').data('action') is 'index'
 			initNameFilterExplanationDialog()
@@ -96,13 +102,14 @@ initSitesShow = ->
 	if $.cookie('auto_update') isnt null
 		$('.auto_update[data-interval="' + $.cookie('auto_update') + '"]').click()
 		
-	if pstateAvailable
-		$(window).bind("popstate", ->
-			if location.href == initialURL and not popped
-				return
-			popped = true
-			$.getScript(location.href)
-		)
+	# if pstateAvailable
+	# 	$(window).bind("popstate", ->
+	# 		console.log 'sites popstate'
+	# 		if location.href == initialURL and not popped
+	# 			return
+	# 		popped = true
+	# 		$.getScript(location.href)
+	# 	)
 	
 cycleInfo = ->
 	device = $(this)

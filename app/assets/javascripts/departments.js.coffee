@@ -2,13 +2,22 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 jQuery ->
+	initPage()
+	
+	$(document).on 'page:load', initPage
+
+initPage = ->
+	console.log 'initPage'
 	if $('body').data('controller') is 'departments'
+		console.log 'controller is departments'
 		if $('body').data('action') is 'index'
+			console.log 'action is index'
 			initDepartmentChartTooltips()
 			
 		if $('body').data('action') is 'show'
+			console.log 'action is show'
 			initSiteChartTooltips()
-		
+
 initDepartmentChartTooltips = ->
 	if $('.department_summary').length > 0
 		initHover()
