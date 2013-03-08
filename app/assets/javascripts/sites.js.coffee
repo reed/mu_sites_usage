@@ -1,28 +1,237 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 pstateAvailable = (history && history.pushState)
-refresher = ""
 initialLoad = true
 
-jQuery ->
+$ ->
 	initPage()
-	
+
 	$(document).on 'page:load', initPage
+
+class SiteList
+	constructor: ->
+		@container = $('#site_list')
+		@sites = {}
+			
+	load: ->
+		ids = @container.data('sites')
+		unless ids.length is 0
+			first_id = ids.shift()
+			@container.data('sites', ids)
+			$('.refresh_button', @sites[first_id].header).click()
+			@load()
 	
+	addSites: ->
+		$('.site_block').each (index, site) =>
+			@add $(site)
+				
+	add: (container) ->
+		site = new Site container
+		@sites[site.id] = site
+		
+	remove: (id) ->
+		@sites[id].hide()
+		delete @sites[id]
+		
+	build: ->
+		$('#main_throbbler img').show 'slide', {direction: 'right'}, =>
+			link = $(this)
+			url = link.data('url')
+			$.get(url, (data) ->
+				newSite = window.site_list.add $(data)
+				newSite.container.hide().prependTo('#site_list').slideDown( ->
+						$('#main_throbbler img').hide 'slide', {direction: 'right'}
+				)
+				history.replaceState(window.history.state, document.title, location.href + '/' + newSite.name) if pstateAvailable
+			)
+		
+	refresh: ->
+		unless initialLoad
+			$('#main_throbbler img').show 'slide', {direction: 'right'}
+			showing = true
+		if $(this).attr('id') is 'refresh_image'
+			$('.summary').hide()
+			$('.throbbler_container').show()
+			siteNames = []
+			siteNames.push site.name for id, site of window.site_list.sites
+			siteName = siteNames.join '/'
+		else
+			site = window.site_list.sites[$(this).parent().data('site')]
+			siteName = site.name
+			site.container.find('.summary').hide()
+			site.throbbler.show() unless initialLoad
+		$.getJSON('/sites/refresh/' + siteName, (data) ->
+			window.site_list.sites[id].refresh(clients) for id, clients of data
+			$('#main_throbbler img').hide 'slide', {direction: 'right'} if showing?
+		)
+
+class Site
+	constructor: (@container) ->
+		@devices = @container.find('.device')
+		@header = @container.find('.site_header')
+		@pane = @container.find('.site_pane')
+		@toggle_button = @container.find('.toggle_button')
+		@id = @container.data 'site'
+		@name = @container.data 'site-name'
+		@menu_link = $('a', "#site_#{@id}")
+		
+		@setupThrobbler()
+		@setupDevices() 
+		@updateMenu 'init'
+		@bindCallbacks()
+		
+	setupThrobbler: ->
+		@throbbler = @container.find('.throbbler_container')
+		@throbbler.hide()
+		@throbbler.ajaxError =>
+			@throbbler.hide()
+			@header.find('.summary').show()
+	
+	setupDevices: ->
+		for device in @devices
+			$('span:gt(0)', device).not('.user_toggler').hide()
+			$('.uid', device).hide()
+			$(device).click cycleInfo
+	
+	bindCallbacks: ->
+		@container.find('.hide_button').one 'click', =>
+			@menu_link.unbind 'click'
+			window.site_list.remove @id
+		@menu_link.one 'click', =>
+			window.site_list.remove @id
+		@container.find('.refresh_button').click(window.site_list.refresh)
+		@toggle_button.one('click', @showDetails)
+			
+	updateMenu: (action) ->
+		if action is 'init'
+			@menu_link.removeClass('show').addClass('selected')
+		else if action is 'remove'
+			@menu_link.removeClass('selected').addClass('show').one('click', window.site_list.build)
+	
+	hide: ->
+		@container.animate {height: '0px'}, 500, =>
+			@container.remove()
+			@updateMenu 'remove'
+		history.replaceState(history.state, document.title, location.href.replace("/" + @name, "")) if pstateAvailable
+			
+	refresh: (clients) ->
+		newClients = $(clients).css 'opacity', '0'
+		@devices = newClients.find('.device')
+		@setupDevices()
+		if @devices.length > 0
+			newHeight = (26 * Math.ceil(@devices.length / 5)) + 2
+			newHeight = newHeight + 'px'
+		else
+			$('.toggle_button, .refresh_button', @header).hide()
+		@pane.html newClients
+		@updateCounts()
+		@throbbler.hide()
+		@header.find('.summary').show()
+		if @toggle_button.text() == 'Basic'
+			@toggle_button.unbind('click').one('click', @showDetails).click()
+		else
+			@pane.animate({height: newHeight}, 500) if newHeight?
+			newClients.animate({opacity: 1}, 500)
+		if initialLoad
+			initialLoad = false if window.site_list.container.data('sites').length is 0
+		
+		
+	updateCounts: ->
+		@header.find('.available_count').text @pane.find('.available').length
+		@header.find('.unavailable_count').text @pane.find('.unavailable').length
+		@header.find('.offline_count').text @pane.find('.offline').length
+			
+	showDetails: =>
+		detailsHeader = $('<tr class="details_table_header"></tr>')
+		$('<th>Hostname</th>').appendTo(detailsHeader)
+		$('<th>MAC Address</th>').appendTo(detailsHeader)
+		$('<th>IP Address</th>').appendTo(detailsHeader)
+		$('<th>User</th>').appendTo(detailsHeader)
+		$('<th>Status</th>').appendTo(detailsHeader)
+		detailsTable = $('<table class="details_table"></table>')
+		detailsTable.append(detailsHeader).append(columnizeDetails(@devices)).css('opacity', '0')
+		@pane.html(detailsTable)
+	
+		newHeight = @pane.height()
+		newHeight = newHeight + "px"
+		rowCount = $('.device_row', @pane).length
+	
+		$('.user:contains("Unknown User")', @pane).text("").addClass('empty_details')
+		$('.device_detail span', @pane).not('.user_toggler').show()
+		$('.device_row', @pane).each ->
+			$('td:gt(0)', this).each ->
+				$(this).addClass('centered')
+				$('span:not(".user_toggler")', this).addClass('details')
+		$('.user_toggler', @pane).click(toggleUser)
+		h = $('.details_table', @pane).height()
+		@pane.animate({height: h}, rowCount * 15)
+		$('.details_table', @pane).animate({opacity: 1}, 1500)
+		$('.vm', @pane).hide()
+		$('.name_toggler span', @pane).click(toggleName)
+		@toggle_button.text('Basic').one('click', @hideDetails)
+		
+	hideDetails: =>
+		@toggle_button.text('Details').one('click', @showDetails)
+		@container.find('.refresh_button').click()
+
+class AutoUpdater
+	constructor: ->
+		$('.auto_update').click @change	
+		@refresher = setInterval "$('#refresh_image').click()", 300000
+		if $.cookie('auto_update') isnt null
+			@change $('.auto_update[data-interval="' + $.cookie('auto_update') + '"]')
+	
+	change: (event) =>
+		target = if event.target? then event.target else event
+		interval = $(target).data('interval')
+		if interval is 'off'
+			clearInterval @refresher
+		else
+			@set interval
+		$('.selected_interval').removeClass 'selected_interval'
+		$(target).addClass 'selected_interval'
+		$.cookie('auto_update', interval, {path: '/'})
+		
+	set: (min) ->
+		msec = min * 60000
+		clearInterval @refresher
+		@refresher = setInterval "$('#refresh_image').click()", msec
+			
+cycleInfo = ->
+	device = $(this)
+	current = $('span.cycle:visible', device)
+	if current.next('span.cycle').length == 0
+		current.hide()
+		$('span.cycle:eq(0)', device).show()
+	else
+		current.hide()
+		current.next('span.cycle').show()
+
 
 initPage = ->
 	if $('body').data('controller') is 'sites'
-		if $('body').data('action') is 'index'
-			initNameFilterExplanationDialog()
-			initSitesPagination()
-		
-		if $('body').data('action') in ['new', 'edit', 'create', 'update']
-			initNameFilterExplanationDialog()
-			initNameFilterChecker()
+	# 	if $('body').data('action') is 'index'
+	# 		initNameFilterExplanationDialog()
+	# 		initSitesPagination()
+	# 	
+	# 	if $('body').data('action') in ['new', 'edit', 'create', 'update']
+	# 		initNameFilterExplanationDialog()
+	# 		initNameFilterChecker()
 		
 		if $('body').data('action') is 'show'
-			initSitesShow()
+			$('.initial_throbbler').filter(':last').one 'load', initSitesShow
+					
+initSitesShow = ->
+	initialLoad = true
+	window.site_list = new SiteList
+	window.site_list.addSites()
+	
+	$('#main_throbbler img').hide()
+	$('#main_throbbler').ajaxError ->
+		$('img', this).hide('slide', {direction: 'right'})
+	$('#site_list').sortable({ placeholder: "ui-state-active", forcePlaceholderSize: true, handle: '.site_header' })
+	$('.show').one('click', window.site_list.build)
+	$('#refresh_image').click(window.site_list.refresh)
+	window.site_list.load() if window.site_list.sites?
+	new AutoUpdater
 
 initSitesPagination = ->
 	$('#sites th a:not(.dialog_open), #sites .pagination a').live("click", ->
@@ -64,197 +273,6 @@ resetNameFilter = ->
 	$('#site_name_filter').val($('#site_name_filter').data('original_filter')).change()
 	$('#reset_name_filter').hide()
 
-initSitesShow = ->
-	$('.throbbler_container', '.sites').hide()
-	$('.throbbler_container', '.sites').ajaxError ->
-		$(this).hide()
-		header = $(this).parent()
-		$('.summary', header).show()
-	$('#main_throbbler img').hide()
-	$('#main_throbbler').ajaxError ->
-		$('img', this).hide('slide', {direction: 'right'})
-	$('#site_list').sortable({ placeholder: "ui-state-active", forcePlaceholderSize: true, handle: '.site_header' })
-	$('.device').each ->
-		$('span:gt(0)', this).not('.user_toggler').hide()
-		$('.uid', this).hide()
-		$(this).click(cycleInfo)
-	$('.site_header', '.sites').each ->
-		siteID = $(this).data('site')
-		$('a', '#site_' + siteID).removeClass("show").addClass("selected")
-	$('.hide_button, .selected').one('click', hideSite)
-	$('.refresh_button').click(refreshSite)
-	$('.show').one('click', buildSite)
-	$('.toggle_button').one('click', showDetails)
-	$('#refresh_image').click(refreshSite)
-	
-	loadSites() if $('#site_list', '.sites').size() > 0
-	
-	$('.auto_update').click ->
-		if $(this).data('interval') is "off"
-			clearInterval(refresher)
-		else
-			setUpdate($(this).data('interval'))
-		$('.selected_interval').removeClass("selected_interval")
-		$(this).addClass("selected_interval")
-		$.cookie("auto_update", $(this).data('interval'))
-
-	refresher = setInterval("$('#refresh_image').click()", 300000)
-	if $.cookie('auto_update') isnt null
-		$('.auto_update[data-interval="' + $.cookie('auto_update') + '"]').click()
-		
-	# if pstateAvailable
-	# 	$(window).bind("popstate", ->
-	# 		console.log 'sites popstate'
-	# 		if location.href == initialURL and not popped
-	# 			return
-	# 		popped = true
-	# 		$.getScript(location.href)
-	# 	)
-	
-cycleInfo = ->
-	device = $(this)
-	current = $('span.cycle:visible', device)
-	if current.next('span.cycle').length == 0
-		current.hide()
-		$('span.cycle:eq(0)', device).show()
-	else
-		current.hide()
-		current.next('span.cycle').show()
-
-loadSites = ->
-	ids = $('#site_list').data('sites')
-	unless ids.length is 0
-		first_id = ids.shift()
-		$('#site_list').data('sites', ids)
-		header = $('.site_header[data-site="' + first_id + '"]')
-		$('.refresh_button', header).click()
-		loadSites()
-	
-hideSite = ->
-	if $(this).hasClass('hide_button')
-		siteBlock = $(this).parents('.site_block')
-		siteID = siteBlock.data('site')
-		siteName = siteBlock.data('site-name')
-	else
-		siteID = $(this).data('site')
-		siteName = $(this).data('site-name')
-		siteBlock = $('.site_block[data-site=' + siteID + ']')
-
-	siteBlock.animate({height: '0px'}, 500, ->
-		$(this).remove()
-		$('a', '#site_' + siteID).removeClass("selected").addClass('show').one('click', buildSite)
-	)
-	history.pushState(null, document.title, location.href.replace("/" + siteName, "")) if pstateAvailable
-
-buildSite = ->
-	$('#main_throbbler img').show 'slide', {direction: 'right'}, =>
-		link = $(this)
-		url = $(this).data('url')
-		siteID = $(this).data('site')
-		siteName = $(this).data('site-name')
-		$.get(url, (data) ->
-			newSite = $(data)
-			$('.throbbler_container', newSite).hide()
-			$('.device', newSite).each ->
-				$('span:gt(0)', this).not('.user_toggler').hide()
-				$('.uid', this).hide()
-				$(this).click(cycleInfo)
-			newSite.hide().prependTo('#site_list').slideDown( ->
-				$('#main_throbbler img').hide 'slide', {direction: 'right'}
-			)
-			header = $('.site_header[data-site=' + siteID + ']')
-			$('.hide_button', header).one('click', hideSite)
-			$('.refresh_button', header).click(refreshSite)
-			$('.toggle_button', header).one('click', showDetails)
-			link.removeClass('show').addClass('selected').one('click', hideSite)
-			history.pushState(null, document.title, location.href + '/' + siteName) if pstateAvailable
-		)
-		
-refreshSite = ->
-	unless initialLoad
-		$('#main_throbbler img').show 'slide', {direction: 'right'}
-		showing = true
-	if $(this).attr('id') is "refresh_image"
-		$('.summary').hide()
-		$('.throbbler_container').show()
-		siteNames = []
-		$('.site_block').each ->
-			siteNames.push $(this).data('site-name')
-		siteName = siteNames.join('/')
-	else
-		header = $(this).parent()
-		$('.summary', header).hide()
-		$('.throbbler_container', header).show() unless initialLoad
-		pane = $(this).parent().next('.site_pane')
-		siteName = pane.data('site-name')
-	$.getJSON('/sites/refresh/' + siteName, (data) ->
-		$.each(data, (id, clients) -> 
-			siteHeader = $('.site_header[data-site=' + id + ']')
-			sitePane = $('.site_pane[data-site=' + id + ']')
-			newClients = $(clients).css('opacity', '0')
-			$('.device', newClients).each ->
-				$('span:gt(0)', this).not('.user_toggler').hide()
-				$('.uid', this).hide()
-				$(this).click(cycleInfo)
-			if $('.device', newClients).length > 0
-				newHeight = (26 * Math.ceil($('.device', newClients).length / 5)) + 2
-				newHeight = newHeight + "px"
-			else
-				$('.toggle_button, .refresh_button', siteHeader).hide()
-			sitePane.html(newClients)
-			$('.available_count', siteHeader).text($('.available', sitePane).length)
-			$('.unavailable_count', siteHeader).text($('.unavailable', sitePane).length)
-			$('.offline_count', siteHeader).text($('.offline', sitePane).length)
-			$('.throbbler_container', siteHeader).hide()
-			$('.summary', siteHeader).show()
-			if $('.toggle_button', siteHeader).text() == "Basic"
-				$('.toggle_button', siteHeader).unbind('click').one('click', showDetails).click()
-			else
-				sitePane.animate({height: newHeight}, 500) if newHeight?
-				newClients.animate({opacity: 1}, 500)
-			if initialLoad
-				initialLoad = false if $('#site_list').data('sites').length is 0
-		)
-		$('#main_throbbler img').hide 'slide', {direction: 'right'} if showing?
-		updateTime()
-	)
-
-showDetails = ->
-	pane = $(this).parent().next('.site_pane')
-	detailsHeader = $('<tr class="details_table_header"></tr>')
-	$('<th>Hostname</th>').appendTo(detailsHeader)
-	$('<th>MAC Address</th>').appendTo(detailsHeader)
-	$('<th>IP Address</th>').appendTo(detailsHeader)
-	$('<th>User</th>').appendTo(detailsHeader)
-	$('<th>Status</th>').appendTo(detailsHeader)
-	detailsTable = $('<table class="details_table"></table>')
-	devices = $('.device', pane)
-	detailsTable.append(detailsHeader).append(columnizeDetails(devices)).css('opacity', '0')
-	pane.html(detailsTable)
-	
-	newHeight = pane.height()
-	newHeight = newHeight + "px"
-	rowCount = $('.device_row', pane).length
-	
-	$('.user:contains("Unknown User")', pane).text("").addClass('empty_details')
-	$('.device_detail span', pane).not('.user_toggler').show()
-	$('.device_row', pane).each ->
-		$('td:gt(0)', this).each ->
-			$(this).addClass('centered')
-			$('span:not(".user_toggler")', this).addClass('details')
-	$('.user_toggler', pane).click(toggleUser)
-	h = $('.details_table', pane).height()
-	pane.animate({height: h}, rowCount * 15)
-	$('.details_table', pane).animate({opacity: 1}, 1500)
-	$('.vm', pane).hide()
-	$('.name_toggler span', pane).click(toggleName)
-	$(this).text('Basic').one('click', ->
-		$(this).text('Details').one('click', showDetails)
-		pane = $(this).parent().next('.site_pane')
-		$('.refresh_button', $(this).parent()).click()
-	)
-	
-
 columnizeDetails = (devices) ->
 	rows = []
 	columnCount = 5
@@ -290,28 +308,3 @@ toggleName = ->
 	container = $(this).parent('.name_toggler')
 	$('span', container).each ->
 		$(this).toggle()
-
-setUpdate = (min) ->
-	msec = min * 60000
-	clearInterval(refresher)
-	refresher = setInterval("$('#refresh_image').click()", msec)
-		
-updateTime = ->
-	now = new Date
-	hours = now.getHours()
-	minutes = now.getMinutes()
-	month = now.getMonth() + 1
-	day = now.getDate()
-	year = now.getFullYear();
-	
-	ampm = if hours > 11 then 'pm' else 'am'
-	hours = hours - 12 if hours > 12
-	hours = 12 if hours is 0
-	minutes = "0" + minutes if minutes < 10
-	year -= 2000
-	
-	formatted = month + "/" + day + "/" + year + " " + hours + ":" + minutes + " " + ampm
-	origColor = $('#last_updated').css("color")
-	
-	$('#last_updated').text(formatted).css("color", "#FFFFFF").animate({ color: origColor })
-	

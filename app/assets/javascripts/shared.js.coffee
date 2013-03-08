@@ -1,26 +1,33 @@
 window.pstateAvailable = (history && history.pushState)
 window.initialURL = location.href
 window.popped = false
+window.timeouts = []
 
 jQuery ->
 	initMenu()
 	initBestInPlace()
 	initButtons()
-	initPopstate()
-	setTimeout(hideFlashes, 4000)
+	#initPopstate()
+	addTimeout(hideFlashes, 4000)
+	$(document).on 'page:change', clearAllTimeouts
 
 $(document).on 'page:load', ->
 	initMenu()
 	initBestInPlace()
 	initButtons()
-	setTimeout(hideFlashes, 4000)
+	addTimeout(hideFlashes, 4000)
+
+
+	
+addTimeout = (func, delay) ->
+	window.timeouts.push setTimeout(func, delay)
 
 initMenu = ->
 	resizeMenu()
 	$(window).bind 'resize', resizeMenu
 	$('#main_nav ul.menu ul').hide()
 	initAccordion()
-	setTimeout ( ->
+	addTimeout ( ->
 		$('.site_group:has(.selected)').each ->
 			$('ul', this).show('blind', {easing: 'easeInOutCubic'}).addClass('shown')
 	), 1000
@@ -53,9 +60,7 @@ initPopstate = ->
 	if pstateAvailable
 		$(window).bind("popstate", (e) ->
 			e.preventDefault()
-			console.log window.history.state
 			if location.href == initialURL and not popped
-				console.log 'returning'
 				return
 			popped = true
 			$.getScript(location.href)
@@ -66,6 +71,10 @@ hideFlashes = ->
 		$(this).fadeOut 'slow', ->
 			$(this).remove()
 
+clearAllTimeouts = ->
+	clearTimeout(timeout) for timeout in window.timeouts
+	window.timeouts = []
+	
 jQuery ->
   console.log "dom ready"
 
