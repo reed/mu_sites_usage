@@ -1,15 +1,10 @@
-PATH
-  remote: ~/code/lazy_high_charts
+GIT
+  remote: git://github.com/michelson/lazy_high_charts.git
+  revision: c2b17d09f5abb1f5aa29206eaf42ebe59c9503da
   specs:
     lazy_high_charts (1.3.3)
       bundler (~> 1.0)
       hash-deep-merge
-
-PATH
-  remote: ~/code/turbolinks
-  specs:
-    turbolinks (1.0.0)
-      coffee-rails
 
 GEM
   remote: http://rubygems.org/
@@ -240,6 +235,8 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    turbolinks (1.0.0)
+      coffee-rails
     turn (0.9.6)
       ansi
     twitter-stream (0.1.16)
@@ -292,7 +289,7 @@ DEPENDENCIES
   therubyracer
   thin
   tiny_tds
-  turbolinks!
+  turbolinks
   turn
   uglifier (>= 1.0.3)
   whenever

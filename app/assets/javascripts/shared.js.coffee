@@ -83,18 +83,3 @@ hideFlashes = ->
   $('.flash').each ->
     $(this).fadeOut 'slow', ->
       $(this).remove()
- 
-jQuery ->
-  console.log "dom ready"
-
-$(document).bind 'page:change', ->
-  console.log "page changed"
-
-$(document).bind 'page:fetch', ->
-  console.log "page fetched"
-
-$(document).bind 'page:load', ->
-  console.log "page loaded"
-
-$(document).bind 'page:restore', ->
-  console.log "page restored"
