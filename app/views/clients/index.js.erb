@@ -1,2 +1,17 @@
 $("#clients").html("<%= escape_javascript(render("clients")) %>");
 document.title = "<%= escape_javascript("Sites Usage | Devices by #{(params[:sort] || 'name').sub(".", " ").titleize} - Page #{params[:page] || 1}") %>"
+
+<% if params[:search_type] %>
+  type_field = $('#search_form #type');
+  if (type_field.val() == ''){ type_field.val("<%= escape_javascript(params[:search_type]) %>"); }
+<% end %>
+
+<% if params[:search_site] %>
+  site_field = $('#search_form #site');
+  if (site_field.val() == ''){ site_field.val("<%= escape_javascript(params[:search_site]) %>"); }
+<% end %>
+
+<% if params[:search_text] %>
+  text_field = $('#search_form #search_text');
+  if (text_field.val() == ''){ text_field.val("<%= escape_javascript(params[:search_text]) %>"); }
+<% end %>

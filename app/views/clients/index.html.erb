@@ -8,7 +8,7 @@
     </p>
     <p>
        <%= label_tag :search_type, "Device Type" %>
-       <%= select_tag :search_type, options_for_select([["Mac", "mac"], ["PC", "pc"], ["Thin Client", "tc"], ["Zero Client", "zc"]]), :include_blank => true, :id => "type" %>
+       <%= select_tag :search_type, options_for_select([["Mac", "mac"], ["PC", "pc"], ["Thin Client", "tc"], ["Zero Client", "zc"]], :selected => params[:search_type]), :include_blank => true, :id => "type" %>
     </p>
     <p>
        <%= label_tag :search_site, "Site" %>

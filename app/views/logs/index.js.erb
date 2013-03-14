@@ -1,2 +1,32 @@
 $("#logs").html("<%= escape_javascript(render("logs")) %>");
-document.title = "<%= escape_javascript("Sites Usage | Device Logs by #{(params[:sort] || 'date').sub(".", " ").titleize} - Page #{params[:page] || 1}") %>"
+document.title = "<%= escape_javascript("Sites Usage | Device Logs by #{(params[:sort] || 'date').sub(".", " ").titleize} - Page #{params[:page] || 1}") %>";
+
+<% if params[:search_client] %>
+  client_field = $('#search_form #client');
+  if (client_field.select2('val') == ''){ client_field.select2('val', "<%= escape_javascript(params[:search_client]) %>"); }
+<% end %>
+
+<% if params[:search_vm_or_user] %>
+  vm_or_user_field = $('#search_form #vm_or_user');
+  if (vm_or_user_field.select2('val') == ''){ vm_or_user_field.select2('val', "<%= escape_javascript(params[:search_site]) %>"); }
+<% end %>
+
+<% if params[:search_site] %>
+  site_field = $('#search_form #site');
+  if (site_field.select2('val').length == 0){ site_field.select2('val', <%= raw(params[:search_site].map(&:to_i)) %>); }
+<% end %>
+
+<% if params[:search_type] %>
+  type_field = $('#search_form #type');
+  if (type_field.select2('val').length == 0){ type_field.select2('val', <%= raw(params[:search_type]) %>); }
+<% end %>
+
+<% if params[:search_start_date] %>
+  start_date_field = $('#search_form #start_date');
+  if (start_date_field.val() == ''){ start_date_field.val("<%= escape_javascript(params[:search_start_date]) %>"); }
+<% end %>
+
+<% if params[:search_end_date] %>
+  start_date_field = $('#search_form #end_date');
+  if (end_date_field.val() == ''){ end_date_field.val("<%= escape_javascript(params[:search_end_date]) %>"); }
+<% end %>

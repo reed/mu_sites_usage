@@ -12,6 +12,7 @@ class ClientsController < ApplicationController
         render json: { :total => @clients.count, :clients => @clients.paginate(page: params[:page], per_page: 10) }
       }
       format.any(:html, :js) {
+        params.delete :_
         search_filters = build_search_filters(params)
         @clients = @client_scope.search(search_filters).order(sort_column + " " + sort_direction).page(params[:page])
       }
@@ -132,7 +133,7 @@ class ClientsController < ApplicationController
   end
   
   def sort_column
-    super(Client.column_names + ['sites.display_name'], 'name')
+    super(Client.column_names + ['clients.enabled', 'sites.display_name'], 'name')
   end
   
 end

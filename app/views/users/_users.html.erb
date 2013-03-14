@@ -3,7 +3,9 @@
     <th><%= sortable "name" %></th>
     <th><%= sortable "username" %></th>
     <th><%= sortable "email" %></th>
-    <th><%= sortable "department.display_name", "Department" %></th>
+    <% if current_user.administrator? %>
+    <th><%= sortable "departments.display_name", "Department" %></th>
+    <% end %>
     <th><%= sortable "role" %> <span class="roles_explanation_button_inline">(<a class="dialog_open">?</a>)</span></th>
     <th><%= sortable "logins" %></th>
     <th></th>

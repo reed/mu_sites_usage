@@ -1,8 +1,15 @@
 class UsersController < ApplicationController
   
   def index
-    @title = "#{current_user.department.display_name} Users"
-    @users = User.beneath_me(current_user).order(sort_column + " " + sort_direction).page(params[:page])
+    @title = "Users"
+    if current_user.administrator?
+      @page_heading = "All Users"
+      @users = User.unscoped.includes(:department)
+    else
+      @page_heading = "#{current_user.department.display_name} Users"
+      @users = User.beneath_me(current_user)
+    end
+    @users = @users.order(sort_column + " " + sort_direction).page(params[:page])
   end
 
   def new
@@ -26,7 +33,7 @@ class UsersController < ApplicationController
   end
     
   def edit
-    @title = "Edit user"
+    @title = "Edit User"
     @user = current_resource
   end
   

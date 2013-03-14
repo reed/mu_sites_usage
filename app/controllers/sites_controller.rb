@@ -119,7 +119,7 @@ class SitesController < ApplicationController
   end
   
   def sort_column
-    super(Site.column_names + ['departments.display_name'], 'sites.display_name')
+    super(Site.column_names + ['sites.display_name', 'sites.short_name', 'departments.display_name'], 'sites.display_name')
   end
   
 end

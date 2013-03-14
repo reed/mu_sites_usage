@@ -2,10 +2,10 @@
   <table id="sites_table">
     <thead>
       <th><%= sortable "sites.display_name", "Display Name" %></th>
-      <th><%= sortable "short_name" %></th>
+      <th><%= sortable "sites.short_name", "Short Name" %></th>
       <th><%= sortable "name_filter" %> <span class="name_filter_explanation_button_inline">(<a class="dialog_open">?</a>)</span></th>
       <th><%= sortable "enabled" %></th>
-      <th><%= sortable 'site_type' %>
+      <th><%= sortable 'site_type' %></th>
         
       <% if current_user.administrator? %>
       <th><%= sortable "departments.display_name", "Department" %></th>

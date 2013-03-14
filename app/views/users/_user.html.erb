@@ -2,7 +2,9 @@
   <td><%= best_in_place user, :name %></td>
   <td><%= best_in_place user, :username %></td>
   <td><%= best_in_place user, :email %></td>
+  <% if current_user.administrator? %>
   <td><%= user.department.display_name %></td>
+  <% end %>
   <td><%= user.role.titleize %></td>
   <td><%= user.logins %></td>
   <td><%= link_to "edit", edit_user_path(user) %></td>
