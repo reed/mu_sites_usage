@@ -1,21 +1,25 @@
-@pstateAvailable = (history && history.pushState)
 @initialLoad = true
 
 $ ->
   initPage()
 
   $(document).on 'page:load', initPage
+  $(document).on 'page:restore', ->
+    Turbolinks.visit location.href if pageIs 'sites', 'index'
 
 initPage = ->
   if pageIs 'sites', 'index'
     initNameFilterExplanationDialog()
+    initSitesPagination()
     
   if pageIs 'sites', ['new', 'edit', 'create', 'update']
     initNameFilterExplanationDialog()
     initNameFilterChecker()
     
   if pageIs 'sites', 'show'
-    $('.initial_throbbler').filter(':last').one 'load', initSitesShow
+    last_throbbler = $('.initial_throbbler').filter(':last')
+    last_throbbler.one 'load', initSitesShow
+    last_throbbler.attr 'src', last_throbbler.attr('src')
           
 initSitesShow = ->
   window.site_list = new SiteList
@@ -29,7 +33,13 @@ initSitesShow = ->
   $('#refresh_image').click window.site_list.refresh
   window.site_list.load() if window.site_list.sites?
   new AutoUpdater
-  
+
+initSitesPagination = ->
+  $(document.body).on 'click', '#sites th a:not(.dialog_open), #sites .pagination a', ->
+    $.getScript this.href
+    history.pushState({getScript: true}, document.title, this.href) if window.browserSupportsPushState
+    false
+
 initNameFilterExplanationDialog = ->
   $('#name_filter_explanation').dialog({
     autoOpen: false
@@ -58,7 +68,7 @@ checkForFilterMatches = ->
   $('#matches', '#client_matches').empty()
   params = {filter: $('#site_name_filter').val()}
   url = $('#client_matches').data('url') + '?' + $.param(params)
-  $.getScript(url)
+  $.getScript url
 
 resetNameFilter = ->
   $('#site_name_filter').val($('#site_name_filter').data('original_filter')).change()
