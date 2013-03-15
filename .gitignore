@@ -12,3 +12,4 @@ doc/app
 config/database.yml
 config/ldap.yml
 .powenv
+app/assets/javascripts/debug.js.coffee
