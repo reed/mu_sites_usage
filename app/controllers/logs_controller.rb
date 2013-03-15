@@ -8,7 +8,6 @@ class LogsController < ApplicationController
       format.any(:html, :js) {
         @title = "Device Logs"
         search_filters = build_search_filters(params)
-        params.delete :_
         @logs = Log.search(search_filters).order(sort_column + " " + sort_direction)
         @log_count = @logs.count
         @logs = LogDecorator.decorate(@logs.page(params[:page])) 

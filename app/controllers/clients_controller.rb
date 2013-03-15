@@ -12,7 +12,6 @@ class ClientsController < ApplicationController
         render json: { :total => @clients.count, :clients => @clients.paginate(page: params[:page], per_page: 10) }
       }
       format.any(:html, :js) {
-        params.delete :_
         search_filters = build_search_filters(params)
         @clients = @client_scope.search(search_filters).order(sort_column + " " + sort_direction).page(params[:page])
       }

@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   
   before_filter :authorize
+  before_filter :remove_jquery_cache_param
   
   delegate :allow?, to: :current_permission
   helper_method :allow?
@@ -44,6 +45,10 @@ class ApplicationController < ActionController::Base
         redirect_to login_path, :flash => { :error => "Please sign in to access this page." }
       end
     end
+  end
+  
+  def remove_jquery_cache_param
+    params.delete :_
   end
   
   def sort_column(columns, default)
