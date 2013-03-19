@@ -125,7 +125,7 @@ class Log < ActiveRecord::Base
             .order("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
             .count
     s_data = Hash.new
-    data.each{|k,v| s_data[Utilities::DateFormatters.week(k)] = v}
+    data.sort_by{|i| Date.strptime(i[0], '%Y %U') }.each{|i| s_data[Utilities::DateFormatters.week(i[0])] = i[1]}
     s_data
   end
   
@@ -138,7 +138,7 @@ class Log < ActiveRecord::Base
             .order("sites.display_name", "DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
             .count
             
-    weeks = data.keys.collect{|x| x[0]}.uniq
+    weeks = data.keys.collect{|x| x[0]}.uniq.sort_by{|x| Date.strptime(x, '%Y %U')}
     sites = data.keys.collect{|x| x[1]}.uniq
     f_data = Array.new
     sites.each do |s|

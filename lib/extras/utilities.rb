@@ -2,7 +2,7 @@ module Utilities
   class DateFormatters
     def self.week(wk)
       week_start = Date.strptime("#{wk} 0", "%Y %U %w")
-      week_end = Date.strptime("#{wk} 6", "%Y %U %w")
+      week_end = week_start + 6.days
       if week_start.year == week_end.year && week_start.month == week_end.month
         week_start.strftime("%b %e-") + week_end.strftime("%e") + "<br/>" + week_end.strftime("%Y")
       elsif week_start.year == week_end.year

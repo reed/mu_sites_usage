@@ -17,7 +17,7 @@
 			]
 		tooltip:
 			formatter: ->
-				'<b>' + this.series.name.replace("<br/>", " ") + '</b>(' + this.x.replace("<br/>", ", ") + '): ' + this.y
+				'<b>' + this.series.name.replace("<br/>", " ") + '</b>(' + this.x.replace("<br/>", ", ").replace('-, ', '- ') + '): ' + this.y
 		yAxis:
 			title:
 				text: "Logins"
@@ -94,7 +94,7 @@
 			]
 		tooltip:
 			formatter: ->
-				'<b>' + this.series.name.replace("<br/>", " ") + '</b>(' + this.x.replace("<br/>", ", ") + '): ' + this.y
+				('<b>' + this.series.name.replace("<br/>", " ") + '</b>(' + this.x.replace("<br/>", ", ") + '): ' + this.y).replace("-, ", "- ")
 		yAxis:
 			title:
 				text: "Logins"
