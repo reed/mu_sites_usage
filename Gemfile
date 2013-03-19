@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 
 gem 'sqlite3', group: [:development, :testing]
 gem 'tiny_tds'
@@ -11,7 +11,6 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.2'
   gem 'select2-rails'
   gem 'turbolinks'
-  gem 'jquery-turbolinks'
   gem 'uglifier', '>= 1.0.3'
 end
 
