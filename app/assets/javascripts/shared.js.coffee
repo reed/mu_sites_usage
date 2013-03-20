@@ -3,21 +3,21 @@
 @initialURL = location.href
 @popped = false
 @timeouts = new Timeouts
+new PageAnimator()
 
-jQuery ->
+$ ->
   initMenu()
   initBestInPlace()
   initButtons()
   initPopstate()
   window.timeouts.add hideFlashes, 4000
-  $(document).on 'page:change', window.timeouts.clear
+  $(document).on 'page:change', window.timeouts.clear  
 
 $(document).on 'page:load', ->
   initMenu()
   initBestInPlace()
   initButtons()
   window.timeouts.add hideFlashes, 4000
-
 
 @page = ->
   body = $('body')
@@ -33,8 +33,7 @@ $(document).on 'page:load', ->
   return true unless action
   action = [action] unless $.isArray action
   @page().action in action
-     
-  
+
 initMenu = ->
   resizeMenu()
   $(window).bind 'resize', resizeMenu
@@ -78,7 +77,7 @@ initPopstate = ->
           window.popped = true
         else
           $.getScript(location.href) if history.state?.getScript?
-    
+
 hideFlashes = ->
   $('.flash').each ->
     $(this).fadeOut 'slow', ->
