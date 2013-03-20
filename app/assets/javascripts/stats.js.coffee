@@ -8,28 +8,39 @@ initPage = ->
   if pageIs 'stats'
     jQuery.datepicker.dpDiv.appendTo($('body'))
     initFilters()
-    $(document.body).on 'click', '#toggle_filters_btn', toggleFilters
+    @_statsAjaxCallbacks ||= initAjaxCallbacks()?
     $('#throbbler_div, #ajax_error, #ajax_long').hide()
-    $('#throbbler_div').ajaxStart ->
-      t = setTimeout("$('#ajax_long').show()", 3000)
-      $('#chart').empty()
-      $('#ajax_error').hide()
-      $(this).show()
-    $('#throbbler_div').ajaxSuccess ->
-      clearTimeout(t)
-      $('#ajax_long').hide()
-      $(this).hide()
-    $('#throbbler_div').ajaxError ->
-      clearTimeout(t)
-      $('#ajax_long').hide()
-      $(this).hide()
-      $('#ajax_error').show()
-    $(document.body).on 'submit', '#filter_form', ->
-      toggleFilters() if $('#toggle_filters_btn').text() is "Hide Filters"
-    $(document.body).on 'click', '#reload', ->
-      $('#filter_form').submit()
-  
+    $(document.body)
+      .on('click', '#toggle_filters_btn', toggleFilters)
+      .on('submit', '#filter_form', -> 
+        toggleFilters() if $('#toggle_filters_btn').text() is "Hide Filters" )
+      .on 'click', '#reload', ->
+        $('#filter_form').submit()
+
+initAjaxCallbacks = ->
+  $(document)
+    .ajaxStart( ->
+      if pageIs 'stats'
+        t = setTimeout("$('#ajax_long').show()", 3000)
+        $('#chart').empty()
+        $('#ajax_error').hide()
+        $('#throbbler_div').show() )
+    .ajaxSuccess( ->
+      if pageIs 'stats'
+        clearTimeout(t)
+        $('#ajax_long').hide()
+        $('#throbbler_div').hide() )
+    .ajaxError ->
+      if pageIs 'stats'
+        clearTimeout(t)
+        $('#ajax_long').hide()
+        $('#throbbler_div').hide()
+        $('#ajax_error').show()
+
 initFilters = ->
+  $('#filter_btn_dv', '#filters').hide()
+  $('.selection_li:gt(0)', '#filters_list').hide()
+  
   dates = $('#start_date, #end_date', '#filters_list').datepicker({
     maxDate: "+0d",
     onSelect: (selectedDate) ->
@@ -39,13 +50,12 @@ initFilters = ->
       date = $.datepicker.parseDate(instance.settings.dateFormat or $.datepicker._defaults.dateFormat, selectedDate, instance.settings)
       dates.not(this).datepicker("option", option, date)
   })
-  $(document.body).on 'change', '#start_date, #end_date', ->
-    $(this).val("").removeClass('date_input_selected').datepicker("setDate", null)
-    dates.not(this).datepicker("option", "minDate", null) if this.id is "start_date" 
-    dates.not(this).datepicker("option", "maxDate", '+0d') if this.id is "end_date" 
-  $('#filter_btn_dv', '#filters').hide()
-  $('.selection_li:gt(0)', '#filters_list').hide()
+  
   $(document.body)
+    .on('change', '#start_date, #end_date', ->
+      $(this).val("").removeClass('date_input_selected').datepicker("setDate", null)
+      dates.not(this).datepicker("option", "minDate", null) if this.id is "start_date" 
+      dates.not(this).datepicker("option", "maxDate", '+0d') if this.id is "end_date" )
     .on('click', 'input[name="chart_select"]', chartSelected)
     .on('click', 'input[name="total_select"], input[name="average_select"], input[name="concurrent_select"]', subSelected)
     .on('click', 'input[name="client_type_select[]"]', clientTypeSelected)
