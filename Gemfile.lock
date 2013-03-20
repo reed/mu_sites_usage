@@ -6,6 +6,13 @@ GIT
       bundler (~> 1.0)
       hash-deep-merge
 
+GIT
+  remote: git://github.com/rails/turbolinks.git
+  revision: 7d4238f2deafbccc8e40be07ef7d2197890ec941
+  specs:
+    turbolinks (1.0.0)
+      coffee-rails
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -233,8 +240,6 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
-    turbolinks (1.0.0)
-      coffee-rails
     turn (0.9.6)
       ansi
     twitter-stream (0.1.16)
@@ -286,7 +291,7 @@ DEPENDENCIES
   therubyracer
   thin
   tiny_tds
-  turbolinks
+  turbolinks!
   turn
   uglifier (>= 1.0.3)
   whenever
