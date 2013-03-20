@@ -42,7 +42,7 @@ class @Site
     @container.animate {height: '0px'}, 500, =>
       @container.remove()
       @updateMenu 'remove'
-    history.replaceState(history.state, document.title, location.href.replace("/" + @name, "")) if pstateAvailable
+    history.replaceState(history.state, document.title, location.href.replace("/" + @name, "")) if window.browserSupportsPushState
       
   refresh: (clients) ->
     newClients = $(clients).css 'opacity', '0'

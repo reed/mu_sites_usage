@@ -36,7 +36,7 @@ class @SiteList
         newSite.container.hide().prependTo('#site_list').slideDown( ->
             $('#main_throbbler img').hide 'slide', {direction: 'right'}
         )
-        history.replaceState(window.history.state, document.title, location.href + '/' + newSite.name) if pstateAvailable
+        history.replaceState(window.history.state, document.title, location.href + '/' + newSite.name) if window.browserSupportsPushState
       )
     
   refresh: ->
