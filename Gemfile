@@ -27,7 +27,7 @@ gem 'exception_notification'
 gem 'coffeebeans'
 gem 'jbuilder'
 gem 'strong_parameters'
-gem 'lazy_high_charts', :github => 'michelson/lazy_high_charts'
+gem 'lazy_high_charts'
 gem 'debugger', group: [:development, :test, :staging]
 
 group :development do
