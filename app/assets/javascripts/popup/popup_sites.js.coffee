@@ -1,5 +1,5 @@
 initialLoad = false
-jQuery -> 
+$ -> 
   if $('body').hasClass('popup')
     $('.throbbler_container', '.sites').hide()
     $('.throbbler_container', '.sites').ajaxError ->
