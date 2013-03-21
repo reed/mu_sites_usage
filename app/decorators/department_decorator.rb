@@ -1,5 +1,7 @@
 class DepartmentDecorator < ApplicationDecorator
   decorates :department
+  decorates_association :sites
+  delegate_all
   
   def status_data
     counts = model.status_counts

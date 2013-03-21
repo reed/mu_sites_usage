@@ -1,6 +1,8 @@
 class SiteDecorator < ApplicationDecorator
   decorates :site
-
+  decorates_association :clients
+  delegate_all
+  
   def status_data(counts)
     formatted_counts = Hash.new
     counts.each do |type, type_count|
@@ -137,7 +139,7 @@ class SiteDecorator < ApplicationDecorator
       h.content_tag :div, "No computers", :class => "no_computers"
     else
       devices = Array.new
-      ClientDecorator.decorate(model.clients.enabled.order(:name)).each do |client| 
+      model.clients.enabled.order(:name).decorate.each do |client| 
         devices << client.client_cell(details)
       end
       columnize(devices)

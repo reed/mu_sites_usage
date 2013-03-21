@@ -1,6 +1,7 @@
 class ClientDecorator < ApplicationDecorator
   decorates :client
-
+  delegate_all
+  
   def client_cell(details = false)
     status = model.current_status
     type = model.client_type == "mac" ? "mac" : "windows"

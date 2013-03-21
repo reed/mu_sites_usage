@@ -1,6 +1,5 @@
-class ApplicationDecorator < Draper::Base
+class ApplicationDecorator < Draper::Decorator
   def light(status)
-    color = "green"
     case status
     when "available"
       color = "green"
@@ -8,6 +7,8 @@ class ApplicationDecorator < Draper::Base
       color = "yellow"
     when "offline"
       color = "red"
+    else
+      color = "green"
     end
     h.image_tag "#{color}.png", :class => "light"
   end
@@ -25,4 +26,7 @@ class ApplicationDecorator < Draper::Base
       stops: stops
     }
   end
+end
+class Draper::CollectionDecorator
+  delegate :current_page, :per_page, :offset, :total_entries, :total_pages
 end

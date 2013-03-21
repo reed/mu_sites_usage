@@ -1,6 +1,7 @@
 class LogDecorator < ApplicationDecorator
   decorates :log
-
+  delegate_all
+  
   def device_info_toggler
     name = h.content_tag :span, model.client.name, :class => "name"
     mac = h.content_tag :span, model.client.mac_address, :class => "mac_address"
@@ -33,5 +34,4 @@ class LogDecorator < ApplicationDecorator
       ""
     end
   end
-  
 end

@@ -3,11 +3,11 @@ class DepartmentsController < ApplicationController
   def index
     @title = "Departments"
     @page_heading = "Departments"
-    @departments = DepartmentDecorator.all
+    @departments = DepartmentDecorator.decorate_collection(Department.all)
   end
 
   def show
-    @department = DepartmentDecorator.find(params[:id])
+    @department = Department.find(params[:id])
     @sites = @department.sites.enabled.joins(:clients).uniq
     @sites = @sites.external unless allow? :sites, :view_internal_sites
     if @sites.any?
@@ -19,10 +19,12 @@ class DepartmentsController < ApplicationController
         type_counts = @sites.reorder('').group(:site_type).count
         @site_type = type_counts.has_key?("general_access") ? "general_access" : type_counts.max_by{|k,v| v}[0]
       end
-      @sites = SiteDecorator.decorate(@sites.where(:site_type => @site_type))
+      @sites = @sites.where(:site_type => @site_type)
       @status_counts = Site.status_counts_by_type(@sites)
+      @sites = @sites.decorate
     end
     @title = @department.display_name
+    @department = @department.decorate
   end
 
   def new

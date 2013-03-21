@@ -10,7 +10,7 @@ class LogsController < ApplicationController
         search_filters = build_search_filters(params)
         @logs = Log.search(search_filters).order(sort_column + " " + sort_direction)
         @log_count = @logs.count
-        @logs = LogDecorator.decorate(@logs.page(params[:page])) 
+        @logs = @logs.page(params[:page]).decorate
       }
     end
   end
