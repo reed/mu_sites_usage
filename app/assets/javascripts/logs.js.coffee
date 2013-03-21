@@ -49,12 +49,11 @@ initLogSearchForm = ->
       client.name
     formatSelection: (client) ->
       client.name
-    initSelection: (element) ->
+    initSelection: (element, callback) ->
       val = element.val().split(',')
-      {
+      callback
         id: val[0]
         name: val[1]
-      } 
   )
   
   $('.logs #search_form #vm_or_user').select2(
@@ -155,10 +154,10 @@ select2Formatter = (el) ->
   else
     el.id
   
-initialSelect = (el) ->
-  val = el.val().split('$$')  
-  {
+initialSelect = (el, callback) ->
+  val = el.val().split('$$')
+  callback
     id: val[1]
     category: val[0]
-  }
+
   
