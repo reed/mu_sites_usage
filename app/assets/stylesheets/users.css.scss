@@ -2,26 +2,26 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .users {
-	#users_table {
-		width: 80%;
-		margin-bottom: 20px;
-	}
-	#roles_explanation_button {
-		display: block;
-		margin-top: 20px;
-	}
-	.roles_explanation_button_inline, .roles_explanation_button_inline a {
-		font-size: 12px;
-		color: #FFD568;
-		letter-spacing: 3px;
-	}
+  #users_table {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+  #roles_explanation_button {
+    display: block;
+    margin-top: 20px;
+  }
+  .roles_explanation_button_inline, .roles_explanation_button_inline a {
+    font-size: 12px;
+    color: #FFD568;
+    letter-spacing: 3px;
+  }
 }
 #roles_explanation_table {
-	width: 1000px;
-	height: 500px;
-	tbody th {
-		border-bottom: none;
-		border-right: 1px dotted #3399CC;
-		font-variant: normal;
-	}
+  width: 1000px;
+  height: 500px;
+  tbody th {
+    border-bottom: none;
+    border-right: 1px dotted #3399CC;
+    font-variant: normal;
+  }
 }

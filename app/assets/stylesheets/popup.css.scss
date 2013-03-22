@@ -1,43 +1,37 @@
 @import "colors";
 
-@mixin rounded-corners($radius) {
-  border-radius: $radius;
-  -moz-border-radius: $radius;
-  -webkit-border-radius: $radius;
-}
-
 body.popup {
-	background-color: #1D2D44;
-  	color: $lightest_gold;
-	font-family: "Lucida Sans Unicode","Lucida Grande","Trebuchet MS",Arial,Helvetica,sans-serif;
-	font-size: 11px;
-	font-weight: normal;
-	
-	#content {
-		min-width: 1000px;
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-	
-	#site_list {
-		margin: 0px auto;
-		padding-left: 0px;
-	}
+  background-color: #1D2D44;
+  color: $lightest_gold;
+  font-family: "Lucida Sans Unicode","Lucida Grande","Trebuchet MS",Arial,Helvetica,sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  
+  #content {
+    min-width: 1000px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  #site_list {
+    margin: 0px auto;
+    padding-left: 0px;
+  }
 
-	.site_block, .device {
-		cursor: default !important;
-	}
-	a {
-		color: #A6D3FD;
-		text-decoration: none;
-		cursor: pointer;
-		&:hover {
-			text-decoration: underline;
-		}
-	}
+  .site_block, .device {
+    cursor: default !important;
+  }
+  a {
+    color: #A6D3FD;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
-	ul {
-		list-style: none outside none;
-	}
+  ul {
+    list-style: none outside none;
+  }
 }
 
