@@ -17,10 +17,10 @@ class SitesController < ApplicationController
   def show
     @title = @department.display_name
     if params[:sites].present?
-      @sites = SiteDecorator.decorate(current_resource)
+      @sites = SiteDecorator.decorate_collection(current_resource)
       @site_ids = @sites.map{ |s| s.id }
     else
-      @sites = [SiteDecorator.new(current_resource)]
+      @sites = [SiteDecorator.decorate(current_resource)]
       @site_ids = @sites.map{ |s| s.id }
       if params.has_key? :partial
         render :partial => 'site_pane', :collection => @sites
