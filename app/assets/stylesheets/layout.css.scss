@@ -6,6 +6,10 @@
   -webkit-border-radius: $radius;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   background: image_url("bg_nav.jpg") repeat-y scroll left top #1D2D44;
     color: $lightest_gold;
@@ -189,9 +193,7 @@ body {
   min-height: 800px;
   min-width: 1000px;
   margin-left: 235px;
-  padding-left: 45px;
-  padding-right: 60px;
-  padding-top: 50px;
+  padding: 50px 60px 20px 45px;
 }
 
 #container {
