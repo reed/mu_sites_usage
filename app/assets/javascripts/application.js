@@ -5,7 +5,7 @@
 // the compiled file.
 //
 //= require jquery
-//= require jquery-ui-1.8.23.custom.min
+//= require jquery-ui-1.10.2.custom
 //= require jquery.cookie
 //= require jquery.tablesorter.min
 //= require jquery.tablesorter.pager
