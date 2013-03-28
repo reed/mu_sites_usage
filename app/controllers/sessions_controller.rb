@@ -24,7 +24,10 @@ class SessionsController < ApplicationController
   def destroy
     sign_out
     flash[:success] = "Successfully signed out."
-    redirect_to root_path
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.js { render js: "Turbolinks.visit('#{root_path}');" }
+    end
   end
 
 end

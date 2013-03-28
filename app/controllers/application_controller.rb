@@ -38,12 +38,7 @@ class ApplicationController < ActionController::Base
     if filter_resources || current_permission.allow?(params[:controller], params[:action], current_resource)
       current_permission.permit_params! params
     else
-      if signed_in?
-        redirect_to root_url, :flash => { :error => 'Not Authorized' }
-      else
-        store_location
-        redirect_to login_path, :flash => { :error => "Please sign in to access this page." }
-      end
+      deny_access
     end
   end
   

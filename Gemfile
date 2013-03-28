@@ -13,8 +13,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'turbolinks', github: 'rails/turbolinks'
-gem 'thin', group: [:development, :staging]
+gem 'turbolinks'
 gem 'jquery-rails'
 gem 'therubyracer', require: "v8"
 gem 'whenever', :require => false
@@ -31,8 +30,13 @@ gem 'lazy_high_charts'
 gem 'debugger', group: [:development, :test, :staging]
 
 group :development do
-	gem 'rspec-rails'
-	gem 'annotate', '~> 2.5.0'
+  gem 'rspec-rails'
+  gem 'annotate', '~> 2.5.0'
+end
+
+group :development, :staging do
+  gem 'thin'
+  gem 'meta_request'
 end
 
 group :test do

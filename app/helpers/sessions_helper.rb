@@ -24,7 +24,11 @@ module SessionsHelper
 
   def deny_access
     store_location
-    redirect_to login_path, :notice => "Please sign in to access this page."
+    if signed_in?
+      redirect_to root_url, :flash => { :error => 'Not Authorized' }
+    else
+      redirect_to login_path, :flash => { :error => "Please sign in to access this page." }
+    end
   end
 
   def current_user?(user)
