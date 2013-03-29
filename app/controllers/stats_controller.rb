@@ -42,14 +42,14 @@ class StatsController < ApplicationController
   private
   
   def total(options)
-    @data = Log.send("total_#{options[:total_select].tr('-', '_')}", @sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @data = Log.send("total_#{options[:total_select].tr('-', '_')}", @sites, options[:start_date], options[:end_date], options[:client_type_select] || ["all"])
     if options[:total_select].include? "and-site"
       @subtitle = @subtitle.empty? ? "Per Site" : "Per Site, #{@subtitle}"
     end
   end
   
   def average(options)
-    @data = Log.send("average_#{options[:average_select]}", @sites, options[:start_date], options[:end_date], options[:client_type_select])
+    @data = Log.send("average_#{options[:average_select]}", @sites, options[:start_date], options[:end_date], options[:client_type_select] || ["all"])
   end
   
   def concurrent(options)

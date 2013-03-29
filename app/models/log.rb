@@ -53,7 +53,7 @@ class Log < ActiveRecord::Base
     end
   end
   
-  def self.total_per_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_site(site_ids, start_date = nil, end_date = nil, client_types)
     initial_hash = Hash.new
     Site.where(:id => site_ids).pluck(:display_name).each{|d| initial_hash[d] = 0 }
     data = includes(:client => :site)
@@ -66,7 +66,7 @@ class Log < ActiveRecord::Base
     initial_hash.merge(data)
   end
   
-  def self.total_per_year(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_year(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -79,7 +79,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_per_month(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_month(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -93,7 +93,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_per_month_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_month_and_site(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -116,7 +116,7 @@ class Log < ActiveRecord::Base
     {:categories => months, :sites => f_data}
   end
   
-  def self.total_per_week(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_week(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -129,7 +129,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_per_week_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_week_and_site(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -151,7 +151,7 @@ class Log < ActiveRecord::Base
     {:categories => weeks, :sites => f_data}
   end
   
-  def self.total_per_day(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_day(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -164,7 +164,7 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_per_day_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_day_and_site(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -187,7 +187,7 @@ class Log < ActiveRecord::Base
     {:categories => days, :sites => f_data}
   end
   
-  def self.total_per_hour(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_hour(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -201,7 +201,8 @@ class Log < ActiveRecord::Base
     s_data
   end
   
-  def self.total_per_hour_and_site(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.total_per_hour_and_site(site_ids, start_date = nil, end_date = nil, client_types)
+    Rails.logger.info "client_types: #{client_types}"
     data = includes(:client => :site)
             .with_sites(site_ids)
             .with_client_types(client_types)
@@ -224,7 +225,7 @@ class Log < ActiveRecord::Base
     {:categories => hours, :sites => f_data}
   end
 
-  def self.average_daily(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.average_daily(site_ids, start_date = nil, end_date = nil, client_types)
     time_to_day = "CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)"
     filtered = includes(:client => :site)
                   .with_sites(site_ids)
@@ -257,7 +258,7 @@ class Log < ActiveRecord::Base
     f_data
   end
   
-  def self.average_weekly(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.average_weekly(site_ids, start_date = nil, end_date = nil, client_types)
     time_to_day = "CONVERT(VARCHAR(10), DATEADD(hour, -6, login_time), 120)"
     time_to_week = "DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))"
     filtered = includes(:client => :site)
@@ -292,7 +293,7 @@ class Log < ActiveRecord::Base
     f_data
   end
   
-  def self.average_monthly(site_ids, start_date = nil, end_date = nil, client_types = ["all"])
+  def self.average_monthly(site_ids, start_date = nil, end_date = nil, client_types)
     time_to_month = "CONVERT(VARCHAR(7), DATEADD(hour, -6, login_time), 120)"
     data = includes(:client => :site)
               .with_sites(site_ids)
