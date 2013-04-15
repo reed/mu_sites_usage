@@ -63,7 +63,7 @@ class @Site
       @pane.animate({height: newHeight}, 500) if newHeight?
       newClients.animate({opacity: 1}, 500)
     if initialLoad
-      initialLoad = false if window.site_list.container.data('sites').length is 0
+      window.initialLoad = false if window.site_list.container.data('sites').length is 0
     @updateTime()
     
     
