@@ -40,6 +40,7 @@ initAjaxCallbacks = ->
 initFilters = ->
   $('#filter_btn_dv', '#filters').hide()
   $('.selection_li:gt(0)', '#filters_list').hide()
+  #$(window).resize()
   
   dates = $('#start_date, #end_date', '#filters_list').datepicker({
     maxDate: "+0d",

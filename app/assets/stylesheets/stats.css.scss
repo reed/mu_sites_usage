@@ -9,8 +9,9 @@
       .selection_li {
         margin-bottom: 10px;
         padding: 10px 0px;
-        background-color: #1E3A54;
         border-radius: 10px;
+        background-color: rgba(0,0,0,0.1);
+        box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
       
         .selection_label {
           color: #FFFFFF;
@@ -36,7 +37,8 @@
             padding: 12px;
           }
           input[type="text"] {
-            background-color: #1E3A54;
+            background-color: rgba(0,0,0,0.1);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
             color: #A6D3FD;
             padding: 3px;
             width: 100px;
@@ -45,7 +47,8 @@
             text-align: center;
           }
           input[type="text"].date_input_selected {
-            background-color: #1E3A54;
+            background-color: rgba(0,0,0,0.1);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
             color: #FADF8F;
             border: 1px solid #FADF8F;
           }

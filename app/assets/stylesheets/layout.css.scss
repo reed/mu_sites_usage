@@ -5,8 +5,8 @@ html {
 }
 
 body {
-  background: image_url("bg_nav.jpg") repeat-y scroll left top #1D2D44;
-    color: $lightest_gold;
+  background: image_url("bg_nav.jpg") repeat-y scroll left top #1D2D44; //rgb(20, 56, 90);
+  color: $lightest_gold;
   font-family: "Lucida Sans Unicode","Lucida Grande","Trebuchet MS",Arial,Helvetica,sans-serif;
   font-size: 11px;
   font-weight: normal;
@@ -184,6 +184,7 @@ body {
 
 #content {
   background: image_url("bg.jpg") repeat-x scroll center top;
+  background: radial-gradient(#205983, #0A2742) repeat-x scroll center top;
   min-height: 800px;
   min-width: 1000px;
   margin-left: 235px;
@@ -321,10 +322,15 @@ form {
   position: absolute;
   top: 0px;
   right: 0px;
+  left: 235px;
   padding-right: 10px;
   padding-top: 2px;
+  padding-bottom: 2px;
   font-size: 12px;
+  text-align: right;
+  background-color: rgba(255,255,255,0.1);
   color: #A6D3FD;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
   span {
     font-style: italic;
   }

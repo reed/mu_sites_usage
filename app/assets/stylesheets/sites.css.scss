@@ -93,7 +93,8 @@
         table {
           width: 100%;
           .details_table_header {
-            background-color: #1E3A54;
+            background-color: rgba(0,0,0,0.1);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
             font-variant: small-caps;
             th:first-child {
               padding-left: 47px;
@@ -111,6 +112,12 @@
             }
           }
           .device_row {
+            &:nth-child(even) {
+              box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
+              td {
+                -webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
+              }
+            }
             .device_detail {
               line-height: 20px;
               height: 20px;
@@ -297,6 +304,12 @@
     .name_filter_link {
       color: $lightest_gold;
     }
+    tr:nth-child(even) {
+      box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
+      td {
+        -webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
+      }
+    }
   }
   .name_filter_explanation_button_inline, .name_filter_explanation_button_inline a {
     font-size: 12px;
@@ -312,6 +325,9 @@
 }
 .new_site, .edit_site {
   input[type="text"], select {
+    background-color: rgba(0,0,0,0.1);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
+    border: 0;
     padding: 6px;
     width: 300px;
   }

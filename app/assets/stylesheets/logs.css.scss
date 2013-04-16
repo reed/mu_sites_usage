@@ -50,7 +50,12 @@
   #logs_table {
     width: 90%;
     margin-bottom: 20px;
-    
+    tr:nth-child(even) {
+      box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
+      td {
+        -webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2) inset, 0 0 12px rgba(255,255,255,0.1);
+      }
+    }
     .device_info_toggler, .user_toggler {
       cursor: pointer;
       span:first-child {

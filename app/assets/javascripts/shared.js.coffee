@@ -10,13 +10,16 @@ $ ->
   initBestInPlace()
   initButtons()
   initPopstate()
+  setContentHeight()
+  $(window).bind 'resize', setContentHeight
   window.timeouts.add hideFlashes, 4000
-  $(document).on 'page:change', window.timeouts.clear  
+  $(document).on 'page:change', window.timeouts.clear
 
 $(document).on 'page:load', ->
   initMenu()
   initBestInPlace()
   initButtons()
+  setContentHeight()
   window.timeouts.add hideFlashes, 4000
 
 @page = ->
@@ -82,3 +85,6 @@ hideFlashes = ->
   $('.flash').each ->
     $(this).fadeOut 'slow', ->
       $(this).remove()
+
+setContentHeight = ->
+  $('#content').css('minHeight', window.innerHeight - 70)
