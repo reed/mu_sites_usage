@@ -40,7 +40,6 @@ initAjaxCallbacks = ->
 initFilters = ->
   $('#filter_btn_dv', '#filters').hide()
   $('.selection_li:gt(0)', '#filters_list').hide()
-  #$(window).resize()
   
   dates = $('#start_date, #end_date', '#filters_list').datepicker({
     maxDate: "+0d",
@@ -95,7 +94,7 @@ subSelected = ->
 
 clientTypeSelected = ->
   if this.id is "client_type_all"
-    $(this).attr('checked', 'checked') if not $(this).attr('checked')
+    $(this).attr('checked', 'checked') unless $(this).attr('checked')
     $('#client_type_selection input:gt(0)').removeAttr('checked')
   else
     $('#client_type_all', '#client_type_selection').removeAttr('checked')
@@ -131,16 +130,17 @@ showFilters = (selected, toShow) ->
   animateFilters($.makeArray(hideQueue), $.makeArray(showQueue))
  
 animateFilters = (toHide, toShow) ->
-  if toHide.length > 0
+  if toHide.length
     next = toHide.pop()
     $('#' + next.id).hide('slide', {direction: 'up'}, 500)
-    window.setTimeout( ->
+    setTimeout( ->
       animateFilters(toHide, toShow)
     , 300)
-  else if toShow.length > 0
+  else if toShow.length
     next = toShow.shift()
+    console.log next
     $('#' + next.id).show('slide', {direction: 'up', easing: 'easeOutBounce'}, 1000)
-    window.setTimeout( ->
+    setTimeout( ->
       animateFilters(toHide, toShow)
     , 300)
 
@@ -176,10 +176,7 @@ resetFilters = (filters) ->
     restrictTypeOptions(["pie", "column"])
         
 restrictTypeOptions = (types) ->
-  if $.isArray(types)
-    $.each(types, (index, value) ->
-      $('#type_selection #type_' + value).button({disabled: true})
-    )
-  else
-    $('#type_selection #type_' + types).button({disabled: true})
-  $('#type_selection').buttonset('refresh')
+  $typeSelection = $('#type_selection')
+  types = [types] unless $.isArray(types)
+  $typeSelection.find('#type_' + type).button({disabled: true}) for type in types
+  $typeSelection.buttonset('refresh')

@@ -44,7 +44,7 @@ initMenu = ->
   initAccordion()
   @timeouts.add ( ->
     $('.site_group:has(.selected)').each ->
-      $('ul', this).show('blind', {easing: 'easeInOutCubic'}).addClass('shown')
+      $('ul', this).show('blind', {easing: 'easeInOutCubic'}, setContentHeight).addClass('shown')
   ), 1000
 
 initAccordion = ->
@@ -87,4 +87,5 @@ hideFlashes = ->
       $(this).remove()
 
 setContentHeight = ->
-  $('#content').css('minHeight', window.innerHeight - 70)
+  newHeight = Math.max $('#main_nav').height(), window.innerHeight - 70
+  $('#content').css 'minHeight', newHeight
