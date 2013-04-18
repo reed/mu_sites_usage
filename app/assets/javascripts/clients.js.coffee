@@ -13,19 +13,22 @@ initPage = ->
     initClientsPagination()
 
 initClientsSearchForm = ->
-  $('.clients #reset_form').hide() if formIsReset()
-  $(document.body).on 'click', '.clients #reset_form', resetSearchForm
-  $(document.body).on 'submit', '.clients #search_form', ->
-    $.get(this.action, serializeFilter(), null, "script")
-    history.pushState(null, document.title, $('#search_form').attr('action') + serializeFilter(true)) if window.browserSupportsPushState
-    false
-      
-  $(document.body).on 'keyup', '.clients #search_form input', submitForm
-  $(document.body).on 'change', '.clients #search_form #type, .clients #search_form #site', submitForm
+  $clients = $('.clients')
+  $resetForm = $clients.find('#reset_form')
+
+  $resetForm.hide() if formIsReset()
+  $clients.find('#submit_button').hide() if @browserSupportsPushState
   
-  $('.clients #submit_button').hide() if @browserSupportsPushState
-    
-  window._clients_ajax_complete ||= $(document).ajaxComplete ->
+  $(document.body)
+    .on('click', '.clients #reset_form', resetSearchForm)
+    .on('submit', '.clients #search_form', ->
+      $.get(this.action, serializeFilter(), null, "script")
+      history.pushState(null, document.title, $('#search_form').attr('action') + serializeFilter(true)) if window.browserSupportsPushState
+      false)   
+    .on('keyup', '.clients #search_form input', submitForm)
+    .on 'change', '.clients #search_form #type, .clients #search_form #site', submitForm
+  
+  window._clientsAjaxComplete ||= $(document).ajaxComplete ->
     if window.pageIs 'clients', 'index'
       if reset
         reset = false
@@ -53,17 +56,21 @@ serializeFilter = (q) ->
   (if q and filteredSerialization.length then '?' else '') + filteredSerialization.join('&') 
   
 submitForm = ->
-  $.get($('#search_form').attr('action'), serializeFilter(), null, "script")
+  action = $('#search_form').attr 'action'
+  $.get(action, serializeFilter(), null, "script")
   if window.browserSupportsPushState
     if history.state?.turbolinks?
-      history.pushState({getScript: true}, document.title, $('#search_form').attr('action') + serializeFilter(true))
+      history.pushState({getScript: true}, document.title, action + serializeFilter(true))
     else
-      history.replaceState({getScript: true}, document.title, $('#search_form').attr('action') + serializeFilter(true))
+      history.replaceState({getScript: true}, document.title, 'action' + serializeFilter(true))
   
 resetSearchForm = ->
-  $('#search_form input').not('#submit_button').each ->
+  $searchForm = $('#search_form')
+  $resetForm = $('#reset_form')
+  
+  $searchForm.find('input').not('#submit_button').each ->
     $(this).val('')
-  $('#search_form select').val('')
+  $searchForm.find('select').val('')
   reset = true
-  $('#search_form').submit()
-  $('#reset_form').hide()
+  $searchForm.submit()
+  $resetForm.hide()

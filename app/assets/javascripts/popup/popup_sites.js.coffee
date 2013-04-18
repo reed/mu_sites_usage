@@ -1,11 +1,12 @@
 initialLoad = false
 $ -> 
   if $('body').hasClass('popup')
-    $('.throbbler_container', '.sites').hide()
-    $('.throbbler_container', '.sites').ajaxError ->
-      $(this).hide()
-      header = $(this).parent()
-      $('.summary', header).show()
+    $('.sites').find('.throbbler_container')
+      .hide()
+      .ajaxError ->
+        $(this).hide()
+        header = $(this).parent()
+        $('.summary', header).show()
 
     $('.device').each ->
       $('span:gt(0)', this).not('.user_toggler').hide()

@@ -17,21 +17,22 @@ initPage = ->
     initNameFilterChecker()
     
   if pageIs 'sites', 'show'
-    last_throbbler = $('.initial_throbbler').filter(':last')
-    last_throbbler.one 'load', initSitesShow
-    last_throbbler.attr 'src', last_throbbler.attr('src')
+    $lastThrobbler = $('.initial_throbbler').filter(':last')
+    $lastThrobbler.one 'load', initSitesShow
+    $lastThrobbler.attr 'src', $lastThrobbler.attr('src')
           
 initSitesShow = ->
-  window.site_list = new SiteList
-  window.site_list.addSites()
+  window._siteList = new SiteList
+  window._siteList.addSites()
   
-  $('#main_throbbler img').hide()
-  $('#main_throbbler').ajaxError ->
+  $mainThrobbler = $('#main_throbbler')
+  $mainThrobbler.find('img').hide()
+  $mainThrobbler.ajaxError ->
     $('img', this).hide('slide', {direction: 'right'})
     
-  $('.show').one 'click', window.site_list.build
-  $('#refresh_image').click window.site_list.refresh
-  window.site_list.load() if window.site_list.sites?
+  $('.show').one 'click', window._siteList.build
+  $('#refresh_image').click window._siteList.refresh
+  window._siteList.load() if window._siteList.sites?
   new AutoUpdater
 
 initSitesPagination = ->
@@ -41,37 +42,46 @@ initSitesPagination = ->
     false
 
 initNameFilterExplanationDialog = ->
-  $('#name_filter_explanation').dialog({
+  $nameFilterExplanation = $('#name_filter_explanation')
+  $nameFilterExplanation.dialog
     autoOpen: false
     title: "Name Filters"
     minWidth: 600
-  })
   $(document.body).on 'click', '.name_filter_explanation_button_inline', ->
-    $('#name_filter_explanation').dialog('open')
+    $nameFilterExplanation.dialog 'open'
 
 initNameFilterChecker = ->
-  $('#searching', '#client_matches').hide()
-  $('#client_matches').hide()
+  $clientMatches = $('#client_matches')
+  $siteNameFilter = $('#site_name_filter')
+  
+  $clientMatches.find('#searching').hide()
+  $clientMatches.hide()
   $('#reset_name_filter').hide()
+  
   $(document.body)
     .on('click', '#reset_name_filter', resetNameFilter)
     .on('change', '#site_name_filter', checkForFilterMatches)
-  if $('#site_name_filter').size() is 1 and $('#site_name_filter').val()?.length isnt 0
-    orig_filter = $('#site_name_filter').val()
+
+  if $siteNameFilter.size() is 1 and $siteNameFilter.val()?.length isnt 0
+    originalFilter = $siteNameFilter.val()
     checkForFilterMatches() 
-    $('#site_name_filter').data('original_filter', orig_filter)
+    $siteNameFilter.data('original_filter', originalFilter)
   
 checkForFilterMatches = ->
-  $('#client_matches').show()
-  $('#searching', '#client_matches').show()
-  $('#reset_name_filter').show() if $('#site_name_filter').data('original_filter')?
-  $('#matches', '#client_matches').empty()
-  params = {filter: $('#site_name_filter').val()}
-  url = $('#client_matches').data('url') + '?' + $.param(params)
+  $clientMatches = $('#client_matches')
+  $siteNameFilter = $('#site_name_filter')
+  
+  $clientMatches.show().find('#searching').show()
+  $('#reset_name_filter').show() if $siteNameFilter.data('original_filter')?
+  $clientMatches.find('#matches').empty()
+  
+  params = {filter: $siteNameFilter.val()}
+  url = $clientMatches.data('url') + '?' + $.param(params)
   $.getScript url
 
 resetNameFilter = ->
-  $('#site_name_filter').val($('#site_name_filter').data('original_filter')).change()
+  $siteNameFilter = $('#site_name_filter')
+  $siteNameFilter.val($siteNameFilter.data('original_filter')).change()
   $('#reset_name_filter').hide()
 
 

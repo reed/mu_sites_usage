@@ -11,37 +11,39 @@ initPage = ->
     initSiteChartTooltips()
 
 initDepartmentChartTooltips = ->
-  if $('.department_summary').length > 0
+  if $('.department_summary').length
     initHover()
     $('.department_summary').each ->
-      deptDiv = $(this)
+      $department = $(this)
       counts = {
-        Available: $(this).data 'available'
-        Unavailable: $(this).data 'unavailable'
-        Offline: $(this).data 'offline'
+        Available: $department.data 'available'
+        Unavailable: $department.data 'unavailable'
+        Offline: $department.data 'offline'
       }
       @formatTooltip = (data) ->
-        ttip = $('.tooltip', deptDiv)
-        ttip.removeClass('tooltip_Available tooltip_Unavailable tooltip_Offline')
+        $tooltip = $department.find('.tooltip')
+        $tooltip.removeClass('tooltip_Available tooltip_Unavailable tooltip_Offline')
         if data.point.name == "No clients"
-          ttip.html(data.point.name)
+          $tooltip.html(data.point.name)
         else
-          ttip.html(counts[data.point.name] + ' ' + data.point.name).addClass('tooltip_' + data.point.name)
+          $tooltip.html(counts[data.point.name] + ' ' + data.point.name).addClass('tooltip_' + data.point.name)
         return false
 
 initHover = ->
-  if $('.highcharts-container').length > 0
+  if $('.highcharts-container').length
     $('.highcharts-container').each ->
       $(this).hover ->
-        deptDiv = $(this).closest('.department_summary')
-        $('.tooltip', deptDiv).toggleClass('visible')
+        $(this)
+          .closest('.department_summary')
+          .find('.tooltip')
+          .toggleClass('visible')
   else
     setTimeout ( ->
       initHover()
     ), 200
     
 initSiteChartTooltips = ->
-  if $('.site_summary').length > 0
+  if $('.site_summary').length
     $('.site_summary').each ->
       @formatTooltip = (data, total) ->
         if total is 0

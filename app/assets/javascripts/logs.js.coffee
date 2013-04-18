@@ -1,10 +1,12 @@
 reset = false
+resetting = false
 
 $ ->
   initPage()
-  $(document).on 'page:load', initPage
-  $(document).on 'page:restore', ->
-    Turbolinks.visit location.href if pageIs 'logs', 'index'
+  $(document)
+    .on('page:load', initPage)
+    .on 'page:restore', ->
+      Turbolinks.visit location.href if pageIs 'logs', 'index'
   
 initPage = ->  
   if pageIs 'logs'
@@ -13,13 +15,16 @@ initPage = ->
     initLogsPagination()
 
 initLogSearchForm = ->
+  $logs = $('.logs')
+  $searchForm = $logs.find('#search_form')
+  
   jQuery.datepicker.dpDiv.appendTo($('body'))
-  $('.logs #start_date, .logs #end_date').each ->
+  $logs.find('#start_date, #end_date').each ->
     $(this).datepicker({ maxDate: '+0d' })
   
-  $('.logs #submit_button').hide() if @browserSupportsPushState
+  $logs.find('#submit_button').hide() if @browserSupportsPushState
+  $logs.find('#reset_form').hide()
   
-  $('.logs #reset_form').hide()
   $(document.body).on 'click', '.logs #reset_form', resetSearchForm
   
   $(document.body).on 'submit', '.logs #search_form', ->
@@ -27,7 +32,7 @@ initLogSearchForm = ->
     history.pushState(null, document.title, $('#search_form').attr('action') + serializeFilter(true)) if window.browserSupportsPushState
     false
   
-  $('.logs #search_form #client').select2(
+  $searchForm.find('#client').select2
     minimumInputLength: 3
     width: 'resolve'
     allowClear: true
@@ -54,9 +59,8 @@ initLogSearchForm = ->
       callback
         id: val[0]
         name: val[1]
-  )
   
-  $('.logs #search_form #vm_or_user').select2(
+  $searchForm.find('#vm_or_user').select2
     minimumInputLength: 3
     width: 'resolve'
     allowClear: true
@@ -75,29 +79,26 @@ initLogSearchForm = ->
     formatResult: select2Formatter
     formatSelection: select2Formatter
     initSelection: initialSelect
-  )
   
-  $('.logs #search_form #site').select2(
+  $searchForm.find('#site').select2
     width: 'resolve'
-  )
   
-  $('.logs #search_form #type').select2(
+  $searchForm.find('#type').select2
     width: 'resolve'
-  )
     
-  $('.logs #search_form').on 'change', '#start_date, #end_date, #site, #type, #client, #vm_or_user', submitForm
+  $searchForm.on 'change', '#start_date, #end_date, #site, #type, #client, #vm_or_user', submitForm
   
-  window._logs_ajax_send ||= $(document).ajaxSend (e, xhr, settings) ->
+  window._logsAjaxSend ||= $(document).ajaxSend (e, xhr, settings) ->
     if settings.dataType is 'script' and window.pageIs 'logs'
-      $('#searching img', '.logs').fadeIn()
+      $logs.find('#searching img').fadeIn()
         
-  window._logs_ajax_complete ||= $(document).ajaxComplete (e, xhr, settings) ->
+  window._logsAjaxComplete ||= $(document).ajaxComplete (e, xhr, settings) ->
     if settings.dataType is 'script' and window.pageIs 'logs'
-      $('#searching img', '.logs').fadeOut()
+      $logs.find('#searching img').fadeOut()
       if reset
         reset = false
       else
-        $('.logs #reset_form').show()
+        $logs.find('#reset_form').show()
   
 initInfoTogglers = ->
   $(document.body).on 'click', '#logs .device_info_toggler', cycleInfo
@@ -110,14 +111,14 @@ initLogsPagination = ->
     false
 
 cycleInfo = ->
-  entry = $(this)
-  current = $('span:visible', entry)
-  if current.next('span').length == 0
-    current.hide()
-    $('span:eq(0)', entry).show()
+  $entry = $(this)
+  $current = $entry.find('span:visible')
+  $current.hide()
+  $next = $current.next('span')
+  if $next.length == 0
+    $entry.find('span:eq(0)').show()
   else
-    current.hide()
-    current.next('span').show()
+    $next.show()
 
 serializeFilter = (q) ->
   filteredSerialization = []
@@ -128,29 +129,40 @@ serializeFilter = (q) ->
   (if q and filteredSerialization.length then '?' else '') + filteredSerialization.join('&') 
   
 submitForm = ->
-  $.get($('#search_form').attr('action'), serializeFilter(), null, "script")
-  if window.browserSupportsPushState
-    if history.state?.turbolinks?
-      history.pushState({getScript: true}, document.title, $('#search_form').attr('action') + serializeFilter(true))
-    else
-      history.replaceState({getScript: true}, document.title, $('#search_form').attr('action') + serializeFilter(true))
+  unless resetting
+    action = $('#search_form').attr 'action'
+    $.get(action, serializeFilter(), null, "script")
+    if window.browserSupportsPushState
+      if history.state?.turbolinks?
+        history.pushState({getScript: true}, document.title, action + serializeFilter(true))
+      else
+        history.replaceState({getScript: true}, document.title, action + serializeFilter(true))
   
 resetSearchForm = ->
-  $('#client, #vm_or_user', '#search_form').each ->
-    $(this).select2('val', '')
-  $('#site, #type', '#search_form').each ->
+  resetting = true
+  $searchForm = $('#search_form')
+  
+  $searchForm.find('#client, #vm_or_user').each ->
+    $this.select2('val', '') if ($this = $(this)).val()
+
+  $searchForm.find('#site, #type').each ->
     $(this).select2('val', null)
-  $('#search_form input').not('#submit_button').each ->
+
+  $searchForm.find('input').not('#submit_button').each ->
     $(this).val('')
-  $('#search_form select').val('')
+  
+  $searchForm.find('select').val('')
+  
   reset = true
-  $('#search_form').submit()
+  resetting = false
+  
+  $searchForm.submit()
   $('#reset_form').hide()
   
 select2Formatter = (el) ->
-  icon = $('#icons .' + el.category + '_icon')
-  if icon.size is 1
-    '<img src="' + icon.attr('src') + '" class="result_icon" height="11" width="11" /> ' + el.id
+  $icon = $('#icons .' + el.category + '_icon')
+  if $icon.size is 1
+    '<img src="' + $icon.attr('src') + '" class="result_icon" height="11" width="11" /> ' + el.id
   else
     el.id
   

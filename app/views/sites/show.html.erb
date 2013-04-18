@@ -1,17 +1,19 @@
 <div id="auto_update_row">
   <div id="auto_update_box">
     Auto Update: <span class="auto_update" data-interval="1">1m</span> <span class="auto_update selected_interval" data-interval="5">5m</span> <span class="auto_update" data-interval="10">10m</span> <span class="auto_update" data-interval="off">off</span><br />
-    Last Update: <span id="last_updated"><%= Time.now.strftime("%a, %-m/%-d/%y at %-l:%M %p") %></span> <%= image_tag "refresh.png", :id => "refresh_image", :height => "18", :width => "18", :alt => "Refresh", :title => "Refresh" %>
+    Last Update: <span id="last_updated"><%= Time.now.strftime("%a, %-m/%-d/%y at %-l:%M %p") %></span> <%= image_tag "refresh.png", id: "refresh_image", height: "18", width: "18", alt: "Refresh", title: "Refresh" %>
   </div>
   <div id="main_throbbler">
-    <%= image_tag "ajax-loader2.gif", :size => '39x30', :alt => "Loading..." %>
+    <%= image_tag "ajax-loader2.gif", size: '39x30', alt: "Loading..." %>
   </div>
 </div>
 
 <ul id="site_list" data-sites="<%= @site_ids %>">
-    <%= render :partial => 'site_pane', :collection => @sites, :locals => {:initial_load => :true} %>
+    <%= render partial: 'site_pane', collection: @sites, locals: {initial_load: :true} %>
 </ul>
 <div id="type_icon_reserve">
-  <%= image_tag "mac.png", :title => "Mac", :height => "16", :class => "type-icon mac" %>
-  <%= image_tag "windows.png", :title => "Windows", :height => "16", :class => "type-icon windows" %>
+  <%= image_tag "mac.png", title: "Mac", height: "16", class: "type-icon mac" %>
+  <%= image_tag "windows.png", title: "Windows", height: "16", class: "type-icon windows" %>
 </div>
+
+<%= render partial: 'details_table_template' %>

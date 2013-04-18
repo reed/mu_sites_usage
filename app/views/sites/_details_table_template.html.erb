@@ -1,0 +1,32 @@
+<script id="details_table_template" type="text/x-jquery-tmpl">
+  <table class="details_table">
+    <tr class="details_table_header">
+      <th>Hostname</th>
+      <th>MAC Address</th>
+      <th>IP Address</th>
+      <th>User</th>
+      <th>Status</th>
+    </tr>
+    {{each devices}}
+    <tr class="device_row">
+      {{if $value.vm}}
+        <td class="device_detail name_toggler ${$value.status}">
+          {{html $value.light}}
+          {{html $value.typeIcon}}
+          {{html $value.data[0]}}
+          {{html $value.vm}}
+      {{else}}
+        <td class="device_detail ${$value.status}">
+          {{html $value.light}}
+          {{html $value.typeIcon}}
+          {{html $value.data[0]}}
+      {{/if}}
+        </td>
+    <td class="device_detail ${$value.status}">{{html $value.data[1]}}</td>
+    <td class="device_detail ${$value.status}">{{html $value.data[2]}}</td>
+    <td class="device_detail ${$value.status}">{{html $value.data[3]}}</td>
+    <td class="device_detail ${$value.status}">{{html $value.data[4]}}</td>
+    </tr>
+    {{/each}}
+  </table>
+</script>

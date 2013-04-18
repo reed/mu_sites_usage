@@ -28,13 +28,14 @@ class @SiteList
     delete @sites[id]
     
   build: ->
-    $('#main_throbbler img').show 'slide', {direction: 'right'}, =>
-      link = $(this)
-      url = link.data('url')
+    $throbbler = $('#main_throbbler img')
+    $throbbler.show 'slide', {direction: 'right'}, =>
+      $link = $(this)
+      url = $link.data('url')
       $.get(url, (data) ->
-        newSite = window.site_list.add $(data)
+        newSite = window._siteList.add $(data)
         newSite.container.hide().prependTo('#site_list').slideDown( ->
-            $('#main_throbbler img').hide 'slide', {direction: 'right'}
+            $throbbler.hide 'slide', {direction: 'right'}
         )
         history.replaceState(window.history.state, document.title, location.href + '/' + newSite.name) if window.browserSupportsPushState
       )
@@ -47,14 +48,14 @@ class @SiteList
       $('.summary').hide()
       $('.throbbler_container').show()
       siteNames = []
-      siteNames.push site.name for id, site of window.site_list.sites
+      siteNames.push site.name for id, site of window._siteList.sites
       siteName = siteNames.join '/'
     else
-      site = window.site_list.sites[$(this).parent().data('site')]
+      site = window._siteList.sites[$(this).parent().data('site')]
       siteName = site.name
       site.container.find('.summary').hide()
-      site.throbbler.show() unless initialLoad
+      site.$throbbler.show() unless initialLoad
     $.getJSON('/sites/refresh/' + siteName, (data) ->
-      window.site_list.sites[id].refresh(clients) for id, clients of data
+      window._siteList.sites[id].refresh(clients) for id, clients of data
       $('#main_throbbler img').hide 'slide', {direction: 'right'} if showing?
     )

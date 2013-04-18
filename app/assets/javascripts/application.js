@@ -10,6 +10,7 @@
 //= require jquery.tablesorter.min
 //= require jquery.tablesorter.pager
 //= require jquery.purr
+//= require jquery.tmpl
 //= require best_in_place
 //= require jquery_ujs
 //= require table2CSV

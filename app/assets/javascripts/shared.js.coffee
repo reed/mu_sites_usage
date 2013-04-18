@@ -23,10 +23,10 @@ $(document).on 'page:load', ->
   window.timeouts.add hideFlashes, 4000
 
 @page = ->
-  body = $('body')
+  $body = $('body')
   document.body.page ||= 
-    controller: body.data('controller')
-    action: body.data('action')
+    controller: $body.data('controller')
+    action: $body.data('action')
     to_a: -> [@controller, @action]
     to_s: -> "#{@controller}##{@action}"
 
@@ -48,20 +48,23 @@ initMenu = ->
   ), 1000
 
 initAccordion = ->
-  $('.site_group').on 'mouseenter', ->
-    submenu = $('ul', this)
-    unless submenu.hasClass('shown')
-      $('.site_group').off 'mouseenter'
-      submenu.show('blind', {easing: 'easeInOutCubic'}, initAccordion)
-      $('ul.shown', '.site_group').hide('blind', {easing: 'easeInOutCubic'}).removeClass('shown')
-      submenu.addClass('shown')
+  $siteGroup = $('.site_group')
+  $siteGroup.on 'mouseenter', ->
+    $submenu = $('ul', this)
+    unless $submenu.hasClass('shown')
+      $siteGroup.off 'mouseenter'
+      $submenu.show('blind', {easing: 'easeInOutCubic'}, initAccordion)
+      $siteGroup.find('ul.shown').hide('blind', {easing: 'easeInOutCubic'}).removeClass('shown')
+      $submenu.addClass('shown')
   
 resizeMenu = ->
-  if $('#main_nav').height() > ($(window).height() - 20)
-    site_list = $('#main_nav ul.menu ul')
-    if site_list.size() is 1
-      site_list.height($(window).height() - ($('#main_nav').height() - site_list.height()) - 40)
-      site_list.css('overflowY', 'scroll')
+  $mainNav = $('#main_nav')
+  windowHeight = $(window).height()
+  if $mainNav.height() > (windowHeight - 20)
+    $siteList = $mainNav.find('ul.menu ul')
+    if $siteList.size() is 1
+      $siteList.height(windowHeight - ($mainNav.height() - $siteList.height()) - 40)
+      $siteList.css('overflowY', 'scroll')
   
 initBestInPlace = ->
   $('.best_in_place').best_in_place()
