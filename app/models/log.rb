@@ -79,6 +79,51 @@ class Log < ActiveRecord::Base
     s_data
   end
   
+  def self.total_per_semester(site_ids, start_date = nil, end_date = nil, client_types)
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
+            .order("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
+            .count
+    
+    s_data = Hash.new
+    data.sort_by{|i| Date.strptime(i[0], '%Y %U') }.each do |i|
+      semester = Utilities::DateFormatters.semester(i[0])
+      if s_data.has_key? semester
+        s_data[semester] += i[1]
+      else
+        s_data[semester] = i[1]
+      end
+    end
+    s_data
+  end
+  
+  def self.total_per_semester_and_site(site_ids, start_date = nil, end_date = nil, client_types)
+    data = includes(:client => :site)
+            .with_sites(site_ids)
+            .with_client_types(client_types)
+            .by_date(start_date, end_date)
+            .group("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))", "sites.display_name")
+            .order("sites.display_name", "DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
+            .count
+            
+    weeks = data.keys.collect{|x| x[0]}.uniq.sort_by{|x| Date.strptime(x, '%Y %U')}
+    semesters = weeks.map{|week| Utilities::DateFormatters.semester(week)}.uniq
+    sites = data.keys.collect{|x| x[1]}.uniq
+    f_data = Array.new
+    sites.each do |s|
+      d = Array.new(semesters.count).fill(0)
+      weeks.each_with_index do |w, i|
+        semester_index = semesters.index Utilities::DateFormatters.semester(w)
+        d[semester_index] += data[[w, s]] if data.has_key?([w, s]) 
+      end
+      f_data << {"name" => s, "data" => d}
+    end
+    {:categories => semesters, :sites => f_data}
+  end
+  
   def self.total_per_month(site_ids, start_date = nil, end_date = nil, client_types)
     data = includes(:client)
             .with_sites(site_ids)
@@ -124,6 +169,7 @@ class Log < ActiveRecord::Base
             .group("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
             .order("DATENAME(yyyy, DATEADD(hour, -6, login_time)) + ' ' + DATENAME(wk, DATEADD(hour, -6, login_time))")
             .count
+    Rails.logger.info data
     s_data = Hash.new
     data.sort_by{|i| Date.strptime(i[0], '%Y %U') }.each{|i| s_data[Utilities::DateFormatters.week(i[0])] = i[1]}
     s_data

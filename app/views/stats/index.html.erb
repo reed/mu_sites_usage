@@ -10,7 +10,7 @@
       <% end %>
     <% end %>
     <%= render :layout => 'filter', :locals => {:name => 'total', :title => 'Per'} do %>
-      <% %w[site year month month_and_site week week_and_site day day_and_site hour hour_and_site].each do |option| %>
+      <% %w[site year semester semester_and_site month month_and_site week week_and_site day day_and_site hour hour_and_site].each do |option| %>
         <input type="radio" id="per_<%= option %>" name="total_select" value="per-<%= option.dasherize %>" />
         <label for="per_<%= option %>"><%= option.titleize.sub(/And/, "&") %></label>
       <% end %>

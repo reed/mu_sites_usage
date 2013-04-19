@@ -25,6 +25,19 @@ module Utilities
       DateTime.strptime(h, '%H').strftime('%-l %p') + " - " + DateTime.strptime(n, '%k').strftime('%-l %p')
     end
     
+    def self.semester(wk)
+      day = Date.strptime("#{wk}", "%Y %U")
+      week_number = wk.split(' ')[1].to_i
+      if week_number <= 21
+        semester = "Spring"
+      elsif week_number <= 33
+        semester = "Summer"
+      else
+        semester = "Fall"
+      end
+      "#{semester} #{day.year}"
+    end
+    
     def self.snapshot_time(day, time)
       DateTime.strptime(day + time, '%Y-%m-%d%H%M')
     end
@@ -71,5 +84,4 @@ module Utilities
       increments
     end
   end
-  
 end

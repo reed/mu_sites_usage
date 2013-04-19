@@ -83,9 +83,9 @@ subSelected = ->
   g2 = ['date_range_selection', 'client_type_selection', 'type_selection']
   g3 = ['date_range_selection', 'site_selection']
   switch this.id
-    when 'per_site', 'per_month_and_site', 'per_week_and_site', 'per_day_and_site', 'per_hour_and_site'
+    when 'per_site', 'per_semester_and_site', 'per_month_and_site', 'per_week_and_site', 'per_day_and_site', 'per_hour_and_site'
       showFilters('total_selection', g1)
-    when 'per_year', 'per_month', 'per_week', 'per_day', 'per_hour'
+    when 'per_year', 'per_semester', 'per_month', 'per_week', 'per_day', 'per_hour'
       showFilters('total_selection', g2)
     when 'daily', 'weekly', 'monthly'
       showFilters('average_selection', g1)
@@ -168,7 +168,7 @@ resetFilters = (filters) ->
     switch chartSubselect.val()
       when "per-site", "per-year", "daily", "weekly", "monthly"
         restrictTypeOptions('line')
-      when "per-month-and-site", "per-week-and-site"
+      when "per-semester-and-site", "per-month-and-site", "per-week-and-site"
         restrictTypeOptions('pie')
       when "per-day-and-site", "per-hour-and-site", "average-per-site", "average-overall", "maximum-per-site", "maximum-overall"
         restrictTypeOptions(["pie", "column"])
