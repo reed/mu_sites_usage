@@ -63,13 +63,13 @@ initFilters = ->
     .on('click', 'input[name="type_select"]', typeSelected)
   
 toggleFilters = ->
-  btn = $('#toggle_filters_btn')
+  $btn = $('#toggle_filters_btn')
   if btn.text() == "Hide Filters"
     $('#filters').hide("blind", 1000)
-    btn.text("Show Filters")
+    $btn.text("Show Filters")
   else
     $('#filters').show("blind", 1000)
-    btn.text("Hide Filters")
+    $btn.text("Hide Filters")
 
 chartSelected = ->
   switch this.id
@@ -138,7 +138,6 @@ animateFilters = (toHide, toShow) ->
     , 300)
   else if toShow.length
     next = toShow.shift()
-    console.log next
     $('#' + next.id).show('slide', {direction: 'up', easing: 'easeOutBounce'}, 1000)
     setTimeout( ->
       animateFilters(toHide, toShow)
