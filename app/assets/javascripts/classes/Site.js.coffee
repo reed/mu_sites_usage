@@ -70,10 +70,11 @@ class @Site
     @_initCells()
     @_alignCells()
     @_revealDetailsTable()
-    @_updateToggleButton()
+    @_updateToggleButton 'Basic'
     
   hideDetails: =>
-    @_updateToggleButton()
+    console.log 'hideDetails'
+    @_updateToggleButton 'Details'
     @container.find('.refresh_button').click()
     
   toggleUser: ->
@@ -137,11 +138,10 @@ class @Site
         .addClass('details')
     return
     
-  _updateToggleButton: ->
-    newState = if @$toggleButton.text() is 'Basic' then ['Details', @showDetails] else ['Basic', @hideDetails]
+  _updateToggleButton: (text) ->
     @$toggleButton
-      .text(newState[0])
-      .one 'click', newState[1]
+      .text(text)
+      .one 'click', if text is 'Basic' then @hideDetails else @showDetails
     return
   
   _updateCounts: ->
