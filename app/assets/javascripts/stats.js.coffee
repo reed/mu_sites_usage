@@ -8,7 +8,7 @@ initPage = ->
   if pageIs 'stats'
     jQuery.datepicker.dpDiv.appendTo($('body'))
     initFilters()
-    @_statsAjaxCallbacks ||= initAjaxCallbacks()?
+    window._statsAjaxCallbacks ||= initAjaxCallbacks()?
     $('#throbbler_div, #ajax_error, #ajax_long').hide()
     $(document.body)
       .on('click', '#toggle_filters_btn', toggleFilters)
@@ -64,7 +64,7 @@ initFilters = ->
   
 toggleFilters = ->
   $btn = $('#toggle_filters_btn')
-  if btn.text() == "Hide Filters"
+  if $btn.text() == "Hide Filters"
     $('#filters').hide("blind", 1000)
     $btn.text("Show Filters")
   else
