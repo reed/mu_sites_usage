@@ -7,7 +7,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Hour"
+      text: "Total <%= raw @client_types %> Logins Per Hour"
     xAxis:
       categories: <%= raw @data.keys.as_json %>
       labels:
@@ -44,7 +44,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Hour"
+      text: "Total <%= raw @client_types %> Logins Per Hour"
     tooltip:
       formatter: ->
         this.point.name.replace("<br/>", " ") + ": " + this.y + '%'
@@ -78,7 +78,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Hour"
+      text: "Total <%= raw @client_types %> Logins Per Hour"
     xAxis:
       categories: <%= raw @data.keys.as_json %>
       labels:

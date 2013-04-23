@@ -7,7 +7,7 @@ options =
   credits:
     enabled: false
   title:
-    text: "Total Logins Per Day"
+    text: "Total <%= raw @client_types %> Logins Per Day"
   xAxis:
     categories: <%= raw @data[:categories].as_json %>
   series: <%= raw @data[:sites].to_json %>

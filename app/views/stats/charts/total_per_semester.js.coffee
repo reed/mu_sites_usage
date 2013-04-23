@@ -7,7 +7,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Semester"
+      text: "Total <%= raw @client_types %> Logins Per Semester"
     xAxis:
       categories: <%= raw @data.keys.as_json %>
     series:
@@ -50,7 +50,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Semester"
+      text: "Total <%= raw @client_types %> Logins Per Semester"
     tooltip:
       formatter: ->
         this.point.name.replace("<br/>", " ") + ": " + this.y + '%'
@@ -84,7 +84,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Semester"
+      text: "Total <%= raw @client_types %> Logins Per Semester"
     xAxis:
       categories: <%= raw @data.keys.as_json %>
     series:

@@ -7,7 +7,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Week"
+      text: "Total <%= raw @client_types %> Logins Per Week"
     xAxis:
       categories: <%= raw @data[:categories].as_json %>
     series: <%= raw @data[:sites].to_json %>
@@ -47,7 +47,7 @@
     credits:
       enabled: false
     title:
-      text: "Total Logins Per Week"
+      text: "Total <%= raw @client_types %> Logins Per Week"
     xAxis:
       categories: <%= raw @data[:categories].as_json %>
     series: <%= raw @data[:sites].to_json %>

@@ -17,20 +17,20 @@ class StatsController < ApplicationController
     @subtitle = Utilities::DateFormatters.format_date_for_subtitle(params[:start_date], params[:end_date])
     
     case params[:chart_select]
-      when "total" 
-        total(params)
-        subselect = "_#{params[:total_select].tr('-', '_')}"
-      when "average"
-        average(params)
-        subselect = "_#{params[:average_select].tr('-', '_')}"
-      when "concurrent"
-        concurrent(params)
-        subselect = "_#{params[:concurrent_select].tr('-', '_')}"
-      when "historical_snapshots"
-        historical_snapshots(params)
-        subselect = ""
-      else
-        render :status => 400 and return
+    when "total" 
+      total(params)
+      subselect = "_#{params[:total_select].tr('-', '_')}"
+    when "average"
+      average(params)
+      subselect = "_#{params[:average_select].tr('-', '_')}"
+    when "concurrent"
+      concurrent(params)
+      subselect = "_#{params[:concurrent_select].tr('-', '_')}"
+    when "historical_snapshots"
+      historical_snapshots(params)
+      subselect = ""
+    else
+      render :status => 400 and return
     end
     
     @data = convert_to_percentages_for_pie(@data) if @chart_type == "pie" 
@@ -46,6 +46,7 @@ class StatsController < ApplicationController
     if options[:total_select].include? "and-site"
       @subtitle = @subtitle.empty? ? "Per Site" : "Per Site, #{@subtitle}"
     end
+    @client_types = Utilities::DeviceFormatters.display_names(false, options[:client_type_select]) 
   end
   
   def average(options)

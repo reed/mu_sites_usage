@@ -7,7 +7,7 @@ options =
   credits:
     enabled: false
   title:
-    text: "Total Logins Per Hour"
+    text: "Total <%= raw @client_types %> Logins Per Hour"
   xAxis:
     categories: <%= raw @data[:categories].as_json %>
     labels:
