@@ -84,4 +84,32 @@ module Utilities
       increments
     end
   end
+  
+  class DeviceFormatters
+    def self.display_names(plural, types)
+      formatted = types.map{ |type| display_name(plural, type) }
+      if formatted.length > 2
+        formatted[-1] = formatted[-1].prepend '& '
+        formatted = formatted.join(', ')
+      elsif formatted.length == 2
+        formatted = formatted.join(' & ')
+      else
+        formatted = formatted.join('')
+      end
+      formatted
+    end
+    
+    def self.display_name(plural, type)
+      formatted = 
+        case type
+        when 'pc'  then 'PC'
+        when 'mac' then 'Mac'
+        when 'tc'  then 'Thin Client'
+        when 'zc'  then 'Zero Client'
+        else return ''
+        end
+      formatted += 's' if plural
+      formatted
+    end
+  end
 end
