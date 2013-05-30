@@ -89,7 +89,6 @@ class SitesController < ApplicationController
   
   def refresh
     if params[:sites].present?
-      #@sites = SiteDecorator.decorate(current_resource)
       site_hash = Hash.new
       current_resource.each do |site|
         site_hash[site.id] = site.decorate.client_pane(allow? :sites, :view_client_status_details, site)
