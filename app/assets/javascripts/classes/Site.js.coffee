@@ -73,7 +73,6 @@ class @Site
     @_updateToggleButton 'Basic'
     
   hideDetails: =>
-    console.log 'hideDetails'
     @_updateToggleButton 'Details'
     @container.find('.refresh_button').click()
     
